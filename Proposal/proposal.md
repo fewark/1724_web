@@ -27,6 +27,40 @@ This project is worth pursuing because it addresses these critical pain points b
 
 By addressing these challenges and leveraging the power of AI, this project aims to create a more intelligent, inclusive, and engaging chat room experience, ultimately redefining how people connect and communicate in digital spaces.
 
+#### Describe the Target Users
+
+1. **General Social Users**
+   This platform is designed for everyday users who rely on instant messaging tools to stay connected. Through the chatroom, they can easily communicate with friends, family, or like-minded communities. The integrated file-sharing and notification features further enhance the overall experience.
+
+2. **Tech Enthusiasts and Developers**
+   For users passionate about technology, this chatroom offers more than just basic messaging—it incorporates an AI Bot (integrated via ollama) that can assist in answering technical questions, providing development advice, or discussing code. This additional feature not only streamlines interactions but also adds value for users seeking smart, tech-driven support.
+
+3. **Businesses and Collaborative Teams**
+   Small enterprises or teams looking for an efficient internal communication tool will benefit from the platform's ability to create, manage, and join multiple chatrooms. The robust role-based access control ensures proper permissions, while message logging and search functionalities support seamless collaboration. The integrated AI Bot further assists in answering common queries or providing data insights during team discussions.
+
+4. **Educational Institutions and Learners**
+   Students and educators can use the platform for online discussions, Q&A sessions, and collaborative group work. The AI Bot can serve as a real-time tutor—responding to @mentions by providing additional learning resources or clarifying doubts, thus creating an interactive and supportive learning environment.
+
+5. **Customer Support and Service Channels**
+   Businesses may repurpose the platform as a live support channel. With real-time messaging and AI assistance, support agents can quickly triage issues and provide answers, enhancing the customer experience.
+
+#### Discuss Existing Solutions and Their Limitations
+
+1. **Complexity**:
+
+   While these platforms offer a plethora of features, they can be overly complex for regular users or small communities, with a steep learning curve.
+
+2. **Customization Constraints**:
+
+   Although somewhat extensible, these platforms often lack the flexibility to cater to specific needs such as integrating a dedicated AI bot or customizing file handling processes.
+
+3. **Lack of Real-Time Interaction**:
+
+   While some platforms have begun to introduce AI features, most remain at a basic level and do not support direct real-time interaction via @mentions. This limits their ability to significantly enhance the overall user engagement and experience.
+
+4. **Limited Extensibility and Integration**:
+   Many existing chat solutions offer limited options for integrating with external services or third-party plugins. This limitation makes it challenging for developers to extend functionality—such as incorporating a custom AI bot or specialized file handling—without significant custom development.
+
 ## **Key Features**
 
 [Add key features here]
