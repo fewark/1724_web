@@ -69,8 +69,26 @@ By addressing these challenges and leveraging the power of AI, this project aims
 
 ### **Key Features:**
 
+| Feature | Implementation |
+| :------- | :------ |
+| User Authentication | Basic login/signup using JWT authentication. Users will have usernames and profile pictures. |
+| Real-Time Chat | Implemented using Express.js with Socket.io for real-time messaging between users. |
+| Tag Mention AI Models | Users can mention an Ollama AI model (e.g., @ollama) in chat, and the AI will generate a response. The backend will handle requests to the Ollama API and return responses to users. |
+| Message Storage | Messages will be stored in PostgreSQL using Prisma ORM with timestamps and sender details. |
+| File Sharing | Users can upload and share files in chat. Files will be stored on a MinIO object storage server and referenced in the database. |
+| User Management | Admins can moderate chatrooms, delete messages, and manage users. |
+| Frontend Routing | Implemented using React Router, with pages for login, chatroom list, and individual chatrooms. |
+| Responsive UI Design | Built with React + Ant Design for a modern and user-friendly interface. |
+| Typing Indicators and Read Receipts | Show when users are typing and indicate message read status. |
+| Dark Mode & Theming | User preference-based theming using Ant Design components. |
 
+### **Database Schema:**
 
+1. **Users Table**
+| Column | Description |
+| :------- | :------ |
+| User Authentication | Basic login/signup using JWT authentication. Users will have usernames and profile pictures. |
+| Real-Time Chat | Implemented using Express.js with Socket.io for real-time messaging between users. |
 
 ## **Tentative Plan**
 
