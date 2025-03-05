@@ -145,6 +145,29 @@ By addressing these challenges and leveraging the power of AI, this project aims
 2. ***MinIO Storage：*** External storage for user-uploaded files.
 3. ***PostgreSQL (Home Server)：*** Local hosting for chat messages and user data.
 
+
+| Core Technical Requirements | Implementaion |
+| :------- | :------ |
+| **Frontend Requirements** |  |
+| React or Next.js for UI development | Yes |
+| Tailwind CSS for styling | Yes |
+| shadcn/ui or similar component libraries | Yes |
+| Responsive design implementation | Yes |
+| **Data Storage Requirements** |  |
+| PostgreSQL or SQLite for relational database | Yes |
+| Cloud storage for file handling | Yes |
+| **Architecture Approach** |  |
+| Separate Frontend and Backend | Yes |
+| Next.js Full-Stack | No |
+| **Advanced Features** |  |
+| User authentication and authorization | Yes |
+| Real-time functionality (e.g., WebSocket) | Yes |
+| File handling and processing | Yes |
+| Advanced state management | Yes |
+| API integration with external services | Yes |
+
+
+
 ## **Tentative Plan**
 
 The development will follow a structured and modular approach, ensuring clear separation between the frontend and backend components. Our primary goal is to deliver a robust and user-friendly chat platform while effectively distributing responsibilities among team members to ensure timely completion. Starting from the week of March 3rd, we have durations of 7 weeks till the project deadline on April 20th. And below are the specific plan breakdown within this 7 weeks:
