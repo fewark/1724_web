@@ -139,12 +139,13 @@ By addressing these challenges and leveraging the power of AI, this project aims
 4. ***Dark Mode and Theming：*** Users can toggle between light and dark modes using Ant Design’s theming options.
 5. ***Mobile-Friendly Design：*** UI will be optimized for both desktop and mobile devices.
 
-#### **User Interface and Experience Design:**
+#### **Integration with External Services:**
 
 1. ***Ollama API：*** Used for AI chatbot responses when mentioned in chat.
 2. ***MinIO Storage：*** External storage for user-uploaded files.
 3. ***PostgreSQL (Home Server)：*** Local hosting for chat messages and user data.
 
+#### **Course Requirements:**
 
 | Core Technical Requirements | Implementaion |
 | :------- | :------ |
