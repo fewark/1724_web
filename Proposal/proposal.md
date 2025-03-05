@@ -167,7 +167,7 @@ By addressing these challenges and leveraging the power of AI, this project aims
 | Advanced state management | Yes |
 | API integration with external services | Yes |
 
-#### ** project scope and feasibility:**
+#### **project scope and feasibility:**
 
 
 ## **Tentative Plan**
