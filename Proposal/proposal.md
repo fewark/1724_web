@@ -1,6 +1,6 @@
 # Chat Room Project Proposal
 
-## **Motivation and Objective**
+## **Motivation**
 
 ### 1. Motivation
 
@@ -61,13 +61,20 @@ By addressing these challenges and leveraging the power of AI, this project aims
 4. **Limited Extensibility and Integration**:
    Many existing chat solutions offer limited options for integrating with external services or third-party plugins. This limitation makes it challenging for developers to extend functionality—such as incorporating a custom AI bot or specialized file handling—without significant custom development.
 
-## **Key Features**
+## **Objective and Key Features**
 
-[Add key features here]
+### **Objective:**
+
+  The goal of this project is to build a real-time chatroom web application using modern web technologies. The system will enable users to engage in live conversations, store messages in a database, and support file sharing. Additionally, users can tag Ollama AI models in the chat to receive AI-generated responses. While ensuring a fully functional, scalable, and maintainable application, this project will also meet the requirements of the course by covering frontend, backend, database management, file storage, real-time communication, and AI integration.
+
+### **Key Features:**
+
+
+
 
 ## **Tentative Plan**
 
-Our project aims to develop a fully functional chat room website that includes core messaging features alongside an AI chatbot powered by the Ollama framework. The development will follow a structured and modular approach, ensuring clear separation between the frontend and backend components. Our primary goal is to deliver a robust and user-friendly chat platform while effectively distributing responsibilities among team members to ensure timely completion. Starting from the week of March 3rd, we have durations of 7 weeks till the project deadline on April 20th. And below are the specific plan breakdown within this 7 weeks:
+The development will follow a structured and modular approach, ensuring clear separation between the frontend and backend components. Our primary goal is to deliver a robust and user-friendly chat platform while effectively distributing responsibilities among team members to ensure timely completion. Starting from the week of March 3rd, we have durations of 7 weeks till the project deadline on April 20th. And below are the specific plan breakdown within this 7 weeks:
 
 ### **Project Timeline and Milestones:**
 
