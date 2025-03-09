@@ -69,6 +69,8 @@ By addressing these challenges and leveraging the power of AI, this project aims
 
 ### **Key Features:**
 
+#### **Features and Implementation:**
+
 | Feature | Implementation |
 | :------- | :------ |
 | User Authentication | Basic login/signup using JWT authentication. Users will have usernames and profile pictures. |
