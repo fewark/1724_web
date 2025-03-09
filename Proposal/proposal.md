@@ -65,7 +65,7 @@ By addressing these challenges and leveraging the power of AI, this project aims
 
 ### **Objective:**
 
-  The goal of this project is to build a real-time chatroom web application using modern web technologies. The system will enable users to engage in live conversations, store messages in a database, and support file sharing. Additionally, users can tag Ollama AI models in the chat to receive AI-generated responses. While ensuring a fully functional, scalable, and maintainable application, this project will also meet the requirements of the course by covering frontend, backend, database management, file storage, real-time communication, and AI integration.
+  The goal of this project is to develop a real-time chatroom web application that enhances user communication through intelligent AI-driven interactions, real-time messaging, and seamless file sharing. By integrating AI capabilities, this system will improve engagement and accessibility for users from a varity of backgrounds. This project also aims to provide a scalable and maintainable solution that aligns with modern web development practices.
 
 ### **Key Features:**
 
@@ -167,7 +167,7 @@ By addressing these challenges and leveraging the power of AI, this project aims
 | Advanced state management | Yes |
 | API integration with external services | Yes |
 
-#### **project scope and feasibility:**
+#### **Project Scope and Feasibility:**
 
 
 ## **Tentative Plan**
