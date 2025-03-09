@@ -189,7 +189,7 @@ The project is planned to be completed within a 7-week timeframe. Given the scop
 
 ## **Tentative Plan**
 
-The development will follow a structured and modular approach, ensuring clear separation between the frontend and backend components. Our primary goal is to deliver a robust and user-friendly chat platform while effectively distributing responsibilities among team members to ensure timely completion. Starting from the week of March 3rd, we have durations of 7 weeks till the project deadline on April 20th. And below are the specific plan breakdown within this 7 weeks:
+Our project aims to develop a fully functional chat room website that includes core messaging features alongside an AI chatbot powered by the Ollama framework. The development will follow a structured and modular approach, ensuring clear separation between the frontend and backend components. Our primary goal is to deliver a robust and user-friendly chat platform while effectively distributing responsibilities among team members to ensure timely completion. Starting from the week of March 3rd, we have durations of 7 weeks till the project deadline on April 20th. And below are the specific plan breakdown within this 7 weeks:
 
 ### **Project Timeline and Milestones:**
 
@@ -201,29 +201,40 @@ The development will follow a structured and modular approach, ensuring clear se
 
 2. **Week 2-3: Backend Development**
    - Set up the Express.js server and define RESTful API routes.
-   - Implement user authentication (login, registration, session management).
-   - Develop database models and storage mechanisms.
-   - Set up WebSocket communication for real-time messaging.
+   - Implement user authentication (login, registration, session management) using JWT authentication.
+   - Develop database models and storage mechanisms using PostgreSQL with Prisma ORM.
+   - Set up WebSocket communication for real-time messaging with Socket.io.
+   - Implement message storage, including timestamps and sender details.
+   - Implement admin functionalities such as chatroom moderation and message deletion.
 
 3. **Week 4: Frontend Development**
    - Implement the React frontend structure with necessary UI components.
-   - Develop user authentication flows.
+   - Develop user authentication flows (login, signup, profile management).
    - Establish API calls to interact with the backend.
    - Integrate WebSocket for real-time messaging.
+   - Implement responsive UI design using React + Ant Design.
+   - Implement dark mode & theming with Ant Design components.
+   - Develop frontend routing using React Router (login page, chatroom list, individual chatrooms).
 
-4. **Week 5: AI Chatbot Integration**
+4. **Week 5: AI Chatbot Integration & File Handling**
    - Implement Ollama AI chatbot within the backend service.
-   - Develop API endpoints for chatbot responses.
-   - Fine-tune chatbot interactions and ensure smooth integration with the chat interface.
+   - Develop API endpoints for chatbot responses and integrate into the chat interface.
+   - Implement tag mention AI models (e.g., @ollama) to trigger chatbot responses.
+   - Implement file sharing functionality, allowing users to upload and share files in chat.
+   - Store uploaded files using MinIO object storage and reference them in the database.
 
 5. **Week 6: Testing and Refinements**
    - Conduct unit and integration testing for both frontend and backend.
+   - Implement typing indicators and read receipts for messages.
+   - Optimize frontend for mobile responsiveness.
    - Perform UI/UX improvements and bug fixes.
    - Finalize API documentation and ensure proper functionality.
 
 6. **Week 7: Deployment and Final Adjustments**
    - Deploy the application on a cloud platform.
    - Conduct final testing and collect feedback.
+   - Ensure PostgreSQL database and MinIO storage integration are stable.
+   - Perform final security and performance optimizations.
    - Prepare the final report and project presentation.
 
 ### **Team Responsibilities:**
