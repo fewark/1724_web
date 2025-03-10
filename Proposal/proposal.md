@@ -44,23 +44,21 @@ By addressing these challenges and leveraging the power of AI, this project aims
 5. **Customer Support and Service Channels**
    Businesses may repurpose the platform as a live support channel. With real-time messaging and AI assistance, support agents can quickly triage issues and provide answers, enhancing the customer experience.
 
-#### Discuss Existing Solutions and Their Limitations
-
 1. **Complexity:**
 
-   Platforms such as **Slack** and **Microsoft Teams** offer an impressive array of features and integration options. However, this richness in functionality often results in a complex user interface and layered functionalities that can overwhelm regular users or small communities. The multitude of settings and options creates a steep learning curve, causing users to struggle with locating and efficiently using essential features. Consequently, the overall user experience may be hindered by increased friction and reduced ease-of-use.
+   Platforms like Slack and Microsoft Teams offer many features and integrations. However, this abundance of options makes them quite complex for everyday users or small communities. Their many settings can create a steep learning curve, which means users may struggle to quickly find and use the features they need, leading to a less smooth experience.
 
 2. **Customization Constraints:**
 
-   Although platforms like **Slack** and **Discord** support third-party integrations and bot functionalities, they fall short when it comes to deep customization. For instance, Slack provides APIs that allow for certain extensions, but its architecture is not flexible enough to natively integrate a dedicated AI chatbot or to customize file-handling processes extensively. Similarly, while Discord permits a variety of bots, these typically require significant extra development work to be deeply integrated, and customization remains limited by the platform’s predefined interfaces and permission controls.
+   Although platforms such as Slack and **Discord** allow for some third-party integrations and bots, they still have limits when it comes to deep customization. For example, Slack provides APIs that let you add extra functions, but it isn’t very flexible for integrating a dedicated AI chatbot or tailoring file handling processes. Similarly, while Discord supports various bots, these often require extra development work and still offer limited customization due to the platform’s fixed interfaces and permission rules.
 
 3. **Lack of Real-Time Interaction:**
 
-   Some platforms, including **Microsoft Teams**, have started incorporating AI features, such as built-in chatbots capable of handling basic queries. However, these AI functionalities are generally confined to rudimentary, scripted interactions and do not support dynamic, context-aware real-time responses triggered by @mentions. Ideally, a chat platform should provide instant, intelligent, and personalized interactions when users are mentioned, thereby significantly enhancing engagement. Unfortunately, most existing products fall short in delivering such advanced real-time interaction capabilities, limiting their potential to elevate user experience.
+   Some platforms, like Microsoft Teams, have started to include basic AI features, such as simple chatbots that can answer common questions. However, these are usually based on preset commands and do not support dynamic, context-aware interactions triggered by @mentions. Ideally, a chat platform should offer immediate, intelligent, and personalized responses when users are mentioned, something that most existing products are not yet able to do effectively.
 
 4. **Limited Extensibility and Integration:**
 
-   Many current chat solutions also exhibit limitations in terms of extending functionality and integrating with external services. For example, **Telegram** offers a Bot API that enables developers to create bots, but its interfaces are relatively constrained when it comes to integrating specific AI models or implementing custom file management systems. Similarly, **Discord** supports a wide range of third-party bots, yet achieving deep integration with features like a custom AI bot often demands substantial custom development. This restricted extensibility forces developers to invest additional time and resources, increasing both the complexity of implementation and the ongoing maintenance burden.
+   Many current chat solutions have limited options for extending functionality or integrating with external services. For example, Telegram offers a Bot API that lets developers create bots, but its features are restricted when it comes to integrating advanced AI models or custom file management systems. Likewise, Discord supports many third-party bots, but adding a custom AI bot often requires significant extra work. This limited flexibility means that developers need to invest more time and effort to build the features they want.
 
 By comparing these real products, we can see that although the chat platforms currently on the market are powerful, they still have shortcomings in terms of ease of use, customization, real-time interaction and scalability.
 
