@@ -180,53 +180,48 @@ The project is planned to be completed within a 7-week timeframe. Given the scop
 
 ## **Tentative Plan**
 
-Our project aims to develop a fully functional chat room website that includes core messaging features alongside an AI chatbot powered by the Ollama framework. The development will follow a structured and modular approach, ensuring clear separation between the frontend and backend components. Our primary goal is to deliver a robust and user-friendly chat platform while effectively distributing responsibilities among team members to ensure timely completion. Starting from the week of March 3rd, we have durations of 7 weeks till the project deadline on April 20th. And below are the specific plan breakdown within this 7 weeks:
+Our project aims to develop a fully functional chat room website featuring core messaging capabilities and an AI chatbot powered by the Ollama framework. We will follow a modular approach, clearly separating frontend and backend components to ensure a robust, user-friendly platform. Tasks will be effectively distributed among team members to meet our deadline. The project timeline spans 7 weeks, starting March 3rd and ending April 20th. Below is the detailed weekly plan:
 
 ### **Project Timeline and Milestones:**
 
-1. **Week 1: Project Setup and Initial Planning**
-   - Establish the project repository and development environment.
-   - Define API endpoints and draft initial API documentation.
-   - Research and finalize the technology stack and dependencies.
-   - Assign specific tasks to each team member.
+1. **Week 1: Project Setup**
+   - Create repository and dev environment.
+   - Define API endpoints and documentation.
+   - Finalize tech stack and dependencies.
+   - Assign team responsibilities.
 
 2. **Week 2-3: Backend Development**
-   - Set up the Express.js server and define RESTful API routes.
-   - Implement user authentication (login, registration, session management) using JWT authentication.
-   - Develop database models and storage mechanisms using PostgreSQL with Prisma ORM.
-   - Set up WebSocket communication for real-time messaging with Socket.io.
-   - Implement message storage, including timestamps and sender details.
-   - Implement admin functionalities such as chatroom moderation and message deletion.
+   - Set up Express.js server and RESTful APIs.
+   - Implement JWT-based user authentication.
+   - Develop PostgreSQL database models with Prisma ORM.
+   - Enable real-time messaging with Socket.io.
+   - Store messages with timestamps and sender info.
+   - Add admin moderation features.
 
 3. **Week 4: Frontend Development**
-   - Implement the React frontend structure with necessary UI components.
-   - Develop user authentication flows (login, signup, profile management).
-   - Establish API calls to interact with the backend.
-   - Integrate WebSocket for real-time messaging.
-   - Implement responsive UI design using React + Ant Design.
-   - Implement dark mode & theming with Ant Design components.
-   - Develop frontend routing using React Router (login page, chatroom list, individual chatrooms).
+   - Build React app with Ant Design components.
+   - Implement user auth flows and profile management.
+   - Integrate backend API calls and WebSockets.
+   - Add responsive UI, dark mode, and themes.
+   - Set up routing (login, chatroom list, chat pages).
 
-4. **Week 5: AI Chatbot Integration & File Handling**
-   - Implement Ollama AI chatbot within the backend service.
-   - Develop API endpoints for chatbot responses and integrate into the chat interface.
-   - Implement tag mention AI models (e.g., @ollama) to trigger chatbot responses.
-   - Implement file sharing functionality, allowing users to upload and share files in chat.
-   - Store uploaded files using MinIO object storage and reference them in the database.
+4. **Week 5: AI Chatbot & File Sharing**
+   - Integrate Ollama AI chatbot in backend.
+   - Create chatbot response endpoints and "@mentions."
+   - Enable file uploads in chats.
+   - Manage file storage with MinIO.
 
-5. **Week 6: Testing and Refinements**
-   - Conduct unit and integration testing for both frontend and backend.
-   - Implement typing indicators and read receipts for messages.
-   - Optimize frontend for mobile responsiveness.
-   - Perform UI/UX improvements and bug fixes.
-   - Finalize API documentation and ensure proper functionality.
+5. **Week 6: Testing and Refinement**
+   - Conduct unit/integration tests.
+   - Add typing indicators and read receipts.
+   - Optimize for mobile and address UI/UX issues.
+   - Complete API documentation.
 
-6. **Week 7: Deployment and Final Adjustments**
-   - Deploy the application on a cloud platform.
-   - Conduct final testing and collect feedback.
-   - Ensure PostgreSQL database and MinIO storage integration are stable.
-   - Perform final security and performance optimizations.
-   - Prepare the final report and project presentation.
+6. **Week 7: Deployment and Finalization**
+   - Deploy to cloud hosting.
+   - Perform final testing and security checks.
+   - Verify PostgreSQL and MinIO stability.
+   - Optimize performance and finalize presentation/report.
 
 ### **Team Responsibilities:**
 
