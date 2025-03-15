@@ -1,4 +1,13 @@
-# Chat Room Project Proposal
+# Chat Room Web Project Proposal
+
+## **Authors**
+
+| Name | Student Number |
+| :------- | :------ |
+| Kaifeng Lu | 1003012633 |
+|  | |
+|  | |
+|  | |
 
 ## **Motivation**
 
