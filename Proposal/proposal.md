@@ -1,4 +1,4 @@
-# Chat Room Web Project Proposal
+# Chat Room Web Application Project Proposal
 
 ## **Authors**
 
