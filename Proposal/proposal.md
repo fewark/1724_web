@@ -99,56 +99,55 @@ By comparing these real products, we can see that although the chat platforms cu
 
 1. ***Users Table***
 
-   | Column | Description |
-   | :------- | :------ |
-   | id (PK) | Unique user ID |
-   | username | User's display name |
-   | email | User's email |
-   | password | Hashed password |
-   | profile_picture | URL to MinIO storage |
-   | created_at | Timestamp |
+   | Column          | Data Type           | Description |
+   |----------------|----------------|-------------|
+   | `id` (PK)      | `SERIAL`         | Unique user ID (Primary Key) |
+   | `username`     | `VARCHAR(50)`    | User's display name |
+   | `email`        | `VARCHAR(255) UNIQUE` | User's email (must be unique) |
+   | `password`     | `TEXT`           | Hashed password |
+   | `profile_picture` | `TEXT`          | MinIO file URL for the profile picture |
+   | `created_at`   | `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` | Timestamp when the user was created |
 
 2. ***Chatrooms Table***
 
-   | Column | Description |
-   | :------- | :------ |
-   | id (PK) | Unique chatroom ID |
-   | name | Chatroom name |
-   | created_by (FK) | User who created the chatroom |
-   | created_at | Timestamp |
+   | Column          | Data Type           | Description |
+   |---------------|----------------|-------------|
+   | `id` (PK)      | `SERIAL`         | Unique chatroom ID (Primary Key) |
+   | `name`         | `VARCHAR(100)`   | Chatroom name |
+   | `created_by` (FK) | `INTEGER`       | User ID of the chatroom creator (Foreign Key to `Users.id`) |
+   | `created_at`   | `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` | Timestamp when the chatroom was created |
 
-3. ***Messages  Table***
+3. ***Messages Table***
 
-   | Column | Description |
-   | :------- | :------ |
-   | id (PK) | Unique message ID |
-   | chatroom_id (FK) | Chatroom the message belongs to |
-   | user_id (FK) | Sender of the message |
-   | content | Message text |
-   | file_url | Reference to file storage (if applicable) |
-   | created_at | Timestamp |
+   | Column          | Data Type           | Description |
+   |---------------|----------------|-------------|
+   | `id` (PK)      | `SERIAL`         | Unique message ID (Primary Key) |
+   | `chatroom_id` (FK) | `INTEGER`   | Chatroom ID the message belongs to (Foreign Key to `Chatrooms.id`) |
+   | `user_id` (FK)  | `INTEGER`       | Sender's User ID (Foreign Key to `Users.id`) |
+   | `content`      | `TEXT`          | Message text content |
+   | `file_id` (FK)  | `INTEGER NULL`  | Optional reference to an uploaded file (Foreign Key to `Files.id`) |
+   | `created_at`   | `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` | Timestamp when the message was sent |
 
-4. ***Files Table***
+5. ***Files Table***
 
-   | Column | Description |
-   | :------- | :------ |
-   | id (PK) | Unique file  ID |
-   | user_id (FK) | Uploader |
-   | chatroom_id (FK) |  Associated chatroom |
-   | file_url | MinIO storage link |
-   | created_at | Timestamp |
+   | Column          | Data Type           | Description |
+   |---------------|----------------|-------------|
+   | `id` (PK)      | `SERIAL`         | Unique file ID (Primary Key) |
+   | `user_id` (FK)  | `INTEGER`       | Uploader's User ID (Foreign Key to `Users.id`) |
+   | `chatroom_id` (FK) | `INTEGER NULL`  | Associated chatroom ID, if applicable (Foreign Key to `Chatrooms.id`) |
+   | `file_url`     | `TEXT`          | MinIO storage URL for the file |
+   | `created_at`   | `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` | Timestamp when the file was uploaded |
 
 #### **User Interface and Experience Design:**
 
 1. ***Homepage：*** Login/signup form with a modern UI.
 2. ***Chatroom List Page：*** Displays available chatrooms, option to create/join a chatroom.
 3. ***Chat Interface：***
-   
       - Message history
       - Real-time messaging
       - Mentions (@username or @ollama)
       - File upload button
-      - Scrollable UI with infinite scroll for message history
+      - Scrollable UI for message history
 4. ***Dark Mode and Theming：*** Users can toggle between light and dark modes using Ant Design’s theming options.
 5. ***Mobile-Friendly Design：*** UI will be optimized for both desktop and mobile devices.
 
