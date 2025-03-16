@@ -7,7 +7,7 @@
 | Kaifeng Lu   | 1003012633     | Objective and Key Features |
 | Zenan Jiang  | 1004996846     |                            |
 | Xiaoyang Xie | 1005755103     | Tentative Plan             |
-| Yanhao Li    | 1010253618     |                            |
+| Yanhao Li    | 1010253618     |Target Users and limitations|
 
 ## **Motivation**
 
@@ -52,6 +52,8 @@ By addressing these challenges and leveraging the power of AI, this project aims
 
 5. **Customer Support and Service Channels**
    Businesses may repurpose the platform as a live support channel. With real-time messaging and AI assistance, support agents can quickly triage issues and provide answers, enhancing the customer experience.
+
+#### Discuss any existing solutions and their limitations
 
 1. **Complexity:**
 
