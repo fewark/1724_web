@@ -234,9 +234,9 @@ Our project aims to develop a fully functional chat room website featuring core 
 
 ### **Team Responsibilities:**
 
-- **Member 1:** Backend Lead – Develop RESTful API with Express.js, manage database interactions, and implement authentication.
-- **Member 2:** Frontend Lead – Develop React UI, handle API integration, and ensure user experience optimization.
-- **Member 3:** WebSocket and AI Integration – Implement WebSocket for real-time communication and integrate the Ollama chatbot.
-- **Member 4:** Documentation and Testing – Maintain API documentation, conduct testing, and assist in deployment.
+- **Kaifeng Lu:** Backend Lead – Develop RESTful API with Express.js, manage database interactions, and implement authentication.
+- **Xiaoyang Xie:** Frontend Lead – Develop React UI, handle API integration, and ensure user experience optimization.
+- **Zenan Jiang:** WebSocket and AI Integration – Implement WebSocket for real-time communication and integrate the Ollama chatbot.
+- **Yanhao Li:** Documentation and Testing – Maintain API documentation, conduct testing, and assist in deployment.
 
 This well-structured plan ensures that all aspects of the project are covered efficiently and can be realistically completed within the given timeframe.
