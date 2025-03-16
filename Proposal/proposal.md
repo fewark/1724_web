@@ -5,7 +5,7 @@
 | Name         | Student Number | Section                    |
 |--------------|----------------|----------------------------|
 | Kaifeng Lu   | 1003012633     | Objective and Key Features |
-| Zenan Jiang  | 1004996846     |                            |
+| Zenan Jiang  | 1004996846     | Problem & Why Worth Pursuing |
 | Xiaoyang Xie | 1005755103     | Tentative Plan             |
 | Yanhao Li    | 1010253618     |Target Users and limitations|
 
