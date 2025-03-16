@@ -193,13 +193,13 @@ Our project aims to develop a fully functional chat room website featuring core 
 
 ### **Project Timeline and Milestones:**
 
-1. **Week 1: Project Setup**
+1. **Week 1: Project Setup**: March 10 - 16
    - Create repository and dev environment.
    - Define API endpoints and documentation.
    - Finalize tech stack and dependencies.
    - Assign team responsibilities.
 
-2. **Week 2-3: Backend Development**
+2. **Week 2-3: Backend Development**: March 17 - 23
    - Set up Express.js server and RESTful APIs.
    - Implement JWT-based user authentication.
    - Develop PostgreSQL database models with Prisma ORM.
@@ -207,26 +207,26 @@ Our project aims to develop a fully functional chat room website featuring core 
    - Store messages with timestamps and sender info.
    - Add admin moderation features.
 
-3. **Week 4: Frontend Development**
+3. **Week 4: Frontend Development**: March 24 - 30
    - Build React app with Ant Design components.
    - Implement user auth flows and profile management.
    - Integrate backend API calls and WebSockets.
    - Add responsive UI, dark mode, and themes.
    - Set up routing (login, chatroom list, chat pages).
 
-4. **Week 5: AI Chatbot & File Sharing**
+4. **Week 5: AI Chatbot & File Sharing**: March 31 - April 6
    - Integrate Ollama AI chatbot in backend.
    - Create chatbot response endpoints and "@mentions."
    - Enable file uploads in chats.
    - Manage file storage with MinIO.
 
-5. **Week 6: Testing and Refinement**
+5. **Week 6: Testing and Refinement**: April 7 - 13
    - Conduct unit/integration tests.
    - Add typing indicators and read receipts.
    - Optimize for mobile and address UI/UX issues.
    - Complete API documentation.
 
-6. **Week 7: Deployment and Finalization**
+6. **Week 7: Deployment and Finalization**: April 14 - 20
    - Deploy to cloud hosting.
    - Perform final testing and security checks.
    - Verify PostgreSQL and MinIO stability.
