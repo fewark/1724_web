@@ -94,47 +94,49 @@ By comparing these real products, we can see that although the chat platforms cu
 | Dark Mode & Theming | User preference-based theming using Ant Design components. |
 
 #### **Database Schema:**
+* **PK**: Primary Key
+* **FK**: Foreign Key
 
 1. ***Users Table***
 
-| Column | Description |
-| :------- | :------ |
-| id (PK) | Unique user ID |
-| username | User's display name |
-| email | User's email |
-| password | Hashed password |
-| profile_picture | URL to MinIO storage |
-| created_at | Timestamp |
+   | Column | Description |
+   | :------- | :------ |
+   | id (PK) | Unique user ID |
+   | username | User's display name |
+   | email | User's email |
+   | password | Hashed password |
+   | profile_picture | URL to MinIO storage |
+   | created_at | Timestamp |
 
 2. ***Chatrooms Table***
 
-| Column | Description |
-| :------- | :------ |
-| id (PK) | Unique chatroom ID |
-| name | Chatroom name |
-| created_by (FK) | User who created the chatroom |
-| created_at | Timestamp |
+   | Column | Description |
+   | :------- | :------ |
+   | id (PK) | Unique chatroom ID |
+   | name | Chatroom name |
+   | created_by (FK) | User who created the chatroom |
+   | created_at | Timestamp |
 
 3. ***Messages  Table***
 
-| Column | Description |
-| :------- | :------ |
-| id (PK) | Unique message ID |
-| chatroom_id (FK) | Chatroom the message belongs to |
-| user_id (FK) | Sender of the message |
-| content | Message text |
-| file_url | Reference to file storage (if applicable) |
-| created_at | Timestamp |
+   | Column | Description |
+   | :------- | :------ |
+   | id (PK) | Unique message ID |
+   | chatroom_id (FK) | Chatroom the message belongs to |
+   | user_id (FK) | Sender of the message |
+   | content | Message text |
+   | file_url | Reference to file storage (if applicable) |
+   | created_at | Timestamp |
 
 4. ***Files Table***
 
-| Column | Description |
-| :------- | :------ |
-| id (PK) | Unique file  ID |
-| user_id (FK) | Uploader |
-| chatroom_id (FK) |  Associated chatroom |
-| file_url | MinIO storage link |
-| created_at | Timestamp |
+   | Column | Description |
+   | :------- | :------ |
+   | id (PK) | Unique file  ID |
+   | user_id (FK) | Uploader |
+   | chatroom_id (FK) |  Associated chatroom |
+   | file_url | MinIO storage link |
+   | created_at | Timestamp |
 
 #### **User Interface and Experience Design:**
 
