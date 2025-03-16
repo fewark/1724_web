@@ -6,7 +6,7 @@
 |--------------|----------------|----------------------------|
 | Kaifeng Lu   | 1003012633     | Objective and Key Features |
 | Zenan Jiang  | 1004996846     |                            |
-| Xiaoyang Xie | 1005755103     |                            |
+| Xiaoyang Xie | 1005755103     | Tentative Plan             |
 | Yanhao Li    | 1010253618     |                            |
 
 ## **Motivation**
