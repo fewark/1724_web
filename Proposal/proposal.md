@@ -91,7 +91,6 @@ By comparing these real products, we can see that although the chat platforms cu
 | User Management | Admins can moderate chatrooms, delete messages, and manage users. |
 | Frontend Routing | Implemented using React Router, with pages for login, chatroom list, and individual chatrooms. |
 | Responsive UI Design | Built with React + Ant Design for a modern and user-friendly interface. |
-| Typing Indicators and Read Receipts | Show when users are typing and indicate message read status. |
 | Dark Mode & Theming | User preference-based theming using Ant Design components. |
 
 #### **Database Schema:**
@@ -144,7 +143,7 @@ By comparing these real products, we can see that although the chat platforms cu
 3. ***Chat Interface：***
    
       - Message history
-      - Real-time typing indicators
+      - Real-time messaging
       - Mentions (@username or @ollama)
       - File upload button
       - Scrollable UI with infinite scroll for message history
@@ -224,7 +223,6 @@ Our project aims to develop a fully functional chat room website featuring core 
 
 6. **Week 6: Testing and Refinement**: April 7 - 13
    - Conduct unit/integration tests.
-   - Add typing indicators and read receipts.
    - Optimize for mobile and address UI/UX issues.
    - Complete API documentation.
 
