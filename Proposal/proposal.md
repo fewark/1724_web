@@ -159,7 +159,7 @@ By comparing these real products, we can see that although the chat platforms cu
 
 #### **Course Requirements:**
 
-| Core Technical Requirements | Implementaion |
+| Core Technical Requirements | Fulfillment |
 | :------- | :------ |
 | **Frontend Requirements** |  |
 | React or Next.js for UI development | Yes |
@@ -183,9 +183,9 @@ By comparing these real products, we can see that although the chat platforms cu
 
 This project aims to develop a full-featured chatroom application that enables live messaging, AI-driven interactions, and file sharing while ensuring accessibility, security, and usability. The chatroom application will support all core features outlined in the previous section, such as user authentication, real-time messaging, AI chatbot integration, message storage, and role-based permissions.
 
-#### **Feasibility:** 
+#### **Feasibility:**
 
-The project is planned to be completed within a 7-week timeframe. Given the scope and complexity, the timeline is realistic and achievable, provided that the team adheres to the structured development plan. The feasibility assessment is based on the division of tasks, estimated workload, and potential risks. A more detailed plan is provided in the Tentative Plan section below.
+Our team brings industry experience in full-stack development, including RESTful APIs, real-time cloud applications, WebSockets, and S3 interactions. Also, the project is planned for completion within seven weeks. Given its scope and complexity, this timeline is realistic and achievable if the team follows the structured development plan. The feasibility assessment considers task division, workload estimates, and potential risks. A detailed plan is provided in the Tentative Plan section below.
 
 ## **Tentative Plan**
 
