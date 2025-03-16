@@ -147,14 +147,15 @@ By comparing these real products, we can see that although the chat platforms cu
       - Real-time messaging
       - Mentions (@username or @ollama)
       - File upload button
+      - Performance optimizations where appropiate. e.g., inifinite scroll, Web Workers.
 4. ***Dark Mode and Theming：*** Users can toggle between light and dark modes using Ant Design’s theming options.
 5. ***Mobile-Friendly Design：*** UI will be optimized for both desktop and mobile devices.
 
 #### **Integration with External Services:**
 
-1. ***Ollama API：*** Used for AI chatbot responses when mentioned in chat.
-2. ***MinIO Storage：*** External storage for user-uploaded files.
-3. ***PostgreSQL (Home Server)：*** Local hosting for chat messages and user data.
+1. ***Ollama API:*** Used for AI chatbot responses when mentioned in chat.
+2. ***MinIO Storage:*** External storage for user-uploaded files.
+3. ***PostgreSQL:*** Local hosting for chat messages and user data.
 
 #### **Course Requirements:**
 
@@ -225,12 +226,13 @@ Our project aims to develop a fully functional chat room website featuring core 
    - Conduct unit/integration tests.
    - Optimize for mobile and address UI/UX issues.
    - Complete API documentation.
+   - Optimize performance (e.g. Infinite scroll)
 
 7. **Week 7: Deployment and Finalization**: April 14 - 20
    - Deploy to cloud hosting.
    - Perform final testing and security checks.
    - Verify PostgreSQL and MinIO stability.
-   - Optimize performance and finalize presentation/report.
+   - Finalize presentation/report.
 
 ### **Team Responsibilities:**
 
