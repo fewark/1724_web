@@ -147,7 +147,6 @@ By comparing these real products, we can see that although the chat platforms cu
       - Real-time messaging
       - Mentions (@username or @ollama)
       - File upload button
-      - Scrollable UI for message history
 4. ***Dark Mode and Theming：*** Users can toggle between light and dark modes using Ant Design’s theming options.
 5. ***Mobile-Friendly Design：*** UI will be optimized for both desktop and mobile devices.
 
