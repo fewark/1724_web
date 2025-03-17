@@ -160,7 +160,7 @@ By comparing these real products, we can see that although the chat platforms cu
 2. ***MinIO Storage:*** External storage for user-uploaded files.
 3. ***PostgreSQL:*** Local hosting for chat messages and user data.
 
-#### **Course Requirements:**
+#### **Course Requirements Fulfillment:**
 
 | Core Technical Requirements | Fulfillment |
 | :------- | :------ |
