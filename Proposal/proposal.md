@@ -50,9 +50,6 @@ By addressing these challenges and leveraging the power of AI, this project aims
 4. **Educational Institutions and Learners**
    Students and educators can use the platform for online discussions, Q&A sessions, and collaborative group work. The AI Bot can serve as a real-time tutor—responding to @mentions by providing additional learning resources or clarifying doubts, thus creating an interactive and supportive learning environment.
 
-5. **Customer Support and Service Channels**
-   Businesses may repurpose the platform as a live support channel. With real-time messaging and AI assistance, support agents can quickly triage issues and provide answers, enhancing the customer experience.
-
 #### Discuss any existing solutions and their limitations
 
 1. **Complexity:**
