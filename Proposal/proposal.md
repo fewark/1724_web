@@ -240,5 +240,3 @@ Our project aims to develop a fully functional chat room website featuring core 
 - **Xiaoyang Xie:** Frontend Lead – Develop React UI, handle API integration, and ensure user experience optimization.
 - **Zenan Jiang:** WebSocket and AI Integration – Implement WebSocket for real-time communication and integrate the Ollama chatbot.
 - **Yanhao Li:** Documentation and Testing – Maintain API documentation, conduct testing, and assist in deployment.
-
-This well-structured plan ensures that all aspects of the project are covered efficiently and can be realistically completed within the given timeframe.
