@@ -89,11 +89,12 @@ By comparing these real products, we can see that although the chat platforms cu
 | Real-Time Chat | Implemented using Express.js with Socket.io for real-time messaging between users. |
 | Tag Mention AI Models | Users can mention an Ollama AI model (e.g., @ollama) in chat, and the AI will generate a response. The backend will handle requests to the Ollama API and return responses to users. |
 | Message Storage | Messages will be stored in PostgreSQL using Prisma ORM with timestamps and sender details. |
-| File Sharing | Users can upload and share files in chat. Files will be stored on a MinIO object storage server and referenced in the database. |
+| File Sharing | Users can upload and share files (images, PDFs) in chat. Files are stored in MinIO (self-hosted, S3-compatible) with private URLs for controlled access. Supports authentication, encryption, and scalable storage (~50MB/user, 500 files/chatroom) to ensure security and performance. |
 | User Management | Admins can moderate chatrooms, delete messages, and manage users. |
 | Frontend Routing | Implemented using React Router, with pages for login, chatroom list, and individual chatrooms. |
 | Responsive UI Design | Built with React + Ant Design for a modern and user-friendly interface. |
 | Dark Mode & Theming | User preference-based theming using Ant Design components. |
+
 
 #### **Database Schema:**
 * **PK**: Primary Key
