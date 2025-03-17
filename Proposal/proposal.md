@@ -58,7 +58,7 @@ By addressing these challenges and leveraging the power of AI, this project aims
 
 2. **Customization Constraints:**
 
-   Although platforms such as Slack and **Discord** allow for some third-party integrations and bots, they still have limits when it comes to deep customization. For example, Slack provides APIs that let you add extra functions, but it isn’t very flexible for integrating a dedicated AI chatbot or tailoring file handling processes. Similarly, while Discord supports various bots, these often require extra development work and still offer limited customization due to the platform’s fixed interfaces and permission rules.
+   Although platforms such as Slack and Discord allow for some third-party integrations and bots, they still have limits when it comes to deep customization. For example, Slack provides APIs that let you add extra functions, but it isn’t very flexible for integrating a dedicated AI chatbot or tailoring file handling processes. Similarly, while Discord supports various bots, these often require extra development work and still offer limited customization due to the platform’s fixed interfaces and permission rules.
 
 3. **Lack of Real-Time Interaction:**
 
