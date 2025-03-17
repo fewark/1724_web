@@ -11,7 +11,7 @@
 
 ## **Motivation**
 
-### 1. Motivation
+### **Motivation**
 
 #### Identify the Problem or Need
 In today's globalized and digitally connected world, online chat rooms have become a vital platform for communication, collaboration, and community building. However, two significant challenges persist in enhancing the user experience of chat rooms:  
