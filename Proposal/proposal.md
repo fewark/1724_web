@@ -11,9 +11,7 @@
 
 ## **Motivation**
 
-### **Motivation**
-
-#### Identify the Problem or Need
+### Identify the Problem or Need:
 In today's globalized and digitally connected world, online chat rooms have become a vital platform for communication, collaboration, and community building. However, two significant challenges persist in enhancing the user experience of chat rooms:  
 
 1. **Lack of Intelligent Interaction**:  
@@ -22,7 +20,7 @@ In today's globalized and digitally connected world, online chat rooms have beco
 2. **Language Barriers**:  
    As chat rooms often bring together users from diverse linguistic backgrounds, real-time communication can be hindered by language differences, making it difficult for users to fully participate and connect.  
 
-#### Why This Project is Worth Pursuing
+### Why This Project is Worth Pursuing:
 This project is worth pursuing because it addresses these critical pain points by integrating cutting-edge AI technologies into chat rooms, thereby revolutionizing the way users interact and communicate. Here are some reasons:  
 
 1. **Enhanced User Engagement**:  
@@ -36,7 +34,7 @@ This project is worth pursuing because it addresses these critical pain points b
 
 By addressing these challenges and leveraging the power of AI, this project aims to create a more intelligent, inclusive, and engaging chat room experience, ultimately redefining how people connect and communicate in digital spaces.
 
-#### Describe the Target Users
+### Describe the Target Users:
 
 1. **General Social Users**
    This platform is designed for everyday users who rely on instant messaging tools to stay connected. Through the chatroom, they can easily communicate with friends, family, or like-minded communities. The integrated file-sharing and notification features further enhance the overall experience.
@@ -50,7 +48,7 @@ By addressing these challenges and leveraging the power of AI, this project aims
 4. **Educational Institutions and Learners**
    Students and educators can use the platform for online discussions, Q&A sessions, and collaborative group work. The AI Bot can serve as a real-time tutor—responding to @mentions by providing additional learning resources or clarifying doubts, thus creating an interactive and supportive learning environment.
 
-#### Discuss any existing solutions and their limitations
+### Discuss any existing solutions and their limitations:
 
 1. **Complexity:**
 
