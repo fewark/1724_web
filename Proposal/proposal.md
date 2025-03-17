@@ -155,7 +155,7 @@ By comparing these real products, we can see that although the chat platforms cu
 2. ***MinIO Storage:*** External storage for user-uploaded files.
 3. ***PostgreSQL:*** Local hosting for chat messages and user data.
 
-#### **Course Requirements Fulfillment:**
+### **Course Requirements Fulfillment:**
 
 | Core Technical Requirements | Fulfillment |
 | :------- | :------ |
@@ -177,11 +177,11 @@ By comparing these real products, we can see that although the chat platforms cu
 | Advanced state management | Yes |
 | API integration with external services | Yes |
 
-#### **Project Scope:**
+### **Project Scope:**
 
 This project aims to develop a full-featured chatroom application that enables live messaging, AI-driven interactions, and file sharing while ensuring accessibility, security, and usability. The chatroom application will support all core features outlined in the previous section, such as user authentication, real-time messaging, AI chatbot integration, message storage, and role-based permissions.
 
-#### **Feasibility:**
+### **Feasibility:**
 
 Our team brings industry experience in full-stack development, including React, Express.js, PostgreSQL, WebSockets, and AI APIs (Ollama), ensuring efficient implementation. We have access to all necessary resources, including PostgreSQL (database), MinIO (file storage), Ollama AI API, and cloud hosting, with early setup planned to prevent delays. The project is planned for completion within seven weeks. Given its scope and complexity, this timeline is realistic and achievable if the team follows the structured development plan provided in the Tentative Plan section below.
 
