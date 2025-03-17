@@ -187,7 +187,7 @@ This project aims to develop a full-featured chatroom application that enables l
 
 #### **Feasibility:**
 
-Our team brings industry experience in full-stack development, including RESTful APIs, real-time cloud applications, WebSockets, and S3 interactions. Also, the project is planned for completion within seven weeks. Given its scope and complexity, this timeline is realistic and achievable if the team follows the structured development plan. The feasibility assessment considers task division, workload estimates, and potential risks. A detailed plan is provided in the Tentative Plan section below.
+Our team brings industry experience in full-stack development, including React, Express.js, PostgreSQL, WebSockets, and AI APIs (Ollama), ensuring efficient implementation. We have access to all necessary resources, including PostgreSQL (database), MinIO (file storage), Ollama AI API, and cloud hosting, with early setup planned to prevent delays. The project is planned for completion within seven weeks. Given its scope and complexity, this timeline is realistic and achievable if the team follows the structured development plan. The feasibility assessment considers task division, workload estimates, and potential risks. A detailed plan is provided in the Tentative Plan section below.
 
 ## **Tentative Plan**
 
