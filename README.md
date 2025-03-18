@@ -47,7 +47,7 @@ JWT_SECRET=your_jwt_secret_key
 npx prisma migrate dev --name init
 ```
 
-### **5. Start the Frontend**
+### **5. Start the Backend**
 ```bash
 npm run dev
 ```
