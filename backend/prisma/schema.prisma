@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  username       String   @db.VarChar(50)
+  email          String   @unique @db.VarChar(255)
+  password       String   @db.Text
+  profilePicture String   @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  chatrooms      Chatroom[] @relation("UserChatrooms")
+  messages       Message[]
+  files          File[]
+}
+
+model Chatroom {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(100)
+  createdBy  Int
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  creator    User     @relation("UserChatrooms", fields: [createdBy], references: [id])
+  messages   Message[]
+  files      File[]
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  chatroomId Int
+  userId     Int
+  content    String   @db.Text
+  fileId     Int?     
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+  file       File?    @relation(fields: [fileId], references: [id])
+}
+
+model File {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  chatroomId Int?    
+  fileUrl    String   @db.Text @map("file_url")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user       User     @relation(fields: [userId], references: [id])
+  chatroom   Chatroom? @relation(fields: [chatroomId], references: [id])
+}
