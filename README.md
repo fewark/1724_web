@@ -50,6 +50,11 @@ npx prisma migrate dev --name init
 npm run dev
 ```
 
+### **6. Lint the code before committing**
+```bash
+npm run lint
+```
+
 
 ## **Frontend Setup**
 
@@ -68,4 +73,9 @@ npm install
 ### **3. Start the Frontend**
 ```bash
 npm run dev
+```
+
+### **4. Lint the code before committing**
+```bash
+npm run lint
 ```

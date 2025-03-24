@@ -1,0 +1,36 @@
+name: "lint"
+
+on:
+  pull_request:
+    types: ["opened", "reopened", "synchronize"]
+  push:
+  schedule:
+    - cron: "15 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: "write"
+
+concurrency:
+  group: "${{github.workflow}}-${{github.ref}}"
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        directory: ["backend", "frontend"]
+    steps:
+      - uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+          submodules: "recursive"
+      - uses: "actions/setup-node@v4"
+        with:
+          node-version: 22
+      - run: "npm clean-install"
+        working-directory: "${{matrix.directory}}"
+      - run: "npm run lint"
+        working-directory: "${{matrix.directory}}"
+

@@ -6,7 +6,9 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "lint": "eslint .",
+    "lint": "npm run lint:check",
+    "lint:check": "eslint . --max-warnings 0",
+    "lint:fix": "npm run lint:check -- --fix",
     "preview": "vite preview"
   },
   "dependencies": {

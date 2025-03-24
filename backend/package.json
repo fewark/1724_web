@@ -9,6 +9,9 @@
   "scripts": {
     "start": "node main.js",
     "dev": "nodemon main.js",
+    "lint": "npm run lint:check",
+    "lint:check": "eslint . --max-warnings 0",
+    "lint:fix": "npm run lint:check -- --fix",
     "test": "jest --forceExit"
   },
   "dependencies": {
