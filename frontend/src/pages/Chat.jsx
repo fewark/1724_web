@@ -1,9 +1,20 @@
-import React from 'react'
+import {useParams} from "react-router-dom";
 
+
+/**
+ * Renders the Chat page.
+ *
+ * @return {React.ReactElement}
+ */
 const Chat = () => {
-  return (
-    <div>We are on the Chat page</div>
-  )
-}
+    const {id} = useParams();
 
-export default Chat
+    return (
+        <div>
+            {"We are in the Chatroom "}
+            {id}
+        </div>
+    );
+};
+
+export default Chat;
