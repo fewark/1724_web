@@ -7,6 +7,18 @@ const EslintConfig = [
     CommonConfig,
     ...StylisticConfigArray,
     ...ReactConfigArray,
+    {
+        rules: {
+            "import/no-unresolved": [
+                "error",
+                {
+                    ignore: [
+                        "@tailwindcss/vite",
+                    ],
+                },
+            ],
+        },
+    },
 ];
 
 
