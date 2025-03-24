@@ -1,3 +1,22 @@
+# Keep local environment variables out of version control
+.env.local
+
+# Logs
+npm-debug.log*
+
+# Dependency / Build
 node_modules
-# Keep environment variables out of version control
-.env
+dist
+
+# Mac metadata
+.DS_Store
+
+# JetBrains IDE
+.idea
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+*.ntvs*
+*.njsproj
+*.sw?

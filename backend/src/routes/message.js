@@ -1,8 +1,12 @@
-const express = require('express');
+import express from "express";
+
+
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.send('this is file route');// this gets executed when user visit http://localhost:3000/user
+// GET /api/message
+router.get("/", (req, res) => {
+    // this gets executed when user visit http://localhost:3000/message
+    res.send("this is message route");
 });
 
 // example cases
@@ -12,4 +16,4 @@ router.get('/', (req, res) => {
 // router.put("/update", verifyJWT, updateUser);
 // router.delete("/delete", verifyJWT,  deleteUser);
 
-module.exports = router;
+export default router;
