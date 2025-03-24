@@ -9,7 +9,10 @@ on:
   workflow_dispatch:
 
 permissions:
+  # To update PR status
   actions: "write"
+
+  # To read private repo
   contents: "read"
 
 concurrency:
