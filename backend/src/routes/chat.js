@@ -1,4 +1,5 @@
 import express from "express";
+// import authenticate from "../middleware/authenticate";
 
 
 const router = express.Router();
@@ -7,6 +8,10 @@ const router = express.Router();
 router.get("/", (req, res) => {
     res.send("this is chat room route");
 });
+
+// router.get("/", authenticate, (req, res) => {
+//     res.send("this is chat room route using autentication");
+// });
 
 // example cases
 // router.post("/addChat", createChat);

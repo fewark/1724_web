@@ -7,6 +7,7 @@ import chatRouter from "./src/routes/chat.js";
 import fileRouter from "./src/routes/file.js";
 import messageRouter from "./src/routes/message.js";
 import userRouter from "./src/routes/user.js";
+import authRouter from "./src/routes/auth.js"
 
 
 /**
@@ -73,6 +74,7 @@ const initExpressApp = () => {
     });
 
     // Routes
+    app.use("/api/auth", authRouter)
     app.use("/api/chat", chatRouter);
     app.use("/api/file", fileRouter);
     app.use("/api/message", messageRouter);
