@@ -1,0 +1,22 @@
+FROM ubuntu:22.04
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y \
+    wget \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install MinIO
+RUN mkdir -p /opt/minio/bin \
+    && wget https://dl.min.io/server/minio/release/linux-amd64/minio -O /opt/minio/bin/minio \
+    && chmod +x /opt/minio/bin/minio \
+    && ln -s /opt/minio/bin/minio /usr/local/bin/minio
+
+# Create directories for MinIO
+RUN mkdir -p /data/minio
+
+# Expose MinIO API and Console ports
+EXPOSE 9000 9001
+
+# Start MinIO
+CMD ["minio", "server", "/data/minio", "--console-address", ":9001"] 
