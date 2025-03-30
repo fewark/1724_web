@@ -26,10 +26,11 @@ services:
       dockerfile: Dockerfile.ollama
     container_name: ollama
     ports:
-      - "11434:11434"  # Ollama API
+      - "9003:11434"  # Ollama API
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - OLLAMA_USE_GPU=1
+      - OLLAMA_HOST=0.0.0.0
     volumes:
       - ollama-models:/root/.ollama
     restart: unless-stopped
