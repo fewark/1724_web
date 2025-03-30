@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import cors from "cors";
 
 import errorHandler from "./src/middleware/error.js";
 import requestLoggingHandler from "./src/middleware/requestLogging.js";
@@ -63,6 +64,8 @@ let app;
  */
 const initExpressApp = () => {
     app = express();
+
+    app.use(cors());
 
     // Middleware
     app.use(express.json());
