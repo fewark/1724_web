@@ -42,12 +42,12 @@ model Message {
   chatroomId Int
   userId     Int
   content    String   @db.Text
-  fileId     Int?     
+  fileId     Int?     @unique
   createdAt  DateTime @default(now()) @map("created_at")
 
   chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
   user       User     @relation(fields: [userId], references: [id])
-  file       File?    @relation(fields: [fileId], references: [id])
+  file       File?    @relation("MessageFile", fields: [fileId], references: [id])
 }
 
 model File {
@@ -59,4 +59,5 @@ model File {
 
   user       User     @relation(fields: [userId], references: [id])
   chatroom   Chatroom? @relation(fields: [chatroomId], references: [id])
+  message    Message?  @relation("MessageFile")
 }
