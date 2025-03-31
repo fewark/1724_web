@@ -4,6 +4,9 @@ A real-time chat room application consists of separate frontend and backend comp
 
 ---
 
+## Video Demo
+
+
 ## Technologies Used
 
 - **Frontend**: React.js, Ant Design, TailwindCSS
@@ -35,7 +38,10 @@ npm install
 ```
 
 ### **3. Set up environment variables**
-Make a copy of the `.env` file in the backend folder, and add your url and key inside:
+Make a copy of the `.env` file in the backend folder, and add your postgresql database url inside:
+```bash
+cp .env.sample .env
+```
 
 > [!WARNING]  
 > Do not commit your `.env.local` file to version control.
