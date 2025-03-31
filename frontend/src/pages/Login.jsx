@@ -1,10 +1,25 @@
-import { Form, Input, Button, Checkbox, message, Card, Typography, Space, Modal } from 'antd';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+
+import {
+    Button,
+    Card,
+    Checkbox,
+    Form,
+    Input,
+    message,
+    Modal,
+    Space,
+    Typography,
+} from "antd";
+
+import {
+    reqUserLogin,
+    reqUserRegister,
+} from "../api/auth";
 
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 /**
  * Renders the Login page.
@@ -12,115 +27,116 @@ const { Title } = Typography;
  * @return {React.ReactElement}
  */
 const Login = () => {
-    const [loading, setLoading] = useState(false);
-    const [registerModalVisible, setRegisterModalVisible] = useState(false);
-    const [registerLoading, setRegisterLoading] = useState(false);
     const navigate = useNavigate();
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [isRegisterModalVisible, setIsRegisterModalVisible] = useState(false);
+    const [isRegisterLoading, setIsRegisterLoading] = useState(false);
+
     const handleLogin = async (values) => {
-        setLoading(true);
+        setIsLoading(true);
         try {
-            const response = await axios.post('http://localhost:3000/api/auth/login', {
-                email: values.email,
-                password: values.password,
-            });
-
-            const { token } = response.data;
-            localStorage.setItem('token', token);
-            message.success('Login successful!');
-            navigate('/chat');
-
+            await reqUserLogin(values.email, values.password);
+            message.success("Login successful!");
+            navigate("/chat");
         } catch (error) {
-            const errMsg = error.response?.data?.error || 'Login failed';
+            const errMsg = error.response?.data?.error || "Login failed";
             message.error(errMsg);
         } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     };
 
-    const handleLoginFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+    const handleLoginFormValidationFailure = (errorInfo) => {
+        console.log("Failed:", errorInfo);
     };
 
     // --- REGISTER handler ---
     const handleRegister = async (values) => {
-        setRegisterLoading(true);
+        setIsRegisterLoading(true);
         try {
-            const response = await axios.post('http://localhost:3000/api/auth/register', values);
-            console.log("hi there", values)
-
-            const { token } = response.data;
-            localStorage.setItem('token', token);
-            message.success('Registration successful! You are now logged in.');
-            setRegisterModalVisible(false);
-            navigate('/chat');
-            
+            await reqUserRegister(values.username, values.email, values.password, values.profilePicture);
+            message.success("Registration successful! You are now logged in.");
+            setIsRegisterModalVisible(false);
+            navigate("/chat");
         } catch (error) {
-            const errMsg = error.response?.data?.error || 'Registration failed';
+            const errMsg = error.response?.data?.error || "Registration failed";
             message.error(errMsg);
         } finally {
-            setRegisterLoading(false);
+            setIsRegisterLoading(false);
         }
     };
 
     return (
-        <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#123458' }}>
+        <div style={{display: "flex", height: "100vh", alignItems: "center", justifyContent: "center", background: "#123458"}}>
             <Card
                 style={{
                     width: 450,
-                    padding: '20px 30px',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
-                    borderRadius: '12px',
+                    padding: "20px 30px",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+                    borderRadius: "12px",
                 }}
             >
-                <Space direction="vertical" style={{ width: '100%' }} align="center">
+                <Space
+                    align={"center"}
+                    direction={"vertical"}
+                    style={{width: "100%"}}
+                >
                     <Title level={3}>Welcome Back to Chat Room</Title>
                 </Space>
 
                 {/* Login form */}
                 <Form
-                    name="login"
-                    layout="vertical"
-                    initialValues={{ remember: false }}
+                    initialValues={{remember: false}}
+                    layout={"vertical"}
+                    name={"login"}
                     onFinish={handleLogin}
-                    onFinishFailed={handleLoginFailed}
+                    onFinishFailed={handleLoginFormValidationFailure}
                 >
                     <Form.Item
-                        label="Email"
-                        name="email"
+                        label={"Email"}
+                        name={"email"}
                         rules={[
-                            { required: true, message: 'Please input your email!' },
-                            { type: 'email', message: 'Enter a valid email!' },
+                            {required: true, message: "Please input your email!"},
+                            {type: "email", message: "Enter a valid email!"},
                         ]}
                     >
-                        <Input placeholder="you@example.com" />
+                        <Input placeholder={"you@example.com"}/>
                     </Form.Item>
 
                     <Form.Item
-                        label="Password"
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
+                        label={"Password"}
+                        name={"password"}
+                        rules={[{required: true, message: "Please input your password!"}]}
                     >
-                        <Input.Password placeholder="••••••••" />
+                        <Input.Password placeholder={"••••••••"}/>
                     </Form.Item>
 
-                    <Form.Item name="remember" valuePropName="checked">
+                    <Form.Item
+                        name={"remember"}
+                        valuePropName={"checked"}
+                    >
                         <Checkbox>Remember me</Checkbox>
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" block loading={loading}>
+                        <Button
+                            block={true}
+                            htmlType={"submit"}
+                            loading={isLoading}
+                            type={"primary"}
+                        >
                             Log in
                         </Button>
                     </Form.Item>
 
-                    <Form.Item style={{ marginBottom: 0 }}>
+                    <Form.Item style={{marginBottom: 0}}>
                         <Button
-                            type="link"
-                            block
-                            onClick={() => setRegisterModalVisible(true)}
+                            block={true}
+                            type={"link"}
+                            onClick={() => setIsRegisterModalVisible(true)}
                         >
-                            Don't have an account? Sign up
+                            Don&apos;t have an account? Sign up
                         </Button>
                     </Form.Item>
                 </Form>
@@ -128,57 +144,68 @@ const Login = () => {
 
             {/* SIGN UP MODAL */}
             <Modal
-                title="Create an Account"
-                open={registerModalVisible}
-                onCancel={() => setRegisterModalVisible(false)}
+                centered={true}
                 footer={null}
-                centered
+                open={isRegisterModalVisible}
+                title={"Create an Account"}
+                onCancel={() => setIsRegisterModalVisible(false)}
             >
-                <Form layout="vertical" onFinish={handleRegister}>
+                <Form
+                    layout={"vertical"}
+                    onFinish={handleRegister}
+                >
                     <Form.Item
-                        label="Username"
-                        name="username"
-                        rules={[{ required: true, message: 'Please enter a username' }]}
+                        label={"Username"}
+                        name={"username"}
+                        rules={[{required: true, message: "Please enter a username"}]}
                     >
-                        <Input />
+                        <Input/>
                     </Form.Item>
 
                     <Form.Item
-                        label="Email"
-                        name="email"
+                        label={"Email"}
+                        name={"email"}
                         rules={[
-                            { required: true, message: 'Please enter your email' },
-                            { type: 'email', message: 'Enter a valid email' },
+                            {required: true, message: "Please enter your email"},
+                            {type: "email", message: "Enter a valid email"},
                         ]}
                     >
-                        <Input />
+                        <Input/>
                     </Form.Item>
 
                     <Form.Item
-                        label="Password"
-                        name="password"
-                        rules={[{ required: true, message: 'Please enter a password' }]}
+                        label={"Password"}
+                        name={"password"}
+                        rules={[{required: true, message: "Please enter a password"}]}
                     >
-                        <Input.Password />
+                        <Input.Password/>
                     </Form.Item>
 
                     <Form.Item
-                        label="Confirm Password"
-                        name="confirm_password"
-                        dependencies={['password']}
+                        dependencies={["password"]}
+                        label={"Confirm Password"}
+                        name={"confirm_password"}
                         rules={[
-                            { required: true, message: 'Please enter your password again' },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
+                            {required: true, message: "Please enter your password again"},
+                            ({getFieldValue}) => ({
+                                /**
+                                 * Validates that the confirm password
+                                 *
+                                 * @param {*} _ Unused parameter
+                                 * @param {string} value
+                                 * @return {Promise<void>}
+                                 */
+                                validator (_, value) {
+                                    if (!value || getFieldValue("password") === value) {
                                         return Promise.resolve();
                                     }
-                                    return Promise.reject(new Error('Passwords do not match'));
+
+                                    return Promise.reject(new Error("Passwords do not match"));
                                 },
                             }),
                         ]}
                     >
-                        <Input.Password />
+                        <Input.Password/>
                     </Form.Item>
 
                     {/* <Form.Item
@@ -191,17 +218,17 @@ const Login = () => {
 
                     <Form.Item>
                         <Button
-                            type="primary"
-                            htmlType="submit"
-                            block
-                            loading={registerLoading}
+                            block={true}
+                            htmlType={"submit"}
+                            loading={isRegisterLoading}
+                            type={"primary"}
                         >
                             Sign Up
                         </Button>
                     </Form.Item>
                 </Form>
             </Modal>
-        </div >
+        </div>
     );
 };
 
