@@ -9,6 +9,10 @@ router.get("/", (req, res) => {
     res.send("this is user route");
 });
 
+// router.get("/", authenticate, (req, res) => {
+//     res.send("this is user route using autentication");
+// });
+
 // example cases
 // router.post("/adduser", createUser);
 // router.post("/login", loginUser);

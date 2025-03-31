@@ -1,8 +1,10 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 
 import errorHandler from "./src/middleware/error.js";
 import requestLoggingHandler from "./src/middleware/requestLogging.js";
+import authRouter from "./src/routes/auth.js";
 import chatRouter from "./src/routes/chat.js";
 import fileRouter from "./src/routes/file.js";
 import messageRouter from "./src/routes/message.js";
@@ -63,6 +65,8 @@ let app;
 const initExpressApp = () => {
     app = express();
 
+    app.use(cors());
+
     // Middleware
     app.use(express.json());
     app.use(requestLoggingHandler);
@@ -73,6 +77,7 @@ const initExpressApp = () => {
     });
 
     // Routes
+    app.use("/api/auth", authRouter);
     app.use("/api/chat", chatRouter);
     app.use("/api/file", fileRouter);
     app.use("/api/message", messageRouter);
