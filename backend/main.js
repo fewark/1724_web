@@ -16,6 +16,9 @@ import userRouter from "./src/routes/user.js";
  * @property {string} DATABASE_URL
  * @property {string} JWT_SECRET
  * @property {string} PORT
+ * @property {string} MINIO_ACCESS_KEY
+ * @property {string} MINIO_SECRET_KEY
+ * @property {string} MINIO_ENDPOINT
  */
 
 /**
@@ -29,11 +32,19 @@ const parseEnv = () => {
         DATABASE_URL,
         JWT_SECRET,
         PORT,
+        MINIO_ACCESS_KEY,
+        MINIO_SECRET_KEY,
+        MINIO_ENDPOINT,
+        MINIO_PORT,
     } = process.env;
     const requiredEnv = {
         DATABASE_URL,
         JWT_SECRET,
         PORT,
+        MINIO_ACCESS_KEY,
+        MINIO_SECRET_KEY,
+        MINIO_ENDPOINT,
+        MINIO_PORT
     };
 
     Object.entries(requiredEnv).forEach(([key, value]) => {
