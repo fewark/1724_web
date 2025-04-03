@@ -1,7 +1,7 @@
 import {PrismaClient} from "@prisma/client";
 import bcrypt, {compare} from "bcrypt";
 import express from "express";
-import StatusCodes from "http-status-codes";
+import {StatusCodes} from "http-status-codes";
 import jwt from "jsonwebtoken";
 
 
@@ -47,7 +47,9 @@ router.post("/register", async (req, res) => {
     const {username, email, password, profilePicture} = req.body;
 
     if (!username || !email || !password) {
-        return res.status(StatusCodes.BAD_REQUEST).json({error: "username, email, and password are required"});
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            error: "username, email, and password are required",
+        });
     }
 
     try {
