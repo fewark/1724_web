@@ -9,6 +9,7 @@ import Chat from "./pages/Chat.jsx";
 import Login from "./pages/Login.jsx";
 import Profile from "./pages/Profile.jsx";
 
+import "@ant-design/v5-patch-for-react-19";
 import "./index.css";
 
 
