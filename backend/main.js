@@ -1,4 +1,3 @@
-import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 
@@ -55,7 +54,7 @@ dotenv.config({
 });
 
 /**
- * @type {express.Express}
+ * @type {Express}
  */
 let app;
 
@@ -64,8 +63,6 @@ let app;
  */
 const initExpressApp = () => {
     app = express();
-
-    app.use(cors());
 
     // Middleware
     app.use(express.json());
