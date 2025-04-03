@@ -38,17 +38,17 @@ npm install
 ```
 
 ### **3. Set up environment variables**
-Make a copy of the `.env` file in the backend folder, and add your postgresql database url inside:
+Make a copy of the `.env` file as `.env.local` in the backend folder, and add your url and key inside:
 ```bash
-cp .env.sample .env
+cp .env .env.local
 ```
 
-> [!WARNING]  
+> [!WARNING]
 > Do not commit your `.env.local` file to version control.
 
 ### **4. Run Prisma migration**
 ```bash
-npx prisma migrate dev --name init
+npm run prisma:migrate
 ```
 
 ### **5. Start the Backend**

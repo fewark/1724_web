@@ -10,6 +10,14 @@ import messageRouter from "./src/routes/message.js";
 import userRouter from "./src/routes/user.js";
 
 
+dotenv.config({
+    override: true,
+    path: [
+        ".env",
+        ".env.local",
+    ],
+});
+
 /**
  * @typedef {object} EnvVars
  * @property {string} DATABASE_URL
@@ -45,13 +53,6 @@ const parseEnv = () => {
         ...requiredEnv,
     };
 };
-
-dotenv.config({
-    path: [
-        ".env.local",
-        ".env",
-    ],
-});
 
 /**
  * @type {Express}

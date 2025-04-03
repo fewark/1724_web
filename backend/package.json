@@ -8,10 +8,11 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "dev": "nodemon main.js",
+    "dev": "node --watch main.js",
     "lint": "npm run lint:check",
     "lint:check": "eslint . --max-warnings 0",
     "lint:fix": "npm run lint:check -- --fix",
+    "prisma:migrate": "dotenv -e .env.local -- npx prisma migrate dev --name init",
     "test": "jest --forceExit"
   },
   "dependencies": {
@@ -25,9 +26,9 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
+    "dotenv-cli": "^8.0.0",
     "eslint-config-yscope": "^1.1.0",
     "jest": "^29.7.0",
-    "nodemon": "^3.1.9",
     "prisma": "^6.5.0"
   }
 }
