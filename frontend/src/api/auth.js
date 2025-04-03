@@ -10,7 +10,7 @@ import api from "./index";
  */
 const reqUserLogin = async (email, password) => {
     try {
-        const res = await api.post("/login", {email, password}, {
+        const res = await api.post("/auth/login", {email, password}, {
             skipAuth: true,
         });
 
@@ -44,7 +44,7 @@ const reqUserRegister = async (username, email, password, profilePicture) => {
             payload.profilePicture = profilePicture;
         }
 
-        const res = await api.post("/register", payload, {skipAuth: true});
+        const res = await api.post("/auth/register", payload, {skipAuth: true});
         const {token} = res.data;
         sessionStorage.setItem("token", token);
 
