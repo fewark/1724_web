@@ -1,10 +1,12 @@
 import express from "express";
-import { 
-  getFileHandler, 
-  deleteFileHandler,
-  generateUploadUrlHandler,
-  listChatroomFilesHandler
+
+import {
+    deleteFileHandler,
+    generateUploadUrlHandler,
+    getFileHandler,
+    listChatroomFilesHandler,
 } from "../controllers/fileController.js";
+
 
 const router = express.Router();
 
@@ -14,15 +16,15 @@ router.get("/test", (req, res) => {
 });
 
 // Generate presigned URL for file upload and create a record
-router.post('/upload/:roomId', generateUploadUrlHandler);
+router.post("/upload/:roomId", generateUploadUrlHandler);
 
 // Get file details with presigned URL for viewing/downloading
-router.get('/id/:fileId', getFileHandler);
+router.get("/id/:fileId", getFileHandler);
 
 // Delete file by ID
-router.delete('/id/:fileId', deleteFileHandler);
+router.delete("/id/:fileId", deleteFileHandler);
 
 // List all files in a chatroom
-router.get('/room/:roomId', listChatroomFilesHandler);
+router.get("/room/:roomId", listChatroomFilesHandler);
 
 export default router;
