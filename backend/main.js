@@ -28,12 +28,12 @@ const parseEnv = () => {
     const {
         DATABASE_URL,
         JWT_SECRET,
-        PORT
+        PORT,
     } = process.env;
     const requiredEnv = {
         DATABASE_URL,
         JWT_SECRET,
-        PORT
+        PORT,
     };
 
     Object.entries(requiredEnv).forEach(([key, value]) => {
