@@ -3,6 +3,7 @@ import {Client} from "minio";
 import {v4 as uuidv4} from "uuid";
 
 
+// FIXME: why are we call dotenv.config() twice?
 dotenv.config();
 
 // Initialize the MinIO client with environment variables or defaults

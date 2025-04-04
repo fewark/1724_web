@@ -4,11 +4,12 @@ import express from "express";
 import errorHandler from "./src/middleware/error.js";
 import requestLoggingHandler from "./src/middleware/requestLogging.js";
 import authRouter from "./src/routes/auth.js";
-import chatRouter from "./src/routes/chat.js";
-import fileRouter from "./src/routes/file.js";
+import chatroomRouter from "./src/routes/chatroom.js";
 import messageRouter from "./src/routes/message.js";
 import userRouter from "./src/routes/user.js";
 
+
+// import fileRouter from "./src/routes/file.js";
 
 dotenv.config({
     override: true,
@@ -76,10 +77,11 @@ const initExpressApp = () => {
 
     // Routes
     app.use("/api/auth", authRouter);
-    app.use("/api/chat", chatRouter);
-    app.use("/api/file", fileRouter);
+    app.use("/api/chatroom", chatroomRouter);
     app.use("/api/message", messageRouter);
     app.use("/api/user", userRouter);
+
+    // app.use("/api/file", fileRouter);
 
     // Error handling
     app.use(errorHandler);
