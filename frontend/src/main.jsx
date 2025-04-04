@@ -6,16 +6,17 @@ import {
 } from "react-router-dom";
 
 import Chat from "./pages/Chat.jsx";
-import Login from "./pages/Login.jsx";
 import Profile from "./pages/Profile.jsx";
+import Welcome from "./pages/Welcome.jsx";
 
+import "@ant-design/v5-patch-for-react-19";
 import "./index.css";
 
 
 const ROUTER = createBrowserRouter([
     {
         path: "/",
-        element: <Login/>,
+        element: <Welcome/>,
     },
     {
         path: "/chat",

@@ -1,0 +1,257 @@
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+
+import {
+    Button,
+    Card,
+    Checkbox,
+    Divider,
+    Form,
+    Input,
+    message,
+    Tabs,
+    Typography,
+} from "antd";
+
+import {
+    reqUserLogin,
+    reqUserRegister,
+} from "../api/auth";
+
+
+/**
+ * Renders the login form.
+ *
+ * @return {React.ReactNode}
+ */
+const LoginForm = () => {
+    const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleLoginFormValidationFailure = (errorInfo) => {
+        errorInfo.errorFields.forEach(({errors}) => {
+            message.warning(errors[0]);
+        });
+    };
+
+    const handleLogin = async ({email, password}) => {
+        setIsLoading(true);
+        const loginError = await reqUserLogin(email, password);
+        if (null !== loginError) {
+            message.error(loginError);
+        } else {
+            message.success("Login successful!");
+            navigate("/chat");
+        }
+        setIsLoading(false);
+    };
+
+    return (
+        <Form
+            initialValues={{remember: false}}
+            layout={"vertical"}
+            name={"login"}
+            onFinish={handleLogin}
+            onFinishFailed={handleLoginFormValidationFailure}
+        >
+            <div style={{flexGrow: 1}}>
+                <Form.Item
+                    label={<Typography.Title level={5}>Email</Typography.Title>}
+                    name={"email"}
+                    rules={[
+                        {required: true, message: "Please input your email"},
+                        {type: "email", message: "Enter a valid email"},
+                    ]}
+                >
+                    <Input placeholder={"example@example.com"}/>
+                </Form.Item>
+
+                <Form.Item
+                    label={<Typography.Title level={5}>Password</Typography.Title>}
+                    name={"password"}
+                    rules={[{required: true, message: "Please input your password"}]}
+                >
+                    <Input.Password placeholder={"••••••••"}/>
+                </Form.Item>
+
+                <Form.Item
+                    name={"remember"}
+                    valuePropName={"checked"}
+                >
+                    <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+            </div>
+
+            <Divider/>
+
+            <Form.Item>
+                <Button
+                    block={true}
+                    htmlType={"submit"}
+                    loading={isLoading}
+                    type={"primary"}
+                >
+                    Sign in
+                </Button>
+            </Form.Item>
+        </Form>
+    );
+};
+
+/**
+ * Renders the registration form.
+ *
+ * @return {React.ReactNode}
+ */
+const RegisterForm = () => {
+    const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleRegister = async ({username, email, password, profilePicture}) => {
+        setIsLoading(true);
+        const registrationError = await reqUserRegister(username, email, password, profilePicture);
+        if (null !== registrationError) {
+            message.error(registrationError);
+        } else {
+            message.success("Registration successful! You are now logged in.");
+            navigate("/chat");
+        }
+        setIsLoading(false);
+    };
+
+    const handleRegisterFormValidationFailure = (errorInfo) => {
+        errorInfo.errorFields.forEach(({errors}) => {
+            message.warning(errors[0]);
+        });
+    };
+
+    return (
+        <Form
+            layout={"vertical"}
+            onFinish={handleRegister}
+            onFinishFailed={handleRegisterFormValidationFailure}
+        >
+            <Form.Item
+                label={<Typography.Title level={5}>Username</Typography.Title>}
+                name={"username"}
+                rules={[{required: true, message: "Please enter a username"}]}
+            >
+                <Input placeholder={"username"}/>
+            </Form.Item>
+
+            <Form.Item
+                label={<Typography.Title level={5}>Email</Typography.Title>}
+                name={"email"}
+                rules={[
+                    {required: true, message: "Please enter your email"},
+                    {type: "email", message: "Enter a valid email"},
+                ]}
+            >
+                <Input placeholder={"example@example.com"}/>
+            </Form.Item>
+
+            <Form.Item
+                label={<Typography.Title level={5}>Password</Typography.Title>}
+                name={"password"}
+                rules={[{required: true, message: "Please enter a password"}]}
+            >
+                <Input.Password/>
+            </Form.Item>
+
+            <Form.Item
+                dependencies={["password"]}
+                label={<Typography.Title level={5}>Confirm Password</Typography.Title>}
+                name={"confirmPassword"}
+                rules={[
+                    {required: true, message: "Please enter your password again"},
+                    ({getFieldValue}) => ({
+                        // eslint-disable-next-line require-await
+                        validator: async (_, value) => {
+                            if ("undefined" === typeof value ||
+                                getFieldValue("password") === value) {
+                                return;
+                            }
+
+                            throw new Error("Passwords do not match");
+                        },
+                    }),
+                ]}
+            >
+                <Input.Password/>
+            </Form.Item>
+
+            {/* <Form.Item
+                        label="Profile Picture URL"
+                        name="profilePicture"
+                        rules={[{ type: 'url', message: 'Enter a valid URL' }]}
+                    >
+                        <Input placeholder="Optional" />
+                    </Form.Item> */}
+            <Divider/>
+            <Form.Item>
+                <Button
+                    block={true}
+                    htmlType={"submit"}
+                    loading={isLoading}
+                    type={"primary"}
+                >
+                    Register
+                </Button>
+            </Form.Item>
+        </Form>
+    );
+};
+
+
+/**
+ * Renders the Welcome page.
+ *
+ * @return {React.ReactElement}
+ */
+const Welcome = () => {
+    return (
+        <div
+            style={{
+                alignItems: "center",
+                background: "#123458",
+                display: "flex",
+                height: "100vh",
+                justifyContent: "center",
+            }}
+        >
+            <Card
+                style={{
+                    paddingInline: "24px",
+                    paddingBlock: "16px",
+                }}
+            >
+                <Typography.Title
+                    level={2}
+                    style={{justifySelf: "center"}}
+                >
+                    ChatUI
+                </Typography.Title>
+
+                <Tabs
+                    centered={true}
+                    defaultActiveKey={"login"}
+                    size={"large"}
+                    style={{width: "320px", height: "540px"}}
+                    items={[{
+                        label: "Login",
+                        key: "login",
+                        children: <LoginForm/>,
+                    },
+                    {
+                        label: "Register",
+                        key: "register",
+                        children: <RegisterForm/>,
+                    }]}/>
+            </Card>
+        </div>
+    );
+};
+
+export default Welcome;

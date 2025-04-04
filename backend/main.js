@@ -1,7 +1,6 @@
-import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-
+import { createServer } from "http";
 import errorHandler from "./src/middleware/error.js";
 import requestLoggingHandler from "./src/middleware/requestLogging.js";
 import authRouter from "./src/routes/auth.js";
@@ -9,7 +8,15 @@ import chatRouter from "./src/routes/chat.js";
 import fileRouter from "./src/routes/file.js";
 import messageRouter from "./src/routes/message.js";
 import userRouter from "./src/routes/user.js";
+import { setupSocket } from "./src/socket.js";
 
+dotenv.config({
+    override: true,
+    path: [
+        ".env",
+        ".env.local",
+    ],
+});
 
 /**
  * @typedef {object} EnvVars
@@ -47,25 +54,13 @@ const parseEnv = () => {
     };
 };
 
-dotenv.config({
-    path: [
-        ".env.local",
-        ".env",
-    ],
-});
-
-/**
- * @type {express.Express}
- */
 let app;
 
 /**
- * Initializes the express app.
+ * Initializes the Express app.
  */
 const initExpressApp = () => {
     app = express();
-
-    app.use(cors());
 
     // Middleware
     app.use(express.json());
@@ -87,14 +82,18 @@ const initExpressApp = () => {
     app.use(errorHandler);
 };
 
-/**
- * Starts the server.
- */
 const main = () => {
     const envVars = parseEnv();
     initExpressApp();
 
-    app.listen(envVars.PORT, () => {
+    // Create an HTTP server from the Express app.
+    const httpServer = createServer(app);
+
+    // Setup Socket.IO for real-time chat functionality.
+    setupSocket(httpServer);
+
+    // Start the server.
+    httpServer.listen(envVars.PORT, () => {
         console.log(`Server is running on port ${envVars.PORT}`);
     });
 };
