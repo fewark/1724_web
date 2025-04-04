@@ -10,7 +10,7 @@ import jwt from "jsonwebtoken";
  * @param {import("express").NextFunction} next
  * @return {void}
  */
-const authenticate = (req, res, next) => {
+const authHandler = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -41,4 +41,4 @@ const authenticate = (req, res, next) => {
     }
 };
 
-export default authenticate;
+export default authHandler;
