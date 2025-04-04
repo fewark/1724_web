@@ -83,15 +83,9 @@ export const generateUploadUrlHandler = async (req, res) => {
       }
     });
     
-    // Return the presigned URL and file information
+    // Return only the presigned URL
     res.status(200).json({
-      id: file.id,
-      presignedUrl,
-      fileUrl,
-      objectName,
-      bucket: DEFAULT_BUCKET,
-      expiresIn: 600, // 10 minutes in seconds
-      uploadMethod: 'PUT' // Let frontend know to use PUT method for upload
+      presignedUrl
     });
   } catch (err) {
     console.error('Error generating upload URL:', err);
