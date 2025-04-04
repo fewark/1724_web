@@ -66,13 +66,8 @@ export const generateFilePath = (originalFilename) => {
   // Generate a UUID for uniqueness
   const uuid = uuidv4();
   
-  // Extract file extension if present
-  const extension = originalFilename.includes('.') 
-    ? originalFilename.split('.').pop().toLowerCase()
-    : '';
-  
-  // Build the path
-  return `${year}/${month}/${day}/${hour}/${uuid}${extension ? `.${extension}` : ''}`;
+  // Build the path - using only the UUID, not appending extension
+  return `${year}/${month}/${day}/${hour}/${uuid}`;
 };
 
 /**
