@@ -3,12 +3,12 @@ import jwt from "jsonwebtoken";
 
 
 /**
- * autheticate further apis
+ * Decorates the request object with user data if the token is valid.
  *
  * @param {import("express").Request} req
  * @param {import("express").Response} res
  * @param {import("express").NextFunction} next
- * @return {void}
+ * @return {import("express").Response | void}
  */
 const authHandler = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -21,23 +21,16 @@ const authHandler = (req, res, next) => {
     const [, token] = authHeader.split(" ");
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const {email, id, username} = jwt.verify(token, process.env.JWT_SECRET);
 
-        // { id, username, email }
-        req.userData = {
-            email: decoded.email,
-            userID: decoded.userID,
-            userName: decoded.userName,
-            createdAt: decoded.createdAt,
-
-        // user_type: decoded.user_type,
-        };
+        req.user = {email, id, username};
 
         return next();
     } catch (err) {
-        console.log(err);
+        console.log("Unable to decode JWT payload:", err);
 
-        return res.status(StatusCodes.FORBIDDEN).json({error: "Token is invalid or expired"});
+        return res.status(StatusCodes.FORBIDDEN)
+            .json({error: "Token is invalid or expired"});
     }
 };
 
