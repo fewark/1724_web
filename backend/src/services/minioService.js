@@ -1,6 +1,8 @@
 import { Client } from 'minio';
-import fs from 'fs';
-import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Initialize the MinIO client with environment variables or defaults
 const minioClient = new Client({
@@ -14,197 +16,123 @@ const minioClient = new Client({
 // Log connection parameters without exposing secrets
 console.log(`MinIO client initialized with endpoint: ${process.env.MINIO_ENDPOINT || 'localhost'}, port: ${process.env.MINIO_PORT || '9000'}, useSSL: ${process.env.MINIO_USE_SSL === 'true'}`);
 
-// Create a bucket if it doesn't exist
-const ensureBucketExists = async (bucketName) => {
+// Default bucket name for chat files
+export const DEFAULT_BUCKET = 'chatui';
+
+/**
+ * Ensure that a bucket exists, create it if it doesn't
+ * @param {string} bucketName - The name of the bucket
+ * @returns {Promise<void>}
+ */
+export const ensureBucketExists = async (bucketName) => {
   try {
     const exists = await minioClient.bucketExists(bucketName);
     if (!exists) {
+      console.log(`Creating bucket: ${bucketName}`);
       await minioClient.makeBucket(bucketName);
+      // Set bucket policy to allow read access
+      const policy = {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Effect: 'Allow',
+            Principal: { AWS: ['*'] },
+            Action: ['s3:GetObject'],
+            Resource: [`arn:aws:s3:::${bucketName}/*`],
+          },
+        ],
+      };
+      await minioClient.setBucketPolicy(bucketName, JSON.stringify(policy));
       console.log(`Bucket ${bucketName} created successfully`);
     }
-    return true;
   } catch (err) {
-    console.error('Error ensuring bucket exists:', err);
+    console.error(`Error ensuring bucket exists: ${err.message}`);
     throw err;
   }
 };
 
-// Upload a file from local path
-const uploadFile = async (bucketName, filePath, objectName = null) => {
-  try {
-    // If no objectName is provided, use the basename of the file
-    if (!objectName) {
-      objectName = path.basename(filePath);
-    }
+/**
+ * Generate a file path based on the current date and a random UUID
+ * Format: /year/month/day/hour/random-uuid
+ * @returns {string} The generated file path
+ */
+export const generateFilePath = (originalFilename) => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hour = String(now.getHours()).padStart(2, '0');
 
-    await ensureBucketExists(bucketName);
+  // Generate a UUID for uniqueness
+  const uuid = uuidv4();
+  
+  // Extract file extension if present
+  const extension = originalFilename.includes('.') 
+    ? originalFilename.split('.').pop().toLowerCase()
+    : '';
+  
+  // Build the path
+  return `${year}/${month}/${day}/${hour}/${uuid}${extension ? `.${extension}` : ''}`;
+};
+
+/**
+ * Generate a presigned URL for uploading a file
+ * @param {string} originalFilename - Original filename from the client
+ * @param {number} expirySeconds - URL expiry time in seconds (default: 600)
+ * @returns {Object} Object containing presignedUrl, fileUrl, and objectName
+ */
+export const generatePresignedUploadUrl = async (originalFilename, expirySeconds = 600) => {
+  try {
+    // Ensure the default bucket exists
+    await ensureBucketExists(DEFAULT_BUCKET);
     
-    // Upload the file
-    const etag = await minioClient.fPutObject(bucketName, objectName, filePath);
-    console.log(`File uploaded successfully to ${bucketName}/${objectName}`);
+    // Generate a path for the file
+    const objectName = generateFilePath(originalFilename);
     
-    // Generate a URL to access the file
-    const url = await minioClient.presignedGetObject(bucketName, objectName, 24*60*60); // 24 hour expiry
-    
-    return {
-      etag,
+    // Generate a presigned URL for PUT operation
+    const presignedUrl = await minioClient.presignedPutObject(
+      DEFAULT_BUCKET,
       objectName,
-      bucket: bucketName,
-      url
+      expirySeconds
+    );
+    
+    // Return the presigned URL and the file URL for storage
+    return {
+      presignedUrl,
+      fileUrl: `/${DEFAULT_BUCKET}/${objectName}`,
+      objectName
     };
   } catch (err) {
-    console.error('Error uploading file:', err);
+    console.error(`Error generating presigned upload URL: ${err.message}`);
     throw err;
   }
 };
 
-// Upload a buffer/stream directly
-const uploadBuffer = async (bucketName, buffer, objectName, contentType = 'application/octet-stream') => {
+/**
+ * Generate a presigned URL for downloading/viewing a file
+ * @param {string} bucket - Bucket name
+ * @param {string} objectName - Object name in the bucket
+ * @param {number} expirySeconds - URL expiry time in seconds (default: 3600)
+ * @returns {Promise<string>} Presigned URL
+ */
+export const getPresignedUrl = async (bucket, objectName, expirySeconds = 3600) => {
   try {
-    await ensureBucketExists(bucketName);
-    
-    // Upload the buffer
-    const etag = await minioClient.putObject(bucketName, objectName, buffer, contentType);
-    console.log(`Buffer uploaded successfully to ${bucketName}/${objectName}`);
-    
-    // Generate a URL to access the file
-    const url = await minioClient.presignedGetObject(bucketName, objectName, 24*60*60); // 24 hour expiry
-    
-    return {
-      etag,
-      objectName,
-      bucket: bucketName,
-      url
-    };
+    return await minioClient.presignedGetObject(bucket, objectName, expirySeconds);
   } catch (err) {
-    console.error('Error uploading buffer:', err);
+    console.error(`Error generating presigned URL for ${bucket}/${objectName}: ${err.message}`);
     throw err;
   }
 };
 
-// Get file as a stream
-const getFileStream = async (bucketName, objectName) => {
+/**
+ * Check if a file exists in the bucket
+ * @param {string} bucket - Bucket name
+ * @param {string} objectName - Object name in the bucket
+ * @returns {Promise<boolean>} Whether the file exists
+ */
+export const fileExists = async (bucket, objectName) => {
   try {
-    // Check if the object exists
-    await minioClient.statObject(bucketName, objectName);
-    
-    // Get the file stream
-    const stream = await minioClient.getObject(bucketName, objectName);
-    return stream;
-  } catch (err) {
-    console.error(`Error getting file stream for ${bucketName}/${objectName}:`, err);
-    throw err;
-  }
-};
-
-// Get file as a buffer
-const getFileBuffer = async (bucketName, objectName) => {
-  try {
-    const stream = await getFileStream(bucketName, objectName);
-    
-    return new Promise((resolve, reject) => {
-      const chunks = [];
-      
-      stream.on('data', (chunk) => chunks.push(chunk));
-      stream.on('end', () => resolve(Buffer.concat(chunks)));
-      stream.on('error', reject);
-    });
-  } catch (err) {
-    console.error(`Error getting file buffer for ${bucketName}/${objectName}:`, err);
-    throw err;
-  }
-};
-
-// Download file to local path
-const downloadFile = async (bucketName, objectName, filePath) => {
-  try {
-    await minioClient.fGetObject(bucketName, objectName, filePath);
-    console.log(`File downloaded successfully from ${bucketName}/${objectName} to ${filePath}`);
-    return filePath;
-  } catch (err) {
-    console.error(`Error downloading file ${bucketName}/${objectName}:`, err);
-    throw err;
-  }
-};
-
-// Get file metadata
-const getFileMetadata = async (bucketName, objectName) => {
-  try {
-    const stat = await minioClient.statObject(bucketName, objectName);
-    return stat;
-  } catch (err) {
-    console.error(`Error getting metadata for ${bucketName}/${objectName}:`, err);
-    throw err;
-  }
-};
-
-// Generate a presigned URL for downloading a file
-const getPresignedGetUrl = async (bucketName, objectName, expirySeconds = 24 * 60 * 60) => {
-  try {
-    const url = await minioClient.presignedGetObject(bucketName, objectName, expirySeconds);
-    return url;
-  } catch (err) {
-    console.error(`Error generating presigned URL for ${bucketName}/${objectName}:`, err);
-    throw err;
-  }
-};
-
-// Generate a presigned URL for uploading a file
-const getPresignedPutUrl = async (bucketName, objectName, expirySeconds = 60 * 60) => {
-  try {
-    await ensureBucketExists(bucketName);
-    
-    const url = await minioClient.presignedPutObject(bucketName, objectName, expirySeconds);
-    return url;
-  } catch (err) {
-    console.error(`Error generating upload URL for ${bucketName}/${objectName}:`, err);
-    throw err;
-  }
-};
-
-// List all files in a bucket
-const listFiles = async (bucketName, prefix = '', recursive = true) => {
-  try {
-    await ensureBucketExists(bucketName);
-    
-    const stream = minioClient.listObjects(bucketName, prefix, recursive);
-    const files = [];
-    
-    return new Promise((resolve, reject) => {
-      stream.on('data', (obj) => {
-        files.push(obj);
-      });
-      
-      stream.on('end', () => {
-        resolve(files);
-      });
-      
-      stream.on('error', (err) => {
-        reject(err);
-      });
-    });
-  } catch (err) {
-    console.error('Error listing files:', err);
-    throw err;
-  }
-};
-
-// Delete a file
-const deleteFile = async (bucketName, objectName) => {
-  try {
-    await minioClient.removeObject(bucketName, objectName);
-    console.log(`File ${objectName} deleted from ${bucketName}`);
-    return true;
-  } catch (err) {
-    console.error('Error deleting file:', err);
-    throw err;
-  }
-};
-
-// Check if a file exists
-const fileExists = async (bucketName, objectName) => {
-  try {
-    await minioClient.statObject(bucketName, objectName);
+    await minioClient.statObject(bucket, objectName);
     return true;
   } catch (err) {
     if (err.code === 'NotFound') {
@@ -214,19 +142,60 @@ const fileExists = async (bucketName, objectName) => {
   }
 };
 
-// Export all functions
-export {
-  minioClient,
-  uploadFile,
-  uploadBuffer,
-  getFileStream,
-  getFileBuffer,
-  downloadFile,
-  getFileMetadata,
-  getPresignedGetUrl,
-  getPresignedPutUrl,
-  listFiles,
-  deleteFile,
-  fileExists,
-  ensureBucketExists
+/**
+ * Get file metadata
+ * @param {string} bucket - Bucket name
+ * @param {string} objectName - Object name in the bucket
+ * @returns {Promise<Object>} File metadata
+ */
+export const getFileMetadata = async (bucket, objectName) => {
+  try {
+    return await minioClient.statObject(bucket, objectName);
+  } catch (err) {
+    console.error(`Error getting file metadata for ${bucket}/${objectName}: ${err.message}`);
+    throw err;
+  }
 };
+
+/**
+ * Delete a file
+ * @param {string} bucket - Bucket name
+ * @param {string} objectName - Object name in the bucket
+ * @returns {Promise<void>}
+ */
+export const deleteFile = async (bucket, objectName) => {
+  try {
+    await minioClient.removeObject(bucket, objectName);
+  } catch (err) {
+    console.error(`Error deleting file ${bucket}/${objectName}: ${err.message}`);
+    throw err;
+  }
+};
+
+/**
+ * Test the connection to the MinIO server
+ * @returns {Promise<Object>} List of buckets
+ */
+export const testConnection = async () => {
+  try {
+    const buckets = await minioClient.listBuckets();
+    console.log('Connected to MinIO server successfully');
+    console.log('Available buckets:', buckets.map(b => b.name).join(', '));
+    return buckets;
+  } catch (err) {
+    console.error('Failed to connect to MinIO server:', err);
+    throw err;
+  }
+};
+
+// Test the MinIO connection on module load
+(async () => {
+  try {
+    // Only ensure the default bucket exists
+    await ensureBucketExists(DEFAULT_BUCKET);
+    await testConnection();
+    console.log(`Using only the default bucket: ${DEFAULT_BUCKET}`);
+  } catch (err) {
+    console.error('MinIO connection test failed:', err);
+  }
+})();

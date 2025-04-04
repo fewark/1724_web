@@ -4,16 +4,14 @@ import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { 
-  uploadFile, 
-  uploadBuffer, 
-  getFileStream, 
-  getPresignedGetUrl,
   fileExists, 
   getFileMetadata,
-  downloadFile,
   deleteFile,
-  listFiles
+  generatePresignedUploadUrl,
+  getPresignedUrl,
+  DEFAULT_BUCKET
 } from '../services/minioService.js';
+import { PrismaClient } from '@prisma/client';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,104 +34,71 @@ try {
   console.error('Error creating temp directory:', err);
 }
 
-// Default bucket name
-export const DEFAULT_BUCKET = 'chat-uploads';
+// Initialize Prisma client
+const prisma = new PrismaClient();
+
 
 /**
- * Upload a file
- * 
- * This function handles the uploading of a file to a specified bucket in MinIO.
- * 
- * Usage:
- * - Send a POST request to the endpoint with the file included in the form-data under the key 'file'.
- * - Optionally, you can specify the bucket name, folder, and custom filename in the request body.
- * 
- * Example:
- * {
- *   "bucket": "my-bucket",
- *   "folder": "my-folder",
- *   "filename": "custom-name.txt"
- * }
+ * Generate a presigned URL for file upload and create a database record
+ * POST /api/file/upload/:roomId
  */
-export const uploadFileHandler = async (req, res) => {
+export const generateUploadUrlHandler = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file provided' });
+    const { roomId } = req.params;
+    const { userId } = req.body; // Assuming userId is sent in the request or from auth middleware
+    
+    if (!roomId) {
+      return res.status(400).json({ error: 'Room ID is required' });
     }
-
-    const { buffer, originalname, mimetype } = req.file;
     
-    // Optional customization from request
-    const bucket = req.body.bucket || DEFAULT_BUCKET;
-    const folder = req.body.folder || '';
-    const customFilename = req.body.filename;
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
     
-    // Generate a unique filename if not provided
-    const filename = customFilename || 
-      `${Date.now()}-${originalname.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+    // Check if the chatroom exists
+    const chatroom = await prisma.chatroom.findUnique({
+      where: { id: parseInt(roomId) }
+    });
     
-    // Create object name with folder if provided
-    const objectName = folder 
-      ? `${folder.replace(/\/$/, '')}/${filename}`
-      : filename;
+    if (!chatroom) {
+      return res.status(404).json({ error: 'Chatroom not found' });
+    }
     
-    // Upload the file directly from buffer
-    const result = await uploadBuffer(bucket, buffer, objectName, mimetype);
+    // Get filename from request
+    const { filename } = req.body;
     
-    res.status(201).json({
-      message: 'File uploaded successfully',
-      file: {
-        name: filename,
-        originalName: originalname,
-        path: objectName,
-        url: result.url,
-        type: mimetype,
-        bucket: bucket
+    if (!filename) {
+      return res.status(400).json({ error: 'Filename is required' });
+    }
+    
+    // Generate presigned URL for upload
+    const { presignedUrl, fileUrl, objectName } = await generatePresignedUploadUrl(filename);
+    
+    // Create a database record for the file
+    const file = await prisma.file.create({
+      data: {
+        userId: parseInt(userId),
+        chatroomId: parseInt(roomId),
+        fileUrl: fileUrl,
       }
     });
+    
+    // Return the presigned URL and file information
+    res.status(200).json({
+      id: file.id,
+      presignedUrl,
+      fileUrl,
+      objectName,
+      bucket: DEFAULT_BUCKET,
+      expiresIn: 600, // 10 minutes in seconds
+      uploadMethod: 'PUT' // Let frontend know to use PUT method for upload
+    });
   } catch (err) {
-    console.error('Error uploading file:', err);
-    res.status(500).json({ error: 'Failed to upload file', details: err.message });
-  }
-};
-
-/**
- * List files in a bucket
- * 
- * This function retrieves a list of files from a specified bucket in MinIO.
- * 
- * Usage:
- * - Send a GET request to the endpoint with the bucket name as a URL parameter.
- * - Optionally, you can specify a prefix query parameter to filter the results.
- * 
- * Example:
- * GET /api/file/list/my-bucket?prefix=my-folder/
- */
-export const listFilesHandler = async (req, res) => {
-  try {
-    const { bucket } = req.params;
-    const prefix = req.query.prefix || '';
-    
-    // List files in the bucket
-    const files = await listFiles(bucket, prefix);
-    
-    // Transform files for response
-    const transformedFiles = await Promise.all(files.map(async (file) => {
-      // Get a presigned URL for each file
-      const url = await getPresignedGetUrl(bucket, file.name, 3600); // 1 hour expiry
-      
-      return {
-        name: file.name,
-        size: file.size,
-        lastModified: file.lastModified,
-        url
-      };
-    }));
-    
-    res.json(transformedFiles);
-  } catch (err) {
-    console.error('Error listing files:', err);
-    res.status(500).json({ error: 'Failed to list files', details: err.message });
+    console.error('Error generating upload URL:', err);
+    res.status(500).json({ 
+      error: 'Failed to generate upload URL', 
+      details: err.message 
+    });
   }
 };
 
@@ -150,29 +115,71 @@ export const listFilesHandler = async (req, res) => {
  */
 export const getFileHandler = async (req, res) => {
   try {
-    const { bucket, filename } = req.params;
+    const { fileId } = req.params;
     
-    // Check if file exists
-    const exists = await fileExists(bucket, filename);
-    if (!exists) {
+    // Get file from database
+    const file = await prisma.file.findUnique({
+      where: { id: parseInt(fileId) },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true
+          }
+        }
+      }
+    });
+    
+    if (!file) {
       return res.status(404).json({ error: 'File not found' });
     }
     
+    // Extract object name from fileUrl (format: /bucket/objectName)
+    const urlParts = file.fileUrl.split('/');
+    const bucket = urlParts[1];
+    const objectName = urlParts.slice(2).join('/');
+    
+    // Check if file exists in storage
+    const exists = await fileExists(bucket, objectName);
+    
+    if (!exists) {
+      // Update database record to mark file as deleted/unavailable
+      await prisma.file.update({
+        where: { id: parseInt(fileId) },
+        data: { fileUrl: null }
+      });
+      
+      return res.status(404).json({ 
+        error: 'File not found in storage', 
+        details: 'The file record exists but the actual file is missing' 
+      });
+    }
+    
     // Get file metadata
-    const metadata = await getFileMetadata(bucket, filename);
+    const metadata = await getFileMetadata(bucket, objectName);
     
-    // Set headers
-    res.setHeader('Content-Type', metadata.metaData['content-type'] || 'application/octet-stream');
-    res.setHeader('Content-Length', metadata.size);
-    res.setHeader('Content-Disposition', `inline; filename="${path.basename(filename)}"`);
+    // Generate a presigned URL for accessing the file
+    const presignedUrl = await getPresignedUrl(bucket, objectName);
     
-    // Stream the file directly to response
-    const fileStream = await getFileStream(bucket, filename);
-    fileStream.pipe(res);
-    
+    // Return file information with presigned URL
+    res.status(200).json({
+      id: file.id,
+      userId: file.userId,
+      chatroomId: file.chatroomId,
+      fileUrl: file.fileUrl,
+      presignedUrl,
+      uploadedBy: file.user.username,
+      uploadedAt: file.createdAt,
+      size: metadata.size,
+      contentType: metadata.metaData['content-type'] || 'application/octet-stream',
+      expiresIn: 3600 // 1 hour in seconds
+    });
   } catch (err) {
-    console.error('Error streaming file:', err);
-    res.status(500).json({ error: 'Failed to stream file', details: err.message });
+    console.error('Error getting file:', err);
+    res.status(500).json({ 
+      error: 'Failed to get file', 
+      details: err.message 
+    });
   }
 };
 
@@ -219,50 +226,6 @@ export const getFileLinkHandler = async (req, res) => {
 };
 
 /**
- * Download a file to server and send it to client
- * 
- * This function downloads a file to a temporary location on the server and then sends it to the client.
- * 
- * Usage:
- * - Send a GET request to the endpoint with the bucket name and filename as URL parameters.
- * 
- * Example:
- * GET /api/file/download/my-bucket/my-file.txt
- */
-export const downloadFileHandler = async (req, res) => {
-  try {
-    const { bucket, filename } = req.params;
-    const tempFilePath = path.join(tempDir, path.basename(filename));
-    
-    // Check if file exists
-    const exists = await fileExists(bucket, filename);
-    if (!exists) {
-      return res.status(404).json({ error: 'File not found' });
-    }
-    
-    // Download the file to a temporary location
-    await downloadFile(bucket, filename, tempFilePath);
-    
-    // Send the file
-    res.download(tempFilePath, path.basename(filename), async (err) => {
-      // Clean up the temporary file after sending
-      try {
-        await fs.unlink(tempFilePath);
-      } catch (unlinkErr) {
-        console.error('Error deleting temporary file:', unlinkErr);
-      }
-      
-      if (err) {
-        console.error('Error sending file:', err);
-      }
-    });
-  } catch (err) {
-    console.error('Error downloading file:', err);
-    res.status(500).json({ error: 'Failed to download file', details: err.message });
-  }
-};
-
-/**
  * Delete a file
  * 
  * This function deletes a specified file from a bucket in MinIO.
@@ -275,20 +238,99 @@ export const downloadFileHandler = async (req, res) => {
  */
 export const deleteFileHandler = async (req, res) => {
   try {
-    const { bucket, filename } = req.params;
+    const { fileId } = req.params;
+    const { userId } = req.body; // Assuming userId is sent in the request or from auth middleware
     
-    // Check if file exists
-    const exists = await fileExists(bucket, filename);
-    if (!exists) {
+    // Get file from database
+    const file = await prisma.file.findUnique({
+      where: { id: parseInt(fileId) }
+    });
+    
+    if (!file) {
       return res.status(404).json({ error: 'File not found' });
     }
     
-    // Delete the file
-    await deleteFile(bucket, filename);
+    // Check if user is the owner of the file
+    if (file.userId !== parseInt(userId)) {
+      return res.status(403).json({ error: 'You do not have permission to delete this file' });
+    }
     
-    res.json({ message: 'File deleted successfully' });
+    // Extract object name from fileUrl (format: /bucket/objectName)
+    const urlParts = file.fileUrl.split('/');
+    const bucket = urlParts[1];
+    const objectName = urlParts.slice(2).join('/');
+    
+    // Delete file from storage
+    try {
+      await deleteFile(bucket, objectName);
+    } catch (storageErr) {
+      console.error('Error deleting file from storage:', storageErr);
+      // Continue even if file doesn't exist in storage
+    }
+    
+    // Delete file record from database
+    await prisma.file.delete({
+      where: { id: parseInt(fileId) }
+    });
+    
+    res.status(200).json({ message: 'File deleted successfully' });
   } catch (err) {
     console.error('Error deleting file:', err);
-    res.status(500).json({ error: 'Failed to delete file', details: err.message });
+    res.status(500).json({ 
+      error: 'Failed to delete file', 
+      details: err.message 
+    });
+  }
+};
+
+/**
+ * List files in a chatroom
+ * GET /api/file/room/:roomId
+ */
+export const listChatroomFilesHandler = async (req, res) => {
+  try {
+    const { roomId } = req.params;
+    
+    // Check if the chatroom exists
+    const chatroom = await prisma.chatroom.findUnique({
+      where: { id: parseInt(roomId) }
+    });
+    
+    if (!chatroom) {
+      return res.status(404).json({ error: 'Chatroom not found' });
+    }
+    
+    // Get files from database
+    const files = await prisma.file.findMany({
+      where: { chatroomId: parseInt(roomId) },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+    
+    // Format response
+    const formattedFiles = files.map(file => ({
+      id: file.id,
+      userId: file.userId,
+      uploadedBy: file.user.username,
+      fileUrl: file.fileUrl,
+      uploadedAt: file.createdAt
+    }));
+    
+    res.status(200).json(formattedFiles);
+  } catch (err) {
+    console.error('Error listing files:', err);
+    res.status(500).json({ 
+      error: 'Failed to list files', 
+      details: err.message 
+    });
   }
 };

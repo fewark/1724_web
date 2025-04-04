@@ -1,48 +1,28 @@
 import express from "express";
 import { 
-  upload,
-  uploadFileHandler, 
-  listFilesHandler, 
   getFileHandler, 
-  getFileLinkHandler, 
-  downloadFileHandler, 
-  deleteFileHandler 
+  deleteFileHandler,
+  generateUploadUrlHandler,
+  listChatroomFilesHandler
 } from "../controllers/fileController.js";
 
 const router = express.Router();
 
 // GET /api/file/test - Basic test route
 router.get("/test", (req, res) => {
-    res.send("this is test file route");
+    res.send("File upload API is working");
 });
 
-// File upload route
-router.post('/upload', upload.single('file'), uploadFileHandler);
+// Generate presigned URL for file upload and create a record
+router.post('/upload/:roomId', generateUploadUrlHandler);
 
-// File listing route
-router.get('/list/:bucket', listFilesHandler);
+// Get file details with presigned URL for viewing/downloading
+router.get('/id/:fileId', getFileHandler);
 
-// Get file link route
-router.get('/link/:bucket/:filename(*)', getFileLinkHandler);
+// Delete file by ID
+router.delete('/id/:fileId', deleteFileHandler);
 
-// Download file route
-router.get('/download/:bucket/:filename(*)', downloadFileHandler);
-
-// Get/stream file route (must be after other specific routes)
-router.get('/:bucket/:filename(*)', getFileHandler);
-
-// Delete file route
-router.delete('/:bucket/:filename(*)', deleteFileHandler);
-
-// router.get("/", authenticate, (req, res) => {
-//     res.send("this is file route using autentication");
-// });
-
-// example cases
-// router.post("/adduser", createUser);
-// router.post("/login", loginUser);
-// router.post("/logout", verifyJWT, logoutUser);
-// router.put("/update", verifyJWT, updateUser);
-// router.delete("/delete", verifyJWT,  deleteUser);
+// List all files in a chatroom
+router.get('/room/:roomId', listChatroomFilesHandler);
 
 export default router;
