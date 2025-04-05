@@ -4,7 +4,7 @@ import express from "express";
 import errorHandler from "./src/middleware/error.js";
 import requestLoggingHandler from "./src/middleware/requestLogging.js";
 import authRouter from "./src/routes/auth.js";
-import chatroomRouter from "./src/routes/chatroom.js";
+import chatroomRouter from "./src/routes/chat.js";
 import messageRouter from "./src/routes/message.js";
 import userRouter from "./src/routes/user.js";
 
