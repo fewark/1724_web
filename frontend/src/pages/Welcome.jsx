@@ -35,9 +35,9 @@ const LoginForm = () => {
         });
     };
 
-    const handleLogin = async ({email, password}) => {
+    const handleLogin = async ({email, password, remember}) => {
         setIsLoading(true);
-        const loginError = await reqUserLogin(email, password);
+        const loginError = await reqUserLogin(email, password, remember);
         if (null !== loginError) {
             message.error(loginError);
         } else {

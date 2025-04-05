@@ -1,28 +1,41 @@
 import api from "./index";
 
 
+const storageRef = {
+    current: localStorage,
+};
+
 /**
- * Retrieves the saved token from local storage.
+ * Retrieves the saved token from storage.
  *
  * @return {string|null} The saved token or null if not found.
  */
-const getSavedToken = () => localStorage.getItem("token");
+const getSavedToken = () => {
+    console.log(storageRef.current);
+
+    return storageRef.current.getItem("token");
+};
 
 /**
  * Sends a login request with the user's email and password.
  *
  * @param {string} email
  * @param {string} password
+ * @param {boolean} remember
  * @return {Promise<null|string>}
  */
-const reqUserLogin = async (email, password) => {
+const reqUserLogin = async (email, password, remember) => {
     try {
         const res = await api.post("/auth/login", {email, password}, {
             skipAuth: true,
         });
 
         const {token} = res.data;
-        localStorage.setItem("token", token);
+        if (!remember) {
+            storageRef.current = sessionStorage;
+            localStorage.removeItem("token");
+        }
+        storageRef.current.setItem("token", token);
 
         return null;
     } catch (err) {
@@ -53,7 +66,7 @@ const reqUserRegister = async (username, email, password, profilePicture) => {
 
         const res = await api.post("/auth/register", payload, {skipAuth: true});
         const {token} = res.data;
-        localStorage.setItem("token", token);
+        storageRef.current.setItem("token", token);
 
         return null;
     } catch (err) {
