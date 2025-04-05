@@ -64,7 +64,7 @@ const createChatroomRouter = (io) => {
                 );
 
                 historicalMessages.forEach(({createdAt, content, user}) => {
-                    io.to(roomId).emit("message", {
+                    socket.emit("message", {
                         senderId: user.id,
                         senderUsername: user.username,
                         message: content,
