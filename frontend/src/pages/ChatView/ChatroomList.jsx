@@ -38,6 +38,8 @@ const listStyle = {
     height: "100%",
 };
 
+const MAX_CHATROOM_MESSAGE_PREVIEW_LENGTH = 20;
+
 
 /**
  * Enum for the new chatroom mode.
@@ -188,7 +190,7 @@ const ChatroomListItem = ({id, name, lastMessage}) => {
             onMouseLeave={handleMouseLeave}
         >
             <List.Item.Meta
-                description={lastMessage}
+                description={lastMessage.substring(0, MAX_CHATROOM_MESSAGE_PREVIEW_LENGTH)}
                 title={name}/>
         </List.Item>
     );
