@@ -26,6 +26,55 @@ const contentStyle = {
 
 };
 
+const BADGE_OFFSET_HORIZONTAL = -10;
+const SET_IS_NOT_AT_BOTTOM_DEBOUNCE_TIMEOUT_MILLIS = 1000;
+
+/**
+ * Renders a button that scrolls to the bottom of the chat and shows the number of new messages.
+ *
+ * @param {object} props
+ * @param {boolean} props.isAtBottom
+ * @param {number} props.newMessageCount
+ * @param {Function} props.onGotoBottomButtonClick
+ * @return {React.ReactNode}
+ */
+const GoToBottomButton = ({isAtBottom, newMessageCount, onGotoBottomButtonClick}) => {
+    return (
+        <div
+            style={{
+                bottom: "12px",
+                display: "flex",
+                justifyContent: "end",
+                position: "sticky",
+                visibility: isAtBottom ?
+                    "hidden" :
+                    "visible",
+            }}
+        >
+            <Tooltip
+                placement={"left"}
+                title={"Scroll to bottom"}
+            >
+                <Badge
+                    count={newMessageCount}
+                    offset={[
+                        BADGE_OFFSET_HORIZONTAL,
+                        0,
+                    ]}
+                >
+                    <Button
+                        shape={"circle"}
+                        size={"large"}
+                        onClick={onGotoBottomButtonClick}
+                    >
+                        <VerticalAlignBottomOutlined/>
+                    </Button>
+                </Badge>
+            </Tooltip>
+        </div>
+    );
+};
+
 /**
  * Renders a chat view for a specific chatroom.
  *
@@ -34,6 +83,7 @@ const contentStyle = {
  * @param {React.RefObject<import('socket.io-client').Socket>} props.socketRef
  * @return {React.ReactNode}
  */
+// eslint-disable-next-line max-lines-per-function
 const Chatroom = ({isConnected, socketRef}) => {
     const {id} = useParams();
 
@@ -124,7 +174,7 @@ const Chatroom = ({isConnected, socketRef}) => {
                         }
                         setIsAtBottom(false);
                         setNewMessageCount(0);
-                    }, 1000);
+                    }, SET_IS_NOT_AT_BOTTOM_DEBOUNCE_TIMEOUT_MILLIS);
                 }
             },
             {
@@ -172,7 +222,7 @@ const Chatroom = ({isConnected, socketRef}) => {
                 locale={{emptyText: "Start a conversation below"}}
                 dataSource={[...historicalMessages,
                     ...newMessages]}
-                renderItem={(item, index) => (
+                renderItem={(item) => (
                     <List.Item>
                         <List.Item.Meta
                             avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${item.senderId}`}/>}
@@ -180,38 +230,10 @@ const Chatroom = ({isConnected, socketRef}) => {
                             title={item.senderUsername}/>
                     </List.Item>
                 )}/>
-            <div
-                style={{
-                    bottom: "12px",
-                    display: "flex",
-                    justifyContent: "end",
-                    position: "sticky",
-                    visibility: isAtBottom ?
-                        "hidden" :
-                        "visible",
-                }}
-            >
-                <Tooltip
-                    placement={"left"}
-                    title={"Scroll to bottom"}
-                >
-                    <Badge
-                        count={newMessageCount}
-                        offset={[
-                            -10,
-                            0,
-                        ]}
-                    >
-                        <Button
-                            shape={"circle"}
-                            size={"large"}
-                            onClick={handleGotoBottomButtonClick}
-                        >
-                            <VerticalAlignBottomOutlined/>
-                        </Button>
-                    </Badge>
-                </Tooltip>
-            </div>
+            <GoToBottomButton
+                isAtBottom={isAtBottom}
+                newMessageCount={newMessageCount}
+                onGotoBottomButtonClick={handleGotoBottomButtonClick}/>
             <div ref={bottomRef}/>
         </Content>
     );
