@@ -14,15 +14,16 @@ const authHandler = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({error: "Missing or invalid token"});
+        return res.status(StatusCodes.UNAUTHORIZED).json({error: "Authentication Failed: Missing" +
+                " or invalid token"});
     }
 
-    // const token = authHeader.split(" ")[1];
     const [, token] = authHeader.split(" ");
 
     try {
         const {email, id, username} = jwt.verify(token, process.env.JWT_SECRET);
 
+        // FIXME: check if the token has expired.
         req.user = {email, id, username};
 
         return next();
@@ -30,7 +31,7 @@ const authHandler = (req, res, next) => {
         console.log("Unable to decode JWT payload:", err);
 
         return res.status(StatusCodes.FORBIDDEN)
-            .json({error: "Token is invalid or expired"});
+            .json({error: "Authentication Failed: Token is corrupted or expired"});
     }
 };
 
