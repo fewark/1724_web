@@ -10,7 +10,7 @@ import {
     Typography,
 } from "antd";
 
-import {reqUserRegister} from "../../../api/user.js";
+import {reqUserRegister} from "../../api/user.js";
 
 
 /**

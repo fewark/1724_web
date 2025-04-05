@@ -15,8 +15,8 @@ import {
     Typography,
 } from "antd";
 
-import {reqGetChatroomList} from "../../../api/chatroom.js";
-import {reqUserLogin} from "../../../api/user.js";
+import {reqGetChatroomList} from "../../api/chatroom.js";
+import {reqUserLogin} from "../../api/user.js";
 
 
 /**

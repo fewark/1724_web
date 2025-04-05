@@ -7,7 +7,7 @@ import {
 
 import ChatView from "./pages/ChatView";
 import Profile from "./pages/Profile.jsx";
-import Welcome from "./pages/Welcome.jsx";
+import Welcome from "./pages/Welcome";
 
 import "@ant-design/v5-patch-for-react-19";
 import "./index.css";
