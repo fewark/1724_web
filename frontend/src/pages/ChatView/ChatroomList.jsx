@@ -140,7 +140,10 @@ const ChatroomListHeader = () => {
                     open={isPopConfirmOpen}
                     title={""}
                     description={
-                        <Space direction={"vertical"}>
+                        <Space
+                            direction={"vertical"}
+                            style={{width: "300px"}}
+                        >
                             <Segmented
                                 block={true}
                                 color={"blue"}
