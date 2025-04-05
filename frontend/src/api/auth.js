@@ -2,11 +2,11 @@ import api from "./index";
 
 
 /**
- * Retrieves the saved token from session storage.
+ * Retrieves the saved token from local storage.
  *
  * @return {string|null} The saved token or null if not found.
  */
-const getSavedToken = () => sessionStorage.getItem("token");
+const getSavedToken = () => localStorage.getItem("token");
 
 /**
  * Sends a login request with the user's email and password.
@@ -22,7 +22,7 @@ const reqUserLogin = async (email, password) => {
         });
 
         const {token} = res.data;
-        sessionStorage.setItem("token", token);
+        localStorage.setItem("token", token);
 
         return null;
     } catch (err) {
@@ -53,7 +53,7 @@ const reqUserRegister = async (username, email, password, profilePicture) => {
 
         const res = await api.post("/auth/register", payload, {skipAuth: true});
         const {token} = res.data;
-        sessionStorage.setItem("token", token);
+        localStorage.setItem("token", token);
 
         return null;
     } catch (err) {
