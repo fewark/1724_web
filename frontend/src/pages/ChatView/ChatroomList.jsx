@@ -202,6 +202,7 @@ const ChatroomListItem = ({id, name, lastMessage}) => {
  * @return {React.ReactNode}
  */
 const ChatroomList = () => {
+    const navigate = useNavigate();
     const [roomList, setRoomList] = useState([]);
 
     useEffect(() => {
@@ -209,12 +210,13 @@ const ChatroomList = () => {
             const chatroomList = await reqGetChatroomList();
             if ("string" === typeof chatroomList) {
                 message.error(chatroomList);
+                navigate("/");
 
                 return;
             }
             setRoomList(chatroomList);
         })();
-    }, []);
+    }, [navigate]);
 
     return (
         <Sider
