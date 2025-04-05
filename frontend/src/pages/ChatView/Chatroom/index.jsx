@@ -5,18 +5,16 @@ import {
 } from "react";
 import {useParams} from "react-router-dom";
 
-import {VerticalAlignBottomOutlined} from "@ant-design/icons";
 import {
     Avatar,
-    Badge,
-    Button,
     Layout,
     List,
     Space,
-    Tooltip,
     Typography,
 } from "antd";
 import dayjs from "dayjs";
+
+import GoToBottomButton from "./GoToBottomButton.jsx";
 
 
 const {Content} = Layout;
@@ -29,54 +27,8 @@ const contentStyle = {
 
 };
 
-const BADGE_OFFSET_HORIZONTAL = -10;
 const SET_IS_NOT_AT_BOTTOM_DEBOUNCE_TIMEOUT_MILLIS = 1000;
 
-/**
- * Renders a button that scrolls to the bottom of the chat and shows the number of new messages.
- *
- * @param {object} props
- * @param {boolean} props.isAtBottom
- * @param {number} props.newMessageCount
- * @param {Function} props.onGotoBottomButtonClick
- * @return {React.ReactNode}
- */
-const GoToBottomButton = ({isAtBottom, newMessageCount, onGotoBottomButtonClick}) => {
-    return (
-        <div
-            style={{
-                bottom: "12px",
-                display: "flex",
-                justifyContent: "end",
-                position: "sticky",
-                visibility: isAtBottom ?
-                    "hidden" :
-                    "visible",
-            }}
-        >
-            <Tooltip
-                placement={"left"}
-                title={"Scroll to bottom"}
-            >
-                <Badge
-                    count={newMessageCount}
-                    offset={[
-                        BADGE_OFFSET_HORIZONTAL,
-                        0,
-                    ]}
-                >
-                    <Button
-                        shape={"circle"}
-                        size={"large"}
-                        onClick={onGotoBottomButtonClick}
-                    >
-                        <VerticalAlignBottomOutlined/>
-                    </Button>
-                </Badge>
-            </Tooltip>
-        </div>
-    );
-};
 
 /**
  * Renders a message list item.

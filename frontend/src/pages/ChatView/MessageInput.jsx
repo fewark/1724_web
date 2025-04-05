@@ -1,8 +1,4 @@
-import {
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import {useRef} from "react";
 import {useParams} from "react-router-dom";
 
 import {SmileOutlined} from "@ant-design/icons";

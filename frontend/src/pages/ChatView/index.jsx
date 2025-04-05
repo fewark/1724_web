@@ -11,7 +11,7 @@ import {
 import {io} from "socket.io-client";
 
 import {getSavedToken} from "../../api/user.js";
-import Chatroom from "./Chatroom.jsx";
+import Chatroom from "./Chatroom";
 import ChatroomHeader from "./ChatroomHeader.jsx";
 import ChatroomList from "./ChatroomList.jsx";
 import MessageInput from "./MessageInput.jsx";

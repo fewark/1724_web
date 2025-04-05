@@ -2,8 +2,10 @@ import prisma from "./index.js";
 
 
 /**
+ * Fetches the list of chatrooms for a specific user.
  *
- * @param userId
+ * @param {number} userId
+ * @return {Promise<import('@prisma/client').Chatroom[]>} An array of chatroom.
  */
 const getChatroomListForUser = async (userId) => {
     const userWithRooms = await prisma.user.findUnique({
