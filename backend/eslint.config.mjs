@@ -17,6 +17,7 @@ const EslintConfig = [
                 "error",
                 {
                     capIsNewExceptions: [
+                        // Express.js
                         "Router",
                     ],
                 },
