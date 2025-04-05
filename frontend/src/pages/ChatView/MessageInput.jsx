@@ -118,6 +118,8 @@ const MessageInput = ({socketRef}) => {
                             placement={"topLeft"}
                             trigger={"click"}
                             content={<Picker
+                                noCountryFlags={false}
+                                set={"apple"}
                                 onEmojiSelect={handleEmojiSelect}/>}
                         >
                             <Button
