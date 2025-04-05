@@ -10,11 +10,7 @@ const storageRef = {
  *
  * @return {string|null} The saved token or null if not found.
  */
-const getSavedToken = () => {
-    console.log(storageRef.current);
-
-    return storageRef.current.getItem("token");
-};
+const getSavedToken = () => storageRef.current.getItem("token");
 
 /**
  * Sends a login request with the user's email and password.
