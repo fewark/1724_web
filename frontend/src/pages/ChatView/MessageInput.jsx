@@ -1,15 +1,19 @@
 import {
     useEffect,
+    useRef,
     useState,
 } from "react";
 import {useParams} from "react-router-dom";
 
+import {SmileOutlined} from "@ant-design/icons";
+import Picker from "@emoji-mart/react";
 import {
     Button,
     Flex,
     Form,
     Input,
     Layout,
+    Popover,
 } from "antd";
 
 import {reqSendMessage} from "../../api/chatroom.js";
@@ -70,6 +74,21 @@ const MessageInput = ({socketRef}) => {
     const {id} = useParams();
 
     const [form] = Form.useForm();
+    const cursorPositionRef = useRef(0);
+
+    const handleEmojiSelect = (emoji) => {
+        console.log(cursorPositionRef.current);
+        const currentValue = form.getFieldValue("msg") ?? "";
+        form.setFieldsValue({
+            msg: currentValue.slice(0, cursorPositionRef.current) +
+                emoji.native + currentValue.slice(cursorPositionRef.current),
+        });
+        cursorPositionRef.current += emoji.native.length;
+    };
+
+    const handleTextAreaSelect = (ev) => {
+        cursorPositionRef.current = ev.target.selectionStart;
+    };
 
     const handleTextAreaKeyPress = (ev) => {
         if ("Enter" === ev.key && false === ev.shiftKey) {
@@ -90,9 +109,23 @@ const MessageInput = ({socketRef}) => {
                 onFinish={handleMessageFormSubmit}
             >
                 <Flex
-                    justify={"end"}
-                    style={{marginBottom: "2px"}}
+                    justify={"space-between"}
+                    style={{marginBottom: "4px"}}
                 >
+                    <Form.Item style={{marginBottom: 0}}>
+                        <Popover
+                            placement={"topLeft"}
+                            trigger={"click"}
+                            content={<Picker
+                                onEmojiSelect={handleEmojiSelect}/>}
+                        >
+                            <Button
+                                shape={"circle"}
+                            >
+                                <SmileOutlined/>
+                            </Button>
+                        </Popover>
+                    </Form.Item>
                     <Form.Item
                         name={"send"}
                         style={{marginBottom: 0}}
@@ -115,7 +148,8 @@ const MessageInput = ({socketRef}) => {
                             max: MAX_MESSAGE_LENGTH,
                             exceedFormatter: (txt, {max}) => txt.slice(0, max),
                         }}
-                        onKeyPress={handleTextAreaKeyPress}/>
+                        onKeyPress={handleTextAreaKeyPress}
+                        onSelect={handleTextAreaSelect}/>
                 </Form.Item>
             </Form>
         </Footer>
