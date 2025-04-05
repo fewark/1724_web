@@ -21,28 +21,19 @@ const authHandler = (req, res, next) => {
     const [, token] = authHeader.split(" ");
 
     try {
-        const {email, id, username, exp} = jwt.verify(token, process.env.JWT_SECRET);
+        const {email, id, username} = jwt.verify(token, process.env.JWT_SECRET);
 
-        // manually check if the token has expired, but usually jwt.verify will handle this
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        if (exp && exp < currentTimestamp) {
-            return res.status(StatusCodes.UNAUTHORIZED).json({
-                error: "Authentication Failed: Token has expired"
-            });
-        }
         req.user = {email, id, username};
 
         return next();
     } catch (err) {
-        if (err.name === "TokenExpiredError") {
+        if ("TokenExpiredError" === err.name) {
             return res.status(StatusCodes.UNAUTHORIZED)
                 .json({error: "Authentication Failed: Token has expired"});
         }
 
-        console.log("Unable to decode JWT payload:", err);
-
         return res.status(StatusCodes.FORBIDDEN)
-            .json({error: "Authentication Failed: Token is corrupted or expired"});
+            .json({error: "Authentication Failed: Token is corrupted"});
     }
 };
 
