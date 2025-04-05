@@ -73,6 +73,7 @@ const MessageInput = ({socketRef}) => {
         <Footer style={footerStyle}>
             <Form
                 autoComplete={"off"}
+                disabled={"undefined" === typeof id}
                 form={form}
                 onFinish={handleMessageFormSubmit}
             >

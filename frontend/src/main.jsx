@@ -23,6 +23,10 @@ const ROUTER = createBrowserRouter([
         element: <ChatView/>,
     },
     {
+        path: "/chatroom/",
+        element: <ChatView/>,
+    },
+    {
         path: "/profile",
         element: <Profile/>,
     },

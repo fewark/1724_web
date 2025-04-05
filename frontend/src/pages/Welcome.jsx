@@ -1,4 +1,5 @@
 import {
+    useCallback,
     useEffect,
     useState,
 } from "react";
@@ -39,13 +40,18 @@ const LoginForm = () => {
         });
     };
 
-    const goToLatestChatroom = async () => {
+    const goToLatestChatroom = useCallback(async () => {
         const chatroomList = await reqGetChatroomList();
         if (Array.isArray(chatroomList)) {
             message.success("You are already logged in");
-            navigate(`/chatroom/${chatroomList[0].id}`);
+            const lastChatroom = chatroomList[0]?.id;
+            if ("undefined" === typeof lastChatroom) {
+                navigate("/chatroom/");
+            } else {
+                navigate(`/chatroom/${chatroomList[0].id}`);
+            }
         }
-    };
+    }, [navigate]);
 
     const handleLogin = async ({email, password, remember}) => {
         setIsLoading(true);
@@ -137,7 +143,7 @@ const RegisterForm = () => {
             message.error(registrationError);
         } else {
             message.success("Registration successful! You are now logged in.");
-            navigate("/chat");
+            navigate("/chatroom/");
         }
         setIsLoading(false);
     };
@@ -296,7 +302,6 @@ const Welcome = () => {
                         }]}/>
                 </Card>
             </div>
-
         </div>
     );
 };

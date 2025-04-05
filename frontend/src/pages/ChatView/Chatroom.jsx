@@ -174,7 +174,7 @@ const Chatroom = ({isConnected, socketRef}) => {
     ]);
 
     useEffect(() => {
-        if (false === isConnected || null === socketRef.current) {
+        if (false === isConnected || null === socketRef.current || "undefined" === typeof id) {
             return () => null;
         }
 
@@ -285,11 +285,13 @@ const Chatroom = ({isConnected, socketRef}) => {
         >
             <div ref={topRef}/>
             <List
-                locale={{emptyText: "Start a conversation below"}}
                 dataSource={[
                     ...historicalMessages,
                     ...newMessages,
                 ]}
+                locale={{emptyText: "undefined" === typeof id ?
+                    "Start a new chat with the + button" :
+                    "Start a conversation below"}}
                 renderItem={({message, senderId, senderUsername, createdAt}) => (
                     <MessageListItem
                         createdAt={createdAt}

@@ -1,6 +1,5 @@
 import {
     useEffect,
-    useMemo,
     useState,
 } from "react";
 import {useParams} from "react-router-dom";
@@ -52,6 +51,9 @@ const ChatroomHeader = () => {
     };
 
     useEffect(() => {
+        if ("undefined" === typeof id) {
+            return;
+        }
         (async () => {
             const getChatroomInfoResp = await reqGetChatroomInfo(id);
             if ("string" === typeof getChatroomInfoResp) {
@@ -69,8 +71,9 @@ const ChatroomHeader = () => {
                 align={"center"}
                 justify={"space-between"}
             >
-                {chatroomInfo.name}
+                {chatroomInfo.name ?? "Chatroom"}
                 <Button
+                    disabled={"undefined" === typeof id}
                     size={"large"}
                     type={"text"}
                     onClick={handleMenuDrawerButtonClick}
