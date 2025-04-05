@@ -217,42 +217,68 @@ const Welcome = () => {
     return (
         <div
             style={{
-                alignItems: "center",
-                background: "#123458",
-                display: "flex",
+                position: "relative",
                 height: "100vh",
-                justifyContent: "center",
+                overflow: "hidden",
             }}
         >
-            <Card
+            <div
                 style={{
-                    paddingInline: "24px",
-                    paddingBlock: "16px",
+                    background: 'url("/launch-screen.png")',
+                    backgroundPosition: "center",
+                    backgroundRepeat: "repeat",
+                    backgroundSize: "100% auto",
+                    filter: "blur(12px)",
+                    inset: 0,
+                    position: "absolute",
+                    zIndex: 0,
+                }}/>
+            <div
+                style={{
+                    alignItems: "center",
+                    background: 'url("/launch-screen.png")',
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "100% auto",
+                    display: "flex",
+                    height: "100vh",
+                    justifyContent: "end",
+                    paddingInline: "12vw",
+                    position: "relative",
+                    zIndex: 1,
                 }}
             >
-                <Typography.Title
-                    level={2}
-                    style={{justifySelf: "center"}}
+                <Card
+                    style={{
+                        paddingInline: "24px",
+                        paddingBlock: "16px",
+                    }}
                 >
-                    ChatUI
-                </Typography.Title>
+                    <Typography.Title
+                        level={2}
+                        style={{justifySelf: "center"}}
+                    >
+                        Welcome to ChatUI
+                    </Typography.Title>
 
-                <Tabs
-                    centered={true}
-                    defaultActiveKey={"login"}
-                    size={"large"}
-                    style={{width: "320px", height: "540px"}}
-                    items={[{
-                        label: "Login",
-                        key: "login",
-                        children: <LoginForm/>,
-                    },
-                    {
-                        label: "Register",
-                        key: "register",
-                        children: <RegisterForm/>,
-                    }]}/>
-            </Card>
+                    <Tabs
+                        centered={true}
+                        defaultActiveKey={"login"}
+                        size={"large"}
+                        style={{width: "320px", height: "540px"}}
+                        items={[{
+                            label: "Login",
+                            key: "login",
+                            children: <LoginForm/>,
+                        },
+                        {
+                            label: "Register",
+                            key: "register",
+                            children: <RegisterForm/>,
+                        }]}/>
+                </Card>
+            </div>
+
         </div>
     );
 };
