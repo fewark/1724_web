@@ -18,6 +18,7 @@ const router = express.Router();
  * @param {import("socket.io").Server} io Socket.IO server instance.
  * @return {import("express").Router} Express router instance.
  */
+// eslint-disable-next-line max-lines-per-function
 const createChatroomRouter = (io) => {
     io.on(
         "connection",
