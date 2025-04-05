@@ -1,11 +1,13 @@
 import {
     useEffect,
+    useMemo,
     useState,
 } from "react";
 import {useNavigate} from "react-router-dom";
 
 import {PlusOutlined} from "@ant-design/icons";
 import {
+    Avatar,
     Button,
     Flex,
     Form,
@@ -26,6 +28,7 @@ import {
     reqGetChatroomList,
     reqJoinChatroom,
 } from "../../api/chatroom.js";
+import {getUser} from "../../api/user.js";
 
 
 const {Sider} = Layout;
@@ -38,6 +41,7 @@ const listStyle = {
     height: "100%",
 };
 
+const MAX_USERNAME_VIEW_LENGTH = 14;
 const MAX_CHATROOM_MESSAGE_PREVIEW_LENGTH = 20;
 
 
@@ -61,6 +65,19 @@ const ChatroomListHeader = () => {
     const [isPopConfirmOpen, setIsPopConfirmOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [mode, setMode] = useState(NEW_CHATROOM_MODE.CREATE);
+
+    const user = useMemo(() => {
+        const u = getUser();
+        if (null === u) {
+            navigate("/");
+        }
+
+        return u;
+    }, [navigate]);
+
+    const handleProfileButtonClick = () => {
+        navigate("/profile");
+    };
 
     const handleNewChatroomButtonClick = () => {
         setIsPopConfirmOpen(true);
@@ -104,15 +121,19 @@ const ChatroomListHeader = () => {
         setIsLoading(false);
     };
 
-
     return (
-        <Flex
-            justify={"space-between"}
-        >
+        <Flex justify={"space-between"}>
             <Spin
                 fullscreen={true}
                 spinning={isLoading}/>
-            <Typography.Title level={4}>Chat History</Typography.Title>
+            <Button onClick={handleProfileButtonClick}>
+                <Avatar
+                    shape={"square"}
+                    src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${user?.id}`}/>
+                <Typography.Title level={4}>
+                    {user?.username?.substring(0, MAX_USERNAME_VIEW_LENGTH)}
+                </Typography.Title>
+            </Button>
             <Tooltip title={"Start a new chat"}>
                 <Popconfirm
                     icon={null}

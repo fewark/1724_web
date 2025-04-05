@@ -16,11 +16,11 @@ import {
     Typography,
 } from "antd";
 
+import {reqGetChatroomList} from "../api/chatroom.js";
 import {
     reqUserLogin,
     reqUserRegister,
-} from "../api/auth";
-import {reqGetChatroomList} from "../api/chatroom.js";
+} from "../api/user.js";
 
 
 /**

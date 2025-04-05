@@ -6,7 +6,6 @@ import {Server} from "socket.io";
 
 import errorHandler from "./src/middleware/error.js";
 import requestLoggingHandler from "./src/middleware/requestLogging.js";
-import authRouter from "./src/routes/auth.js";
 import createChatroomRouter from "./src/routes/chatroom.js";
 import messageRouter from "./src/routes/message.js";
 import userRouter from "./src/routes/user.js";
@@ -84,7 +83,6 @@ const initExpressServer = () => {
     });
 
     // Routes
-    app.use("/api/auth", authRouter);
     app.use("/api/chatroom", createChatroomRouter(io));
     app.use("/api/message", messageRouter);
     app.use("/api/user", userRouter);

@@ -1,7 +1,7 @@
 // axiosInstance.js
 import axios from "axios";
 
-import {getSavedToken} from "./auth.js";
+import {getSavedToken} from "./user.js";
 
 
 const api = axios.create({

@@ -17,6 +17,7 @@ import {
 } from "antd";
 
 import {reqSendMessage} from "../../api/chatroom.js";
+import {ValidatedSubmitButton} from "../../components/ValidatedSubmitButton.jsx";
 
 
 const {Footer} = Layout;
@@ -27,40 +28,6 @@ const footerStyle = {
     backgroundColor: "#f3f3f3",
     paddingInline: "4px",
     paddingBlock: "4px",
-};
-
-/**
- * Renders a button to submit the message if validation passes.
- *
- * @param {object} props
- * @param {import("antd").FormInstance} props.form
- * @return {React.ReactNode}
- */
-const MessageSubmitButton = ({form}) => {
-    const [submittable, setSubmittable] = useState(false);
-
-    const values = Form.useWatch([], form);
-
-    useEffect(() => {
-        form.validateFields({validateOnly: true})
-            .then(() => setSubmittable(true))
-            .catch(() => setSubmittable(false));
-    }, [
-        form,
-        values,
-    ]);
-
-    return (
-        <Button
-            color={"green"}
-            disabled={!submittable}
-            htmlType={"submit"}
-            style={{fontWeight: 500}}
-            variant={"solid"}
-        >
-            Send
-        </Button>
-    );
 };
 
 /**
@@ -133,7 +100,9 @@ const MessageInput = ({socketRef}) => {
                         name={"send"}
                         style={{marginBottom: 0}}
                     >
-                        <MessageSubmitButton form={form}/>
+                        <ValidatedSubmitButton
+                            color={"green"}
+                            form={form}/>
                     </Form.Item>
                 </Flex>
 

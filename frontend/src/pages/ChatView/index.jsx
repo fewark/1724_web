@@ -10,7 +10,7 @@ import {
 } from "antd";
 import {io} from "socket.io-client";
 
-import {getSavedToken} from "../../api/auth.js";
+import {getSavedToken} from "../../api/user.js";
 import Chatroom from "./Chatroom.jsx";
 import ChatroomHeader from "./ChatroomHeader.jsx";
 import ChatroomList from "./ChatroomList.jsx";
