@@ -21,13 +21,24 @@ const authHandler = (req, res, next) => {
     const [, token] = authHeader.split(" ");
 
     try {
-        const {email, id, username} = jwt.verify(token, process.env.JWT_SECRET);
+        const {email, id, username, exp} = jwt.verify(token, process.env.JWT_SECRET);
 
-        // FIXME: check if the token has expired.
+        // manually check if the token has expired, but usually jwt.verify will handle this
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        if (exp && exp < currentTimestamp) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                error: "Authentication Failed: Token has expired"
+            });
+        }
         req.user = {email, id, username};
 
         return next();
     } catch (err) {
+        if (err.name === "TokenExpiredError") {
+            return res.status(StatusCodes.UNAUTHORIZED)
+                .json({error: "Authentication Failed: Token has expired"});
+        }
+
         console.log("Unable to decode JWT payload:", err);
 
         return res.status(StatusCodes.FORBIDDEN)
