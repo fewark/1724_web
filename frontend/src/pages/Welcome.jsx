@@ -1,4 +1,7 @@
-import {useState} from "react";
+import {
+    useEffect,
+    useState,
+} from "react";
 import {useNavigate} from "react-router-dom";
 
 import {
@@ -17,6 +20,7 @@ import {
     reqUserLogin,
     reqUserRegister,
 } from "../api/auth";
+import {reqGetChatroomList} from "../api/chatroom.js";
 
 
 /**
@@ -35,6 +39,14 @@ const LoginForm = () => {
         });
     };
 
+    const goToLatestChatroom = async () => {
+        const chatroomList = await reqGetChatroomList();
+        if (Array.isArray(chatroomList)) {
+            message.success("You are already logged in");
+            navigate(`/chatroom/${chatroomList[0].id}`);
+        }
+    };
+
     const handleLogin = async ({email, password, remember}) => {
         setIsLoading(true);
         const loginError = await reqUserLogin(email, password, remember);
@@ -42,13 +54,19 @@ const LoginForm = () => {
             message.error(loginError);
         } else {
             message.success("Login successful!");
-
-            // eslint-disable-next-line no-warning-comments
-            // FIXME: remove hardcode
-            navigate("/chatroom/123");
+            await goToLatestChatroom();
         }
         setIsLoading(false);
     };
+
+    useEffect(() => {
+        (async () => {
+            await goToLatestChatroom();
+        })();
+    }, [
+        goToLatestChatroom,
+        navigate,
+    ]);
 
     return (
         <Form
