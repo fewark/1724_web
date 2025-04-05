@@ -1,16 +1,14 @@
 import api from "./index";
 
 
-const storageRef = {
-    current: localStorage,
-};
+globalThis.tokenStorage = sessionStorage;
 
 /**
  * Retrieves the saved token from storage.
  *
  * @return {string|null} The saved token or null if not found.
  */
-const getSavedToken = () => storageRef.current.getItem("token");
+const getSavedToken = () => localStorage.getItem("token") ?? sessionStorage.getItem("token");
 
 /**
  * Sends a login request with the user's email and password.
@@ -27,11 +25,12 @@ const reqUserLogin = async (email, password, remember) => {
         });
 
         const {token} = res.data;
-        if (!remember) {
-            storageRef.current = sessionStorage;
+        if (remember) {
+            globalThis.tokenStorage = localStorage;
+        } else {
             localStorage.removeItem("token");
         }
-        storageRef.current.setItem("token", token);
+        globalThis.tokenStorage.setItem("token", token);
 
         return null;
     } catch (err) {
@@ -62,7 +61,7 @@ const reqUserRegister = async (username, email, password, profilePicture) => {
 
         const res = await api.post("/auth/register", payload, {skipAuth: true});
         const {token} = res.data;
-        storageRef.current.setItem("token", token);
+        globalThis.tokenStorage.setItem("token", token);
 
         return null;
     } catch (err) {
