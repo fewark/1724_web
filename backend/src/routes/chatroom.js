@@ -16,7 +16,7 @@ import {
 
 const router = express.Router();
 
-const FETCH_CHATROOM_MESSAGES_LIMIT = 10;
+const FETCH_CHATROOM_MESSAGES_LIMIT = 20;
 
 /**
  * Chatroom route.
@@ -59,6 +59,24 @@ const createChatroomRouter = (io) => {
 
                 historicalMessages.forEach(({createdAt, content, user}) => {
                     io.to(roomId).emit("message", {
+                        senderId: user.id,
+                        senderUsername: user.username,
+                        message: content,
+                        createdAt: createdAt,
+                    });
+                });
+            });
+
+            socket.on("getMoreMessages", async ({roomId, earlierThan}) => {
+                console.log("Client requested more messages for room:", roomId);
+                const historicalMessages = await getChatroomMessages(
+                    roomId,
+                    FETCH_CHATROOM_MESSAGES_LIMIT,
+                    earlierThan
+                );
+
+                historicalMessages.reverse().forEach(({createdAt, content, user}) => {
+                    io.to(roomId).emit("prependMessage", {
                         senderId: user.id,
                         senderUsername: user.username,
                         message: content,

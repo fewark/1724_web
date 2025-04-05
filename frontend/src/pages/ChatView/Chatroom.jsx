@@ -8,6 +8,7 @@ import {useParams} from "react-router-dom";
 import {VerticalAlignBottomOutlined} from "@ant-design/icons";
 import {
     Avatar,
+    Badge,
     Button,
     Layout,
     List,
@@ -35,22 +36,17 @@ const contentStyle = {
  */
 const Chatroom = ({isConnected, socketRef}) => {
     const {id} = useParams();
-    const [isAtBottom, setIsAtBottom] = useState(true);
-    const [messages, setMessages] = useState([]);
-    const containerRef = useRef(null);
-    const bottomRef = useRef(null);
-    const isAtBottomRef = useRef(true);
-    const isAtBottomChangeDebounceRef = useRef(null);
 
-    const changeIsAtBottom = (value) => {
-        if (isAtBottomChangeDebounceRef.current) {
-            clearTimeout(isAtBottomChangeDebounceRef.current);
-        }
-        isAtBottomChangeDebounceRef.current = setTimeout(() => {
-            isAtBottomRef.current = value;
-            setIsAtBottom(value);
-        }, 100);
-    };
+    const [newMessages, setNewMessages] = useState([]);
+    const [historicalMessages, setHistoricalMessages] = useState([]);
+    const firstMessageTsRef = useRef(null);
+    const [newMessageCount, setNewMessageCount] = useState(0);
+
+    const containerRef = useRef(null);
+    const topRef = useRef(null);
+
+    const bottomRef = useRef(null);
+    const [isAtBottom, setIsAtBottom] = useState(true);
 
     const handleGotoBottomButtonClick = () => {
         bottomRef.current?.scrollIntoView({behavior: "smooth"});
@@ -58,16 +54,31 @@ const Chatroom = ({isConnected, socketRef}) => {
 
     useEffect(() => {
         if (false === isConnected || null === socketRef.current) {
-            return;
+            return () => null;
         }
 
         socketRef.current.emit("subscribe", {roomId: id});
         socketRef.current.on("message", (message) => {
-            setMessages((v) => [
+            setNewMessages((v) => [
                 ...v,
                 message,
             ]);
+            setNewMessageCount((v) => v + 1);
         });
+        socketRef.current.on("prependMessage", (message) => {
+            setHistoricalMessages((v) => [
+                message,
+                ...v,
+            ]);
+        });
+
+        return () => {
+            if (null !== socketRef.current) {
+                socketRef.current.off("message");
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                socketRef.current.emit("unsubscribe", {roomId: id});
+            }
+        };
     }, [
         isConnected,
         id,
@@ -75,22 +86,45 @@ const Chatroom = ({isConnected, socketRef}) => {
     ]);
 
     useEffect(() => {
-        const frame = requestAnimationFrame(() => {
-            if (isAtBottomRef.current) {
-                bottomRef.current?.scrollIntoView();
-            }
-        });
-
-        return () => cancelAnimationFrame(frame);
-    }, [messages]);
-
-    useEffect(() => {
-        const bottomObserver = new IntersectionObserver(
+        const topObserver = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    changeIsAtBottom(true);
+                    socketRef.current.emit("getMoreMessages", {
+                        roomId: id,
+                        earlierThan: firstMessageTsRef.current,
+                    });
+
+                    // Scroll down slightly to allow next trigger.
+                    topRef.current?.parentElement.scrollBy({
+                        top: 1,
+                    });
+                }
+            },
+            {
+                threshold: 0.1,
+            }
+        );
+
+        topObserver.observe(topRef.current);
+
+        let debounceSetIsNotAtBottom = null;
+        const bottomObserver = new IntersectionObserver(
+            ([entry]) => {
+                if (debounceSetIsNotAtBottom) {
+                    clearTimeout(debounceSetIsNotAtBottom);
+                }
+                if (entry.isIntersecting) {
+                    setIsAtBottom(true);
                 } else {
-                    changeIsAtBottom(false);
+                    debounceSetIsNotAtBottom = setTimeout(() => {
+                        if (bottomRef.current.parentElement.scrollTop +
+                            bottomRef.current.parentElement.clientHeight ===
+                            bottomRef.current.parentElement.scrollHeight) {
+                            return;
+                        }
+                        setIsAtBottom(false);
+                        setNewMessageCount(0);
+                    }, 1000);
                 }
             },
             {
@@ -101,18 +135,43 @@ const Chatroom = ({isConnected, socketRef}) => {
         bottomObserver.observe(bottomRef.current);
 
         return () => {
+            clearTimeout(debounceSetIsNotAtBottom);
+            topObserver.disconnect();
             bottomObserver.disconnect();
         };
-    }, []);
+    }, [
+        id,
+        socketRef,
+    ]);
+
+    useEffect(() => {
+        if (isAtBottom) {
+            requestAnimationFrame(() => {
+                // This is a new message.
+                bottomRef.current?.scrollIntoView();
+            });
+        }
+    }, [
+        isAtBottom,
+        newMessages,
+    ]);
+
+    useEffect(() => {
+        if (0 < historicalMessages.length) {
+            firstMessageTsRef.current = historicalMessages[0].createdAt;
+        }
+    }, [historicalMessages]);
 
     return (
         <Content
             ref={containerRef}
             style={contentStyle}
         >
+            <div ref={topRef}/>
             <List
-                dataSource={messages}
                 locale={{emptyText: "Start a conversation below"}}
+                dataSource={[...historicalMessages,
+                    ...newMessages]}
                 renderItem={(item, index) => (
                     <List.Item>
                         <List.Item.Meta
@@ -136,13 +195,21 @@ const Chatroom = ({isConnected, socketRef}) => {
                     placement={"left"}
                     title={"Scroll to bottom"}
                 >
-                    <Button
-                        shape={"circle"}
-                        size={"large"}
-                        onClick={handleGotoBottomButtonClick}
+                    <Badge
+                        count={newMessageCount}
+                        offset={[
+                            -10,
+                            0,
+                        ]}
                     >
-                        <VerticalAlignBottomOutlined/>
-                    </Button>
+                        <Button
+                            shape={"circle"}
+                            size={"large"}
+                            onClick={handleGotoBottomButtonClick}
+                        >
+                            <VerticalAlignBottomOutlined/>
+                        </Button>
+                    </Badge>
                 </Tooltip>
             </div>
             <div ref={bottomRef}/>
