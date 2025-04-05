@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {PrismaClient} from "@prisma/client";
 import fs from "fs/promises";
 import multer from "multer";
@@ -53,6 +54,11 @@ try {
 const prisma = new PrismaClient();
 
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 const generateUploadUrl = async (req, res) => {
     try {
         const {roomId} = req.params;
@@ -102,6 +108,11 @@ const generateUploadUrl = async (req, res) => {
 };
 
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 const getFile = async (req, res) => {
     try {
         const {fileId} = req.params;
@@ -165,6 +176,11 @@ const getFile = async (req, res) => {
     }
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 const getFileLink = async (req, res) => {
     try {
         const {bucket, filename} = req.params;
@@ -196,6 +212,11 @@ const getFileLink = async (req, res) => {
 };
 
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 const deleteFileHandler = async (req, res) => {
     try {
         const {fileId} = req.params;
@@ -241,6 +262,11 @@ const deleteFileHandler = async (req, res) => {
 };
 
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 const listChatroomFiles = async (req, res) => {
     try {
         const {roomId} = req.params;

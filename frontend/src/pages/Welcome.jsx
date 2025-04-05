@@ -42,7 +42,10 @@ const LoginForm = () => {
             message.error(loginError);
         } else {
             message.success("Login successful!");
-            navigate("/chat");
+
+            // eslint-disable-next-line no-warning-comments
+            // FIXME: remove hardcode
+            navigate("/chatroom/123");
         }
         setIsLoading(false);
     };

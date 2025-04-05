@@ -1,6 +1,8 @@
 // axiosInstance.js
 import axios from "axios";
 
+import {getSavedToken} from "./auth.js";
+
 
 const api = axios.create({
     baseURL: "/api",
@@ -13,7 +15,7 @@ api.interceptors.request.use(
             return config;
         }
 
-        const token = sessionStorage.getItem("token");
+        const token = getSavedToken();
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

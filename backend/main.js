@@ -1,10 +1,13 @@
+import {createServer} from "node:http";
+
 import dotenv from "dotenv";
 import express from "express";
+import {Server} from "socket.io";
 
 import errorHandler from "./src/middleware/error.js";
 import requestLoggingHandler from "./src/middleware/requestLogging.js";
 import authRouter from "./src/routes/auth.js";
-import chatroomRouter from "./src/routes/chat.js";
+import createChatroomRouter from "./src/routes/chatroom.js";
 import messageRouter from "./src/routes/message.js";
 import userRouter from "./src/routes/user.js";
 
@@ -61,10 +64,15 @@ const parseEnv = () => {
 let app;
 
 /**
- * Initializes the express app.
+ * Initialize the Express.js app and use it to create an Express server with Socket.io support,
+ * middleware, routes, and error handling.
+ *
+ * @return {Server} The initialized HTTP server.
  */
-const initExpressApp = () => {
+const initExpressServer = () => {
     app = express();
+    const server = createServer(app);
+    const io = new Server(server);
 
     // Middleware
     app.use(express.json());
@@ -72,12 +80,12 @@ const initExpressApp = () => {
 
     // Basic route
     app.get("/", (req, res) => {
-        res.send("Welcome to the Chat App API!");
+        res.send("Welcome to the Chatroom App API!");
     });
 
     // Routes
     app.use("/api/auth", authRouter);
-    app.use("/api/chatroom", chatroomRouter);
+    app.use("/api/chatroom", createChatroomRouter(io));
     app.use("/api/message", messageRouter);
     app.use("/api/user", userRouter);
 
@@ -85,6 +93,8 @@ const initExpressApp = () => {
 
     // Error handling
     app.use(errorHandler);
+
+    return server;
 };
 
 /**
@@ -92,9 +102,9 @@ const initExpressApp = () => {
  */
 const main = () => {
     const envVars = parseEnv();
-    initExpressApp();
+    const server = initExpressServer();
 
-    app.listen(envVars.PORT, () => {
+    server.listen(envVars.PORT, () => {
         console.log(`Server is running on port ${envVars.PORT}`);
     });
 };

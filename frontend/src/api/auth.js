@@ -2,6 +2,13 @@ import api from "./index";
 
 
 /**
+ * Retrieves the saved token from session storage.
+ *
+ * @return {string|null} The saved token or null if not found.
+ */
+const getSavedToken = () => sessionStorage.getItem("token");
+
+/**
  * Sends a login request with the user's email and password.
  *
  * @param {string} email
@@ -55,5 +62,7 @@ const reqUserRegister = async (username, email, password, profilePicture) => {
 };
 
 export {
-    reqUserLogin, reqUserRegister,
+    getSavedToken,
+    reqUserLogin,
+    reqUserRegister,
 };

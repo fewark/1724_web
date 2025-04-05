@@ -21,20 +21,22 @@ model User {
   profilePicture String   @db.Text
   createdAt      DateTime @default(now()) @map("created_at")
 
-  chatrooms      Chatroom[] @relation("UserChatrooms")
-  messages       Message[]
-  files          File[]
+  creatorOf Chatroom[] @relation("UserCreatedChatrooms")
+  memberOf  Chatroom[] @relation("UserJoinedChatrooms")
+  messages  Message[]
+  files     File[]
 }
 
 model Chatroom {
-  id         Int      @id @default(autoincrement())
-  name       String   @db.VarChar(100)
-  createdBy  Int
-  createdAt  DateTime @default(now()) @map("created_at")
+  id        Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(100)
+  createdBy Int
+  createdAt DateTime @default(now()) @map("created_at")
 
-  creator    User     @relation("UserChatrooms", fields: [createdBy], references: [id])
-  messages   Message[]
-  files      File[]
+  creator  User      @relation("UserCreatedChatrooms", fields: [createdBy], references: [id])
+  members  User[]    @relation("UserJoinedChatrooms")
+  messages Message[]
+  files    File[]
 }
 
 model Message {
@@ -45,19 +47,19 @@ model Message {
   fileId     Int?     @unique
   createdAt  DateTime @default(now()) @map("created_at")
 
-  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
-  user       User     @relation(fields: [userId], references: [id])
-  file       File?    @relation("MessageFile", fields: [fileId], references: [id])
+  chatroom Chatroom @relation(fields: [chatroomId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+  file     File?    @relation("MessageFile", fields: [fileId], references: [id])
 }
 
 model File {
   id         Int      @id @default(autoincrement())
   userId     Int
-  chatroomId Int?    
-  fileUrl    String   @db.Text @map("file_url")
+  chatroomId Int?
+  fileUrl    String   @map("file_url") @db.Text
   createdAt  DateTime @default(now()) @map("created_at")
 
-  user       User     @relation(fields: [userId], references: [id])
-  chatroom   Chatroom? @relation(fields: [chatroomId], references: [id])
-  message    Message?  @relation("MessageFile")
+  user     User      @relation(fields: [userId], references: [id])
+  chatroom Chatroom? @relation(fields: [chatroomId], references: [id])
+  message  Message?  @relation("MessageFile")
 }
