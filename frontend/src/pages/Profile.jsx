@@ -2,6 +2,7 @@ import {useMemo} from "react";
 import {useNavigate} from "react-router-dom";
 
 import {
+    Button,
     Flex,
     Form,
     Input,
@@ -11,6 +12,7 @@ import {
 
 import {
     getUser,
+    reqSignOut,
     reqUpdateUserProfile,
 } from "../api/user.js";
 import {ValidatedSubmitButton} from "../components/ValidatedSubmitButton.jsx";
@@ -53,11 +55,19 @@ const Profile = () => {
         }
     };
 
+    const handleSignOutButtonClick = () => {
+        reqSignOut();
+        navigate("/");
+    };
+
     return (
         <Flex
             align={"center"}
             justify={"center"}
-            style={{height: "100vh", backgroundColor: "#fbfcfe"}}
+            style={{
+                height: "100vh",
+                backgroundColor: "#fbfcfe",
+            }}
         >
             <Typography.Title
                 level={1}
@@ -70,9 +80,17 @@ const Profile = () => {
             </Typography.Title>
             <Form
                 form={form}
+                style={{width: "360px"}}
                 onFinish={handleProfileUpdate}
             >
-                <Typography.Title level={2}>Tell us about you</Typography.Title>
+                <Typography.Title
+                    level={2}
+                    style={{
+                        textAlign: "center",
+                    }}
+                >
+                    Tell us about you
+                </Typography.Title>
                 <Form.Item
                     initialValue={user?.username}
                     name={"username"}
@@ -86,9 +104,21 @@ const Profile = () => {
                 <Form.Item>
                     <ValidatedSubmitButton
                         block={true}
-                        form={form}/>
+                        form={form}
+                        type={"primary"}/>
                 </Form.Item>
             </Form>
+            <Button
+                danger={true}
+                size={"large"}
+                style={{
+                    position: "absolute",
+                    bottom: "20px",
+                }}
+                onClick={handleSignOutButtonClick}
+            >
+                Sign out
+            </Button>
         </Flex>
     );
 };

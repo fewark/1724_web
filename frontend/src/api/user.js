@@ -127,9 +127,20 @@ const reqUpdateUserProfile = async ({username, id}) => {
     }
 };
 
+/**
+ * Signs out the user by removing the token from storage.
+ */
+const reqSignOut = () => {
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    globalThis.tokenStorage = sessionStorage;
+    globalThis.user = null;
+};
+
 export {
     getSavedToken,
     getUser,
+    reqSignOut,
     reqUpdateUserProfile,
     reqUserLogin,
     reqUserRegister,
