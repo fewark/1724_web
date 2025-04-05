@@ -99,6 +99,7 @@ const MessageInput = ({socketRef}) => {
 
     const handleMessageFormSubmit = ({msg}) => {
         reqSendMessage(socketRef.current, id, msg);
+        form.resetFields(["msg"]);
     };
 
     return (
