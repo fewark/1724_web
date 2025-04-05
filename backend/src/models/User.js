@@ -15,6 +15,7 @@ const getChatroomListForUser = async (userId) => {
                         take: 1,
                         orderBy: {createdAt: "desc"},
                         select: {
+                            createdAt: true,
                             content: true,
                         },
                     },
@@ -23,7 +24,15 @@ const getChatroomListForUser = async (userId) => {
         },
     });
 
-    return userWithRooms.memberOf;
+    if (!userWithRooms) {
+        return [];
+    }
+
+    return userWithRooms.memberOf.sort((a, b) => {
+        const aTime = a.messages[0]?.createdAt?.valueOf() ?? 0;
+        const bTime = b.messages[0]?.createdAt?.valueOf() ?? 0;
+        return bTime - aTime;
+    });
 };
 
 export {getChatroomListForUser};
