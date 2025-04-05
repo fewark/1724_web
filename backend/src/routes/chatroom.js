@@ -48,6 +48,11 @@ const createChatroomRouter = (io) => {
                 console.log("Client disconnected:", userFromToken.username);
             });
 
+            socket.on("unsubscribe", ({roomId}) => {
+                console.log("Client unsubscribed from room:", roomId);
+                socket.leave(roomId);
+            });
+
             socket.on("subscribe", async ({roomId, earlierThan}) => {
                 console.log("Client subscribed to room:", roomId);
                 socket.join(roomId);
@@ -69,7 +74,7 @@ const createChatroomRouter = (io) => {
             });
 
             socket.on("getMoreMessages", async ({roomId, earlierThan}) => {
-                console.log("Client requested more messages for room:", roomId);
+                console.log("Client requested more messages for room:", roomId, earlierThan);
                 const historicalMessages = await getChatroomMessages(
                     roomId,
                     FETCH_CHATROOM_MESSAGES_LIMIT,
@@ -114,7 +119,6 @@ const createChatroomRouter = (io) => {
 
     router.get("/", authHandler, async (req, res) => {
         const userChatroomRes = await getChatroomListForUser(req.user.id);
-        console.log("User chatroom list:", userChatroomRes);
 
         return res.json(userChatroomRes);
     });

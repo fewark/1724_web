@@ -105,7 +105,20 @@ const Chatroom = ({isConnected, socketRef}) => {
     useEffect(() => {
         setHistoricalMessages([]);
         setNewMessages([]);
+        firstMessageTsRef.current = null;
     }, [id]);
+
+    useEffect(() => {
+        if (0 < historicalMessages.length) {
+            firstMessageTsRef.current = historicalMessages[0].createdAt;
+        }
+        if (null === firstMessageTsRef.current && 0 < newMessages.length) {
+            firstMessageTsRef.current = newMessages[0].createdAt;
+        }
+    }, [
+        historicalMessages,
+        newMessages,
+    ]);
 
     useEffect(() => {
         if (false === isConnected || null === socketRef.current) {
@@ -130,6 +143,7 @@ const Chatroom = ({isConnected, socketRef}) => {
         return () => {
             if (null !== socketRef.current) {
                 socketRef.current.off("message");
+                socketRef.current.off("prependMessage");
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 socketRef.current.emit("unsubscribe", {roomId: id});
             }
@@ -143,7 +157,7 @@ const Chatroom = ({isConnected, socketRef}) => {
     useEffect(() => {
         const topObserver = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) {
+                if (entry.isIntersecting && null !== firstMessageTsRef.current) {
                     socketRef.current.emit("getMoreMessages", {
                         roomId: id,
                         earlierThan: firstMessageTsRef.current,
@@ -210,12 +224,6 @@ const Chatroom = ({isConnected, socketRef}) => {
         isAtBottom,
         newMessages,
     ]);
-
-    useEffect(() => {
-        if (0 < historicalMessages.length) {
-            firstMessageTsRef.current = historicalMessages[0].createdAt;
-        }
-    }, [historicalMessages]);
 
     return (
         <Content
