@@ -5,7 +5,6 @@ import api from "./index.js";
  * @typedef {object} CreateChatroomResp
  * @property {string} roomId
  */
-
 /**
  * Sends a request to create a new chatroom.
  *
@@ -20,6 +19,28 @@ const reqCreateChatroom = async (name) => {
         return res.data;
     } catch (err) {
         return err.response?.data?.error || `Create chatroom failed: ${err.message}`;
+    }
+};
+
+
+/**
+ * @typedef {object} JoinChatroomResp
+ * @property {string} roomId
+ */
+/**
+ * Sends a request to join an existing chatroom.
+ *
+ * @param {string} name
+ * @return {Promise<string | JoinChatroomResp>} If successful, return the response data object;
+ * If failed, return an error message.
+ */
+const reqJoinChatroom = async (name) => {
+    try {
+        const res = await api.put("/chatroom", {name});
+
+        return res.data;
+    } catch (err) {
+        return err.response?.data?.error || `Join chatroom failed: ${err.message}`;
     }
 };
 
@@ -57,5 +78,6 @@ const reqSendMessage = (socket, roomId, message) => {
 export {
     reqCreateChatroom,
     reqGetChatroomInfo,
+    reqJoinChatroom,
     reqSendMessage,
 };

@@ -31,6 +31,43 @@ const createChatroom = async (name, createdBy) => {
 };
 
 /**
+ * Adds a user to an existing chatroom.
+ *
+ * @param {number} roomName
+ * @param {number} userId
+ * @return {Promise<CHATROOM_ERROR_TYPE | import('@prisma/client').Chatroom>} If successful,
+ * returns the updated chatroom; otherwise, returns an error type.
+ */
+const joinChatroom = async (roomName, userId) => {
+    // Check if chatroom exists
+    const chatroom = await prisma.chatroom.findUnique({
+        where: {name: roomName},
+        include: {members: true},
+    });
+
+    if (!chatroom) {
+        return CHATROOM_ERROR_TYPE.CHATROOM_NOT_FOUND;
+    }
+
+    // Check if user is already a member
+    const isAlreadyMember = chatroom.members.some((member) => member.id === userId);
+    if (isAlreadyMember) {
+        return CHATROOM_ERROR_TYPE.USER_ALREADY_IN_CHATROOM;
+    }
+
+    // Add user to chatroom
+    return await prisma.chatroom.update({
+        where: {name: roomName},
+        data: {
+            members: {
+                connect: {id: userId},
+            },
+        },
+        include: {members: true},
+    });
+};
+
+/**
  * Retrieves a chatroom by its ID.
  *
  * @param {string} roomId
@@ -60,4 +97,5 @@ const getChatroomInfo = async (roomId) => {
 export {
     createChatroom,
     getChatroomInfo,
+    joinChatroom,
 };

@@ -6,6 +6,7 @@ import authHandler, {getUserFromToken} from "../middleware/auth.js";
 import {
     createChatroom,
     getChatroomInfo,
+    joinChatroom,
 } from "../models/Chatroom.js";
 
 
@@ -57,6 +58,8 @@ const createChatroomRouter = (io) => {
 
     // GET /api/chat/:roomId
     router.get("/:roomId", async (req, res) => {
+        // eslint-disable-next-line no-warning-comments
+        // FIXME: check if user is a member of the chatroom
         const chatroom = await getChatroomInfo(req.params.roomId);
         if (null === chatroom) {
             return res.status(StatusCodes.NOT_FOUND).json({
@@ -73,7 +76,27 @@ const createChatroomRouter = (io) => {
         const createRoomResp = await createChatroom(name, req.user.id);
         if (createRoomResp === CHATROOM_ERROR_TYPE.CHATROOM_NAME_ALREADY_EXISTS) {
             return res.status(StatusCodes.CONFLICT).json({
-                error: CHATROOM_ERROR_TYPE.CHATROOM_NAME_ALREADY_EXISTS,
+                error: createRoomResp,
+            });
+        }
+
+        return res.json({
+            roomId: createRoomResp.id,
+        });
+    });
+
+    router.put("/", authHandler, async (req, res) => {
+        const {name} = req.body;
+
+        const createRoomResp = await joinChatroom(name, req.user.id);
+        if (createRoomResp === CHATROOM_ERROR_TYPE.CHATROOM_NOT_FOUND) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                error: createRoomResp,
+            });
+        }
+        if (createRoomResp === CHATROOM_ERROR_TYPE.USER_ALREADY_IN_CHATROOM) {
+            return res.status(StatusCodes.CONFLICT).json({
+                error: createRoomResp,
             });
         }
 

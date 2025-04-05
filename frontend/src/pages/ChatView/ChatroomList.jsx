@@ -14,12 +14,17 @@ import {
     List,
     message,
     Popconfirm,
+    Segmented,
+    Space,
     Spin,
     Tooltip,
     Typography,
 } from "antd";
 
-import {reqCreateChatroom} from "../../api/chatroom.js";
+import {
+    reqCreateChatroom,
+    reqJoinChatroom,
+} from "../../api/chatroom.js";
 
 
 const {Sider} = Layout;
@@ -34,6 +39,14 @@ const listStyle = {
 
 
 /**
+ * Enum for the new chatroom mode.
+ */
+const NEW_CHATROOM_MODE = Object.freeze({
+    CREATE: "Create",
+    JOIN: "Join",
+});
+
+/**
  * Renders a chatroom list header that includes the user profile and a creation / join room button.
  *
  * @return {React.ReactNode}
@@ -44,6 +57,7 @@ const ChatroomListHeader = () => {
 
     const [isPopConfirmOpen, setIsPopConfirmOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [mode, setMode] = useState(NEW_CHATROOM_MODE.CREATE);
 
     const handleNewChatroomButtonClick = () => {
         setIsPopConfirmOpen(true);
@@ -53,7 +67,11 @@ const ChatroomListHeader = () => {
         setIsPopConfirmOpen(false);
     };
 
-    const handleNewChatroomConfirm = async (ev) => {
+    const handleModeChange = (value) => {
+        setMode(value);
+    };
+
+    const handleNewChatroomConfirm = async () => {
         try {
             await form.validateFields();
         } catch (e) {
@@ -64,15 +82,22 @@ const ChatroomListHeader = () => {
 
         setIsLoading(true);
         const newChatroomName = form.getFieldValue("newChatroomName");
-        const createResp = await reqCreateChatroom(newChatroomName);
-        if ("string" === typeof createResp) {
-            message.error(createResp);
+
+        const reqFunc = mode === NEW_CHATROOM_MODE.CREATE ?
+            reqCreateChatroom :
+            reqJoinChatroom;
+        const resp = await reqFunc(newChatroomName);
+        if ("string" === typeof resp) {
+            message.error(resp);
         } else {
-            message.success(`Chatroom created with Room ID: ${createResp.roomId}`);
+            message.success(`Chatroom ${mode === NEW_CHATROOM_MODE.CREATE ?
+                "created" :
+                "joined"} with Room ID: ${resp.roomId}`);
             form.resetFields();
             setIsPopConfirmOpen(false);
-            navigate(`/chatroom/${createResp.roomId}`);
+            navigate(`/chatroom/${resp.roomId}`);
         }
+
         setIsLoading(false);
     };
 
@@ -88,21 +113,33 @@ const ChatroomListHeader = () => {
             <Tooltip title={"Start a new chat"}>
                 <Popconfirm
                     icon={null}
-                    okText={"Create"}
                     open={isPopConfirmOpen}
                     title={""}
                     description={
-                        <Form form={form}>
-                            <Form.Item
-                                name={"newChatroomName"}
-                                rules={[
-                                    {required: true, message: "Please enter a chatroom name"},
-                                ]}
-                            >
-                                <Input placeholder={"New Chatroom Name"}/>
-                            </Form.Item>
-                        </Form>
+                        <Space direction={"vertical"}>
+                            <Segmented
+                                block={true}
+                                color={"blue"}
+                                options={Object.values(NEW_CHATROOM_MODE)}
+                                onChange={handleModeChange}/>
+                            <Form form={form}>
+                                <Form.Item
+                                    name={"newChatroomName"}
+                                    rules={[
+                                        {required: true, message: "Please enter a chatroom name"},
+                                    ]}
+                                >
+                                    <Input
+                                        placeholder={mode === NEW_CHATROOM_MODE.CREATE ?
+                                            "New Chatroom Name" :
+                                            "Chatroom Name"}/>
+                                </Form.Item>
+                            </Form>
+                        </Space>
                     }
+                    okText={mode === NEW_CHATROOM_MODE.CREATE ?
+                        "Create" :
+                        "Join"}
                     onCancel={handleNewChatroomCancel}
                     onConfirm={handleNewChatroomConfirm}
                 >
