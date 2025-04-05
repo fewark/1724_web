@@ -103,6 +103,11 @@ const Chatroom = ({isConnected, socketRef}) => {
     };
 
     useEffect(() => {
+        setHistoricalMessages([]);
+        setNewMessages([]);
+    }, [id]);
+
+    useEffect(() => {
         if (false === isConnected || null === socketRef.current) {
             return () => null;
         }
@@ -220,8 +225,10 @@ const Chatroom = ({isConnected, socketRef}) => {
             <div ref={topRef}/>
             <List
                 locale={{emptyText: "Start a conversation below"}}
-                dataSource={[...historicalMessages,
-                    ...newMessages]}
+                dataSource={[
+                    ...historicalMessages,
+                    ...newMessages,
+                ]}
                 renderItem={(item) => (
                     <List.Item>
                         <List.Item.Meta

@@ -23,6 +23,7 @@ import {
 
 import {
     reqCreateChatroom,
+    reqGetChatroomList,
     reqJoinChatroom,
 } from "../../api/chatroom.js";
 
@@ -153,6 +154,47 @@ const ChatroomListHeader = () => {
 };
 
 /**
+ * Renders a chatroom list item.
+ *
+ * @param {object} props
+ * @param {string} props.name
+ * @param {string} props.lastMessage
+ * @param {string} props.id
+ * @return {React.ReactNode}
+ */
+const ChatroomListItem = ({id, name, lastMessage}) => {
+    const navigate = useNavigate();
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleChatroomClick = () => {
+        navigate(`/chatroom/${id}`);
+    };
+
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+    };
+
+    return (
+        <List.Item
+            style={{backgroundColor: isHovered ?
+                "#eaeaea" :
+                "inherit"}}
+            onClick={handleChatroomClick}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            <List.Item.Meta
+                description={lastMessage}
+                title={name}/>
+        </List.Item>
+    );
+};
+
+/**
  * Renders a list of chatroom and the last message.
  *
  * @return {React.ReactNode}
@@ -161,9 +203,15 @@ const ChatroomList = () => {
     const [roomList, setRoomList] = useState([]);
 
     useEffect(() => {
-        // eslint-disable-next-line no-warning-comments
-        // FIXME: fetch the list of past chats.
-        setRoomList([]);
+        (async () => {
+            const chatroomList = await reqGetChatroomList();
+            if ("string" === typeof chatroomList) {
+                message.error(chatroomList);
+
+                return;
+            }
+            setRoomList(chatroomList);
+        })();
     }, []);
 
     return (
@@ -177,12 +225,11 @@ const ChatroomList = () => {
                 header={<ChatroomListHeader/>}
                 locale={{emptyText: <Typography.Text>No chat history</Typography.Text>}}
                 style={listStyle}
-                renderItem={(item) => (
-                    <List.Item>
-                        <Typography.Text mark={true}>[ITEM]</Typography.Text>
-                        {" "}
-                        {item}
-                    </List.Item>
+                renderItem={({id, name, messages}) => (
+                    <ChatroomListItem
+                        id={id}
+                        lastMessage={messages[0]?.content ?? ""}
+                        name={name}/>
                 )}/>
         </Sider>
     );

@@ -12,6 +12,7 @@ import {
     getChatroomMessages,
     saveMessage,
 } from "../models/Message.js";
+import {getChatroomListForUser} from "../models/User.js";
 
 
 const router = express.Router();
@@ -111,18 +112,25 @@ const createChatroomRouter = (io) => {
         return res.json(chatroom);
     });
 
+    router.get("/", authHandler, async (req, res) => {
+        const userChatroomRes = await getChatroomListForUser(req.user.id);
+        console.log("User chatroom list:", userChatroomRes);
+
+        return res.json(userChatroomRes);
+    });
+
     router.post("/", authHandler, async (req, res) => {
         const {name} = req.body;
 
-        const createRoomResp = await createChatroom(name, req.user.id);
-        if (createRoomResp === CHATROOM_ERROR_TYPE.CHATROOM_NAME_ALREADY_EXISTS) {
+        const createRoomRes = await createChatroom(name, req.user.id);
+        if (createRoomRes === CHATROOM_ERROR_TYPE.CHATROOM_NAME_ALREADY_EXISTS) {
             return res.status(StatusCodes.CONFLICT).json({
-                error: createRoomResp,
+                error: createRoomRes,
             });
         }
 
         return res.json({
-            roomId: createRoomResp.id,
+            roomId: createRoomRes.id,
         });
     });
 

@@ -62,6 +62,21 @@ const reqGetChatroomInfo = async (roomId) => {
 };
 
 /**
+ * Gets the list of chatroom the user is in.
+ *
+ * @return {Promise<string | object[]>} If successful, return the response data object;
+ */
+const reqGetChatroomList = async () => {
+    try {
+        const res = await api.get("/chatroom");
+
+        return res.data;
+    } catch (err) {
+        return err.response?.data?.error || `Get chatroom list failed: ${err.message}`;
+    }
+};
+
+/**
  * Sends a message to a chatroom.
  *
  * @param {import('socket.io-client').Socket} socket
@@ -78,6 +93,7 @@ const reqSendMessage = (socket, roomId, message) => {
 export {
     reqCreateChatroom,
     reqGetChatroomInfo,
+    reqGetChatroomList,
     reqJoinChatroom,
     reqSendMessage,
 };
