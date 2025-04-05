@@ -8,9 +8,15 @@ import {
     getChatroomInfo,
     joinChatroom,
 } from "../models/Chatroom.js";
+import {
+    getChatroomMessages,
+    saveMessage,
+} from "../models/Message.js";
 
 
 const router = express.Router();
+
+const FETCH_CHATROOM_MESSAGES_LIMIT = 10;
 
 /**
  * Chatroom route.
@@ -41,12 +47,28 @@ const createChatroomRouter = (io) => {
                 console.log("Client disconnected:", userFromToken.username);
             });
 
-            socket.on("subscribe", ({roomId}) => {
+            socket.on("subscribe", async ({roomId, earlierThan}) => {
                 console.log("Client subscribed to room:", roomId);
                 socket.join(roomId);
+
+                const historicalMessages = await getChatroomMessages(
+                    roomId,
+                    FETCH_CHATROOM_MESSAGES_LIMIT,
+                    earlierThan
+                );
+
+                historicalMessages.forEach(({createdAt, content, user}) => {
+                    io.to(roomId).emit("message", {
+                        senderId: user.id,
+                        senderUsername: user.username,
+                        message: content,
+                        createdAt: createdAt,
+                    });
+                });
             });
 
-            socket.on("sendMessage", ({roomId, message}) => {
+            socket.on("sendMessage", async ({roomId, message}) => {
+                await saveMessage(roomId, userFromToken.id, message);
                 io.to(roomId).emit("message", {
                     senderId: userFromToken.id,
                     senderUsername: userFromToken.username,
