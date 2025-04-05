@@ -12,8 +12,11 @@ import {
     Button,
     Layout,
     List,
+    Space,
     Tooltip,
+    Typography,
 } from "antd";
+import dayjs from "dayjs";
 
 
 const {Content} = Layout;
@@ -72,6 +75,56 @@ const GoToBottomButton = ({isAtBottom, newMessageCount, onGotoBottomButtonClick}
                 </Badge>
             </Tooltip>
         </div>
+    );
+};
+
+/**
+ * Renders a message list item.
+ *
+ * @param {object} props
+ * @param {string} props.createdAt
+ * @param {string} props.message
+ * @param {string} props.senderId
+ * @param {string} props.senderUsername
+ * @return {React.ReactNode}
+ */
+const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+    };
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+    };
+
+    return (
+        <List.Item
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            <List.Item.Meta
+                avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${senderId}`}/>}
+                description={
+                    <Typography.Text>
+                        {message}
+                    </Typography.Text>
+                }
+                title={
+                    <Space align={"baseline"}>
+                        <Typography.Title level={5}>
+                            {senderUsername}
+                        </Typography.Title>
+                        <Typography.Text
+                            style={{color: "grey", fontWeight: 400}}
+                        >
+                            {dayjs(createdAt).format(isHovered ?
+                                "HH:mm:ss MM/DD/YYYY" :
+                                "HH:mm:ss")}
+                        </Typography.Text>
+                    </Space>
+                }/>
+        </List.Item>
     );
 };
 
@@ -237,13 +290,12 @@ const Chatroom = ({isConnected, socketRef}) => {
                     ...historicalMessages,
                     ...newMessages,
                 ]}
-                renderItem={(item) => (
-                    <List.Item>
-                        <List.Item.Meta
-                            avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${item.senderId}`}/>}
-                            description={item.message}
-                            title={item.senderUsername}/>
-                    </List.Item>
+                renderItem={({message, senderId, senderUsername, createdAt}) => (
+                    <MessageListItem
+                        createdAt={createdAt}
+                        message={message}
+                        senderId={senderId}
+                        senderUsername={senderUsername}/>
                 )}/>
             <GoToBottomButton
                 isAtBottom={isAtBottom}
