@@ -106,7 +106,7 @@ const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
             <List.Item.Meta
                 avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${senderId}`}/>}
                 description={
-                    <Typography.Text>
+                    <Typography.Text style={{whiteSpace: "pre-wrap"}}>
                         {message}
                     </Typography.Text>
                 }
