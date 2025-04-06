@@ -160,19 +160,16 @@ Picture of active chatroom with messages and emojis
 - Users can view and manage their **profile** from the chatroom list page.
 - Profile settings allow users to update their display name and profile image.
 - A **Sign Out** button is available in the top menu, which clears the token and returns the user to the login page.
-- 
 <img width="1917" alt="image" src="https://github.com/user-attachments/assets/c1067578-d879-4bc1-b53f-da9c1d6566ee" />
 Picture of user profile dropdown
 
 
 ### 5. Responsive Design
 
-The application is fully responsive and optimized for both desktop and mobile usage.
+The application is fully responsive and optimized for desktop usage.
 
 - Built with **React** and **Ant Design**, the interface adapts to various screen sizes.
-- All pages, including login, chatroom list, and chatroom view, remain accessible and usable on mobile.
-
-> 📷 _Optional: add mobile screenshot if applicable_
+- All pages, including login, chatroom list, and chatroom view, remain accessible and usable on Desktop.
 
 ---
 
@@ -205,6 +202,7 @@ Make a copy of the `.env` file as `.env.local` in the backend folder, and replac
 ```bash
 cp .env .env.local
 ```
+And make sure your postgresql server is started.
 
 > [!WARNING]
 > Do not commit your `.env.local` file to version control.
