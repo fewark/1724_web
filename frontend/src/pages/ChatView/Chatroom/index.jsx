@@ -7,13 +7,25 @@ import {useParams} from "react-router-dom";
 
 import {
     Avatar,
+    Button,
     Layout,
     List,
     Space,
     Typography,
+    message,
 } from "antd";
+import {
+    FileOutlined,
+    DownloadOutlined,
+    FilePdfOutlined,
+    FileImageOutlined,
+    FileWordOutlined,
+    FileTextOutlined,
+    LoadingOutlined,
+} from "@ant-design/icons";
 import dayjs from "dayjs";
 
+import {getDownloadPresignedUrl} from "../../../api/file.js";
 import GoToBottomButton from "./GoToBottomButton.jsx";
 
 
@@ -29,6 +41,27 @@ const contentStyle = {
 
 const SET_IS_NOT_AT_BOTTOM_DEBOUNCE_TIMEOUT_MILLIS = 1000;
 
+/**
+ * Renders a file icon based on file type
+ * 
+ * @param {string} fileType - MIME type of the file
+ * @return {React.ReactNode}
+ */
+const FileTypeIcon = ({ fileType }) => {
+    if (!fileType) return <FileOutlined />;
+    
+    if (fileType.startsWith('image/')) {
+        return <FileImageOutlined style={{ color: '#36c' }} />;
+    } else if (fileType === 'application/pdf') {
+        return <FilePdfOutlined style={{ color: '#e53' }} />;
+    } else if (fileType.includes('word') || fileType.includes('document')) {
+        return <FileWordOutlined style={{ color: '#44a' }} />;
+    } else if (fileType === 'text/plain') {
+        return <FileTextOutlined style={{ color: '#666' }} />;
+    }
+    
+    return <FileOutlined />;
+};
 
 /**
  * Renders a message list item.
@@ -42,6 +75,7 @@ const SET_IS_NOT_AT_BOTTOM_DEBOUNCE_TIMEOUT_MILLIS = 1000;
  */
 const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [downloading, setDownloading] = useState(false);
 
     const handleMouseEnter = () => {
         setIsHovered(true);
@@ -49,6 +83,99 @@ const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
     const handleMouseLeave = () => {
         setIsHovered(false);
     };
+    
+    const handleFileDownload = async (fileData) => {
+        setDownloading(true);
+        try {
+            let fileId = fileData.fileId;
+            
+            // 如果没有 fileId，尝试从 fileUrl 解析
+            if (!fileId && fileData.fileUrl) {
+                const parts = fileData.fileUrl.split("/");
+                fileId = parts[parts.length - 1];
+            }
+    
+            let downloadUrl;
+    
+            // 尝试获取新的 Presigned URL
+            if (fileId) {
+                const freshData = await getDownloadPresignedUrl(fileId);
+                if (freshData?.presignedUrl) {
+                    downloadUrl = freshData.presignedUrl;
+                }
+            }
+    
+            // 回退到原始 URL
+            if (!downloadUrl && fileData.presignedUrl) {
+                downloadUrl = fileData.presignedUrl;
+            }
+    
+            if (!downloadUrl) {
+                throw new Error("No valid download URL found");
+            }
+        
+            const response = await fetch(downloadUrl);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+    
+            const a = document.createElement("a");
+            a.href = blobUrl;
+            a.download = fileData.filename || "file"; 
+            document.body.appendChild(a);
+            a.click();
+    
+            window.URL.revokeObjectURL(blobUrl);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error("Download failed:", error);
+            message.error("Failed to download file: " + (error.message || "Unknown error"));
+        } finally {
+            setDownloading(false);
+        }
+    };
+    
+    // Check if the message is a file message (JSON string)
+    let messageContent;
+    let isFileMessage = false;
+    let fileData = null;
+    
+    try {
+        const parsedMessage = JSON.parse(message);
+        if (parsedMessage.type === 'file') {
+            isFileMessage = true;
+            console.log("File data:", parsedMessage);
+            fileData = parsedMessage;
+        }
+    } catch (e) {
+        // Not a JSON message, treat as regular text
+        isFileMessage = false;
+    }
+    
+    if (isFileMessage && fileData) {
+        messageContent = (
+            <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                <Space>
+                    <FileTypeIcon fileType={fileData.fileType} />
+                    <Typography.Text strong>{fileData.filename}</Typography.Text>
+                </Space>
+                <Button 
+                    type="primary" 
+                    size="small" 
+                    icon={downloading ? <LoadingOutlined /> : <DownloadOutlined />}
+                    onClick={() => handleFileDownload(fileData)}
+                    loading={downloading}
+                >
+                    Download
+                </Button>
+            </Space>
+        );
+    } else {
+        messageContent = (
+            <Typography.Text style={{whiteSpace: "pre-wrap"}}>
+                {message}
+            </Typography.Text>
+        );
+    }
 
     return (
         <List.Item
@@ -57,11 +184,7 @@ const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
         >
             <List.Item.Meta
                 avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${senderId}`}/>}
-                description={
-                    <Typography.Text style={{whiteSpace: "pre-wrap"}}>
-                        {message}
-                    </Typography.Text>
-                }
+                description={messageContent}
                 title={
                     <Space align={"baseline"}>
                         <Typography.Title level={5}>

@@ -172,22 +172,6 @@ const getFileMetadata = async (bucket, objectName) => {
     }
 };
 
-/**
- * Deletes a specific file from a bucket
- *
- * @param {string} bucket Name of the bucket containing the file
- * @param {string} objectName Name of the file to delete
- * @return {Promise<void>}
- * @throws {Error} If file deletion fails
- */
-const deleteFile = async (bucket, objectName) => {
-    try {
-        await minioClient.removeObject(bucket, objectName);
-    } catch (err) {
-        console.error(`Error deleting file ${bucket}/${objectName}: ${err.message}`);
-        throw err;
-    }
-};
 
 /**
  * Tests the connection to MinIO server by listing available buckets
@@ -223,7 +207,6 @@ const testConnection = async () => {
 // Export all functions at the bottom
 export {
     DEFAULT_BUCKET,
-    deleteFile,
     ensureBucketExists,
     fileExists,
     generateFilePath,

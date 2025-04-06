@@ -90,10 +90,40 @@ const reqSendMessage = (socket, roomId, message) => {
     return null;
 };
 
+/**
+ * Sends a file message to a chatroom.
+ *
+ * @param {import('socket.io-client').Socket} socket
+ * @param {string} roomId
+ * @param {object} fileInfo
+ * @param {string} fileInfo.filename - Original filename
+ * @param {string} fileInfo.fileUrl - URL for the file
+ * @param {string} fileInfo.presignedUrl - Temporary upload URL
+ * @param {string} fileInfo.fileType - MIME type of the file
+ * @return {null}
+ */
+const reqSendFileMessage = (socket, roomId, fileInfo) => {
+    
+    // Create a special file message format
+    const fileMessage = JSON.stringify({
+        type: "file",
+        filename: fileInfo.filename,
+        fileUrl: fileInfo.fileUrl,
+        presignedUrl: fileInfo.presignedUrl,
+        fileType: fileInfo.fileType,
+        fileId: fileInfo.fileId
+    });
+    
+    socket.emit("sendMessage", {roomId, message: fileMessage});
+
+    return null;
+};
+
 export {
     reqCreateChatroom,
     reqGetChatroomInfo,
     reqGetChatroomList,
     reqJoinChatroom,
+    reqSendFileMessage,
     reqSendMessage,
 };
