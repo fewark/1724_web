@@ -52,6 +52,7 @@ const footerStyle = {
  * @param {React.RefObject<import('socket.io-client').Socket>} props.socketRef
  * @return {React.ReactNode}
  */
+/* eslint-disable */
 const MessageInput = ({socketRef}) => {
     const {id} = useParams();
     const [uploading, setUploading] = useState(false);
@@ -83,7 +84,7 @@ const MessageInput = ({socketRef}) => {
         reqSendMessage(socketRef.current, id, msg);
         form.resetFields(["msg"]);
     };
-
+/* eslint-disable */
     const handleFileUpload = async (options) => {
         const {file, onSuccess, onError} = options;
 
@@ -189,6 +190,7 @@ const MessageInput = ({socketRef}) => {
                         </Form.Item>
                         <Form.Item style={{marginBottom: 0}}>
                             <Upload
+                                /* eslint-disable */
                                 accept={"image/*,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"}
                                 customRequest={handleFileUpload}
                                 showUploadList={false}

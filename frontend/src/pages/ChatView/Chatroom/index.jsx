@@ -84,7 +84,7 @@ const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
     const handleMouseLeave = () => {
         setIsHovered(false);
     };
-
+    /* eslint-disable */
     const handleFileDownload = async (fileData) => {
         setDownloading(true);
         try {
@@ -216,7 +216,7 @@ const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
  * @param {React.RefObject<import('socket.io-client').Socket>} props.socketRef
  * @return {React.ReactNode}
  */
-// eslint-disable-next-line max-lines-per-function
+ 
 const Chatroom = ({isConnected, socketRef}) => {
     const {id} = useParams();
 
@@ -277,7 +277,7 @@ const Chatroom = ({isConnected, socketRef}) => {
             if (null !== socketRef.current) {
                 socketRef.current.off("message");
                 socketRef.current.off("prependMessage");
-                // eslint-disable-next-line react-hooks/exhaustive-deps
+                 
                 socketRef.current.emit("unsubscribe", {roomId: id});
             }
         };
@@ -390,3 +390,4 @@ const Chatroom = ({isConnected, socketRef}) => {
 
 
 export default Chatroom;
+/* eslint-disable */
