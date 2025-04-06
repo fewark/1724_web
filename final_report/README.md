@@ -15,7 +15,7 @@ A real-time chat room application consists of separate frontend and backend comp
 
 ## **2. Video Demo**
 
-Link URL: 
+Link URL: https://youtu.be/PL0Tnugu6cc
 
 ---
 
