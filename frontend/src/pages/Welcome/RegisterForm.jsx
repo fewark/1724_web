@@ -81,8 +81,8 @@ const RegisterForm = () => {
                                 Promise.resolve() :
                                 Promise.reject(
                                     new Error(
-                                        "Password must be at least 8 characters and include uppercase, " +
-                                        "lowercase, number, and special character."
+                                        "Password must be at least 8 characters and include " +
+                                        "uppercase, lowercase, number, and special character."
                                     )
                                 );
                         },
