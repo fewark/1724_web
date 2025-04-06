@@ -1,9 +1,6 @@
-import dotenv from "dotenv";
 import {Client} from "minio";
 import {v4 as uuidv4} from "uuid";
 
-
-// eslint-disable-next-line no-warning-comments
 
 // Initialize the MinIO client with environment variables or defaults
 const minioClient = new Client({
