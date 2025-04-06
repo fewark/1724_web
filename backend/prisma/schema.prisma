@@ -53,11 +53,12 @@ model Message {
 }
 
 model File {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  chatroomId Int?
-  fileUrl    String   @map("file_url") @db.Text
-  createdAt  DateTime @default(now()) @map("created_at")
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  chatroomId   Int?
+  fileUrl      String   @map("file_url") @db.Text
+  originalName String   @db.VarChar(255)
+  createdAt    DateTime @default(now()) @map("created_at")
 
   user     User      @relation(fields: [userId], references: [id])
   chatroom Chatroom? @relation(fields: [chatroomId], references: [id])

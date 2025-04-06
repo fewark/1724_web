@@ -6,7 +6,17 @@ import {
 import {useParams} from "react-router-dom";
 
 import {
+    DownloadOutlined,
+    FileImageOutlined,
+    FileOutlined,
+    FilePdfOutlined,
+    FileTextOutlined,
+    FileWordOutlined,
+    LoadingOutlined,
+} from "@ant-design/icons";
+import {
     Avatar,
+    Button,
     Layout,
     List,
     Space,
@@ -14,6 +24,7 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 
+import {getDownloadPresignedUrl} from "../../../api/file.js";
 import GoToBottomButton from "./GoToBottomButton.jsx";
 
 
@@ -29,6 +40,29 @@ const contentStyle = {
 
 const SET_IS_NOT_AT_BOTTOM_DEBOUNCE_TIMEOUT_MILLIS = 1000;
 
+/**
+ * Renders a file icon based on file type
+ *
+ * @param {string} fileType MIME type of the file
+ * @return {React.ReactNode}
+ */
+const FileTypeIcon = ({fileType}) => {
+    if (!fileType) {
+        return <FileOutlined/>;
+    }
+
+    if (fileType.startsWith("image/")) {
+        return <FileImageOutlined style={{color: "#36c"}}/>;
+    } else if ("application/pdf" === fileType) {
+        return <FilePdfOutlined style={{color: "#e53"}}/>;
+    } else if (fileType.includes("word") || fileType.includes("document")) {
+        return <FileWordOutlined style={{color: "#44a"}}/>;
+    } else if ("text/plain" === fileType) {
+        return <FileTextOutlined style={{color: "#666"}}/>;
+    }
+
+    return <FileOutlined/>;
+};
 
 /**
  * Renders a message list item.
@@ -42,6 +76,7 @@ const SET_IS_NOT_AT_BOTTOM_DEBOUNCE_TIMEOUT_MILLIS = 1000;
  */
 const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [downloading, setDownloading] = useState(false);
 
     const handleMouseEnter = () => {
         setIsHovered(true);
@@ -49,6 +84,103 @@ const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
     const handleMouseLeave = () => {
         setIsHovered(false);
     };
+    /* eslint-disable */
+    const handleFileDownload = async (fileData) => {
+        setDownloading(true);
+        try {
+            let {fileId} = fileData;
+
+            if (!fileId && fileData.fileUrl) {
+                const parts = fileData.fileUrl.split("/");
+                fileId = parts[parts.length - 1];
+            }
+
+            let downloadUrl;
+
+            if (fileId) {
+                const freshData = await getDownloadPresignedUrl(fileId);
+                if (freshData?.presignedUrl) {
+                    downloadUrl = freshData.presignedUrl;
+                }
+            }
+
+            if (!downloadUrl && fileData.presignedUrl) {
+                downloadUrl = fileData.presignedUrl;
+            }
+
+            if (!downloadUrl) {
+                throw new Error("No valid download URL found");
+            }
+
+            const response = await fetch(downloadUrl);
+            const blob = await response.blob();
+
+            const a = document.createElement("a");
+            a.href = window.URL.createObjectURL(blob);
+            a.download = fileData.filename || "file";
+            document.body.appendChild(a);
+            a.click();
+
+            window.URL.revokeObjectURL(window.URL.createObjectURL(blob));
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error("Download failed:", error);
+            message.error(`Failed to download file: ${error.message || "Unknown error"}`);
+        } finally {
+            setDownloading(false);
+        }
+    };
+
+    // Check if the message is a file message (JSON string)
+    let messageContent;
+    let isFileMessage = false;
+    let fileData = null;
+
+    try {
+        const parsedMessage = JSON.parse(message);
+        if ("file" === parsedMessage.type) {
+            isFileMessage = true;
+            console.log("File data:", parsedMessage);
+            fileData = parsedMessage;
+        }
+    } catch (error) {
+        console.error("Error parsing message:", error);
+        isFileMessage = false;
+    }
+
+    if (isFileMessage && fileData) {
+        messageContent = (
+            <Space
+                direction={"vertical"}
+                size={"small"}
+                style={{width: "100%"}}
+            >
+                <Space>
+                    <FileTypeIcon fileType={fileData.fileType}/>
+                    <Typography.Text strong={true}>
+                        {fileData.filename}
+                    </Typography.Text>
+                </Space>
+                <Button
+                    loading={downloading}
+                    size={"small"}
+                    type={"primary"}
+                    icon={downloading ?
+                        <LoadingOutlined/> :
+                        <DownloadOutlined/>}
+                    onClick={() => handleFileDownload(fileData)}
+                >
+                    Download
+                </Button>
+            </Space>
+        );
+    } else {
+        messageContent = (
+            <Typography.Text style={{whiteSpace: "pre-wrap"}}>
+                {message}
+            </Typography.Text>
+        );
+    }
 
     return (
         <List.Item
@@ -57,11 +189,7 @@ const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
         >
             <List.Item.Meta
                 avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${senderId}`}/>}
-                description={
-                    <Typography.Text style={{whiteSpace: "pre-wrap"}}>
-                        {message}
-                    </Typography.Text>
-                }
+                description={messageContent}
                 title={
                     <Space align={"baseline"}>
                         <Typography.Title level={5}>
@@ -88,7 +216,7 @@ const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
  * @param {React.RefObject<import('socket.io-client').Socket>} props.socketRef
  * @return {React.ReactNode}
  */
-// eslint-disable-next-line max-lines-per-function
+ 
 const Chatroom = ({isConnected, socketRef}) => {
     const {id} = useParams();
 
@@ -149,7 +277,7 @@ const Chatroom = ({isConnected, socketRef}) => {
             if (null !== socketRef.current) {
                 socketRef.current.off("message");
                 socketRef.current.off("prependMessage");
-                // eslint-disable-next-line react-hooks/exhaustive-deps
+                 
                 socketRef.current.emit("unsubscribe", {roomId: id});
             }
         };
@@ -262,3 +390,4 @@ const Chatroom = ({isConnected, socketRef}) => {
 
 
 export default Chatroom;
+/* eslint-disable */

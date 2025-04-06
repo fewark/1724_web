@@ -1,7 +1,6 @@
 import express from "express";
 
 import {
-    deleteFileHandler,
     generateUploadUrlHandler,
     getFileHandler,
     listChatroomFilesHandler,
@@ -20,9 +19,6 @@ router.post("/upload/:roomId", generateUploadUrlHandler);
 
 // Get file details with presigned URL for viewing/downloading
 router.get("/id/:fileId", getFileHandler);
-
-// Delete file by ID
-router.delete("/id/:fileId", deleteFileHandler);
 
 // List all files in a chatroom
 router.get("/room/:roomId", listChatroomFilesHandler);

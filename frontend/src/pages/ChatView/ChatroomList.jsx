@@ -214,8 +214,20 @@ const ChatroomListItem = ({id, name, lastMessage}) => {
             onMouseLeave={handleMouseLeave}
         >
             <List.Item.Meta
-                description={lastMessage.substring(0, MAX_CHATROOM_MESSAGE_PREVIEW_LENGTH)}
-                title={name}/>
+                title={name}
+                description={(() => {
+                    try {
+                        const parsedMessage = JSON.parse(lastMessage);
+                        if (parsedMessage && "file" === parsedMessage.type &&
+                            parsedMessage.filename) {
+                            return `File: ${parsedMessage.filename}`;
+                        }
+                    } catch (error) {
+                        console.error("Error parsing message:", error);
+                    }
+
+                    return lastMessage.substring(0, MAX_CHATROOM_MESSAGE_PREVIEW_LENGTH);
+                })()}/>
         </List.Item>
     );
 };

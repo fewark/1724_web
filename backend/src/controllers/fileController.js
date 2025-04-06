@@ -6,7 +6,6 @@ import path, {dirname} from "path";
 import {fileURLToPath} from "url";
 
 import {
-    deleteFile,
     fileExists,
     generatePresignedUploadUrl,
     getFileMetadata,
@@ -62,7 +61,7 @@ const prisma = new PrismaClient();
 const generateUploadUrl = async (req, res) => {
     try {
         const {roomId} = req.params;
-        const {userId} = req.body;
+        const { userId, filename } = req.body;
 
         if (!roomId) {
             return res.status(HTTP_BAD_REQUEST).json({error: "Room ID is required"});
@@ -80,7 +79,6 @@ const generateUploadUrl = async (req, res) => {
             return res.status(HTTP_NOT_FOUND).json({error: "Chatroom not found"});
         }
 
-        const {filename} = req.body;
 
         if (!filename) {
             return res.status(HTTP_BAD_REQUEST).json({error: "Filename is required"});
@@ -88,15 +86,19 @@ const generateUploadUrl = async (req, res) => {
 
         const uploadResult = await generatePresignedUploadUrl(filename);
 
-        await prisma.file.create({
+        const file = await prisma.file.create({
             data: {
                 userId: Number(userId),
                 chatroomId: Number(roomId),
                 fileUrl: uploadResult.fileUrl,
+                originalName: filename,
             },
         });
 
-        return res.status(HTTP_SUCCESS).json({presignedUrl: uploadResult.presignedUrl});
+        return res.status(HTTP_SUCCESS).json({
+            presignedUrl: uploadResult.presignedUrl,
+            fileId: file.id
+        });
     } catch (err) {
         console.error("Error generating upload URL:", err);
 
@@ -119,14 +121,6 @@ const getFile = async (req, res) => {
 
         const file = await prisma.file.findUnique({
             where: {id: Number(fileId)},
-            include: {
-                user: {
-                    select: {
-                        id: true,
-                        username: true,
-                    },
-                },
-            },
         });
 
         if (!file) {
@@ -151,20 +145,11 @@ const getFile = async (req, res) => {
             });
         }
 
-        const metadata = await getFileMetadata(bucket, objectName);
         const presignedUrl = await getPresignedUrl(bucket, objectName);
 
         return res.status(HTTP_SUCCESS).json({
-            chatroomId: file.chatroomId,
-            contentType: metadata.metaData["content-type"] || OCTET_STREAM,
-            expiresIn: DEFAULT_EXPIRY_SECONDS,
-            fileUrl: file.fileUrl,
-            id: file.id,
             presignedUrl: presignedUrl,
-            size: metadata.size,
-            uploadedAt: file.createdAt,
-            uploadedBy: file.user.username,
-            userId: file.userId,
+            expiresIn: DEFAULT_EXPIRY_SECONDS,
         });
     } catch (err) {
         console.error("Error getting file:", err);
@@ -210,58 +195,6 @@ const getFileLink = async (req, res) => {
         });
     }
 };
-
-
-/**
- *
- * @param req
- * @param res
- */
-const deleteFileHandler = async (req, res) => {
-    try {
-        const {fileId} = req.params;
-        const {userId} = req.body;
-
-        const file = await prisma.file.findUnique({
-            where: {id: Number(fileId)},
-        });
-
-        if (!file) {
-            return res.status(HTTP_NOT_FOUND).json({error: "File not found"});
-        }
-
-        if (file.userId !== Number(userId)) {
-            return res.status(HTTP_UNAUTHORIZED).json({
-                error: "You do not have permission to delete this file",
-            });
-        }
-
-        const [, bucket,
-            ...objectParts] = file.fileUrl.split("/");
-        const objectName = objectParts.join("/");
-
-        try {
-            await deleteFile(bucket, objectName);
-        } catch (storageErr) {
-            console.error("Error deleting file from storage:", storageErr);
-        }
-
-        await prisma.file.delete({
-            where: {id: Number(fileId)},
-        });
-
-        return res.status(HTTP_SUCCESS).json({message: "File deleted successfully"});
-    } catch (err) {
-        console.error("Error deleting file:", err);
-
-        return res.status(HTTP_SERVER_ERROR).json({
-            error: "Failed to delete file",
-            details: err.message,
-        });
-    }
-};
-
-
 /**
  *
  * @param req
@@ -314,7 +247,6 @@ const listChatroomFiles = async (req, res) => {
 };
 
 export {
-    deleteFileHandler,
     generateUploadUrl as generateUploadUrlHandler,
     getFile as getFileHandler,
     getFileLink as getFileLinkHandler,

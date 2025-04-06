@@ -1,11 +1,6 @@
-import dotenv from "dotenv";
 import {Client} from "minio";
 import {v4 as uuidv4} from "uuid";
 
-
-// eslint-disable-next-line no-warning-comments
-// FIXME: why are we call dotenv.config() twice?
-dotenv.config();
 
 // Initialize the MinIO client with environment variables or defaults
 const minioClient = new Client({
@@ -172,22 +167,6 @@ const getFileMetadata = async (bucket, objectName) => {
     }
 };
 
-/**
- * Deletes a specific file from a bucket
- *
- * @param {string} bucket Name of the bucket containing the file
- * @param {string} objectName Name of the file to delete
- * @return {Promise<void>}
- * @throws {Error} If file deletion fails
- */
-const deleteFile = async (bucket, objectName) => {
-    try {
-        await minioClient.removeObject(bucket, objectName);
-    } catch (err) {
-        console.error(`Error deleting file ${bucket}/${objectName}: ${err.message}`);
-        throw err;
-    }
-};
 
 /**
  * Tests the connection to MinIO server by listing available buckets
@@ -223,7 +202,6 @@ const testConnection = async () => {
 // Export all functions at the bottom
 export {
     DEFAULT_BUCKET,
-    deleteFile,
     ensureBucketExists,
     fileExists,
     generateFilePath,
