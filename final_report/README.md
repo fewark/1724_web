@@ -198,6 +198,24 @@ Users can upload and share image or PDF files in any chatroom.
 git clone https://github.com/fewark/1724_web.git
 cd 1724_web
 ```
+## Minio Setup
+
+The minio service is started using docker container
+
+### **1. Navigate to the Docker Directory**
+```bash
+cd ./docker
+```
+
+### **2. Make the script executable (if needed)**
+```bash
+chmod +x run-official.sh
+```
+
+### **3. Run script**
+```bash
+./run-official.sh
+```
 
 ## Backend Setup
 
