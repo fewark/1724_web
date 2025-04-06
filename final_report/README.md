@@ -341,7 +341,7 @@ Security, storage, and environment configurations are managed through `.env` fil
 - Updated and refined the Docker environment for consistent development experience.
 - Contributed to backend infrastructure setup and testing during initial project phases.
 - Provided support for cross-platform compatibility and team environment syncing.
-- Updated the `README.md`.
+- Updated the `README.md` and record the demo video.
 
 ---
 
