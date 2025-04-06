@@ -11,6 +11,10 @@ A real-time chat room application consists of separate frontend and backend comp
 | Xiaoyang Xie | 1005755103     | xiaoyang.xie@mail.utoronto.ca |
 | Yanhao Li    | 1010253618     | yanhao.li@mail.utoronto.ca |
 
+Two members of our team, Xiaoyang Xie and Yanhao Li, are graduating students. As per the course policy, they will be submitting Assignment 4 and the Course Project by April 6 to meet the convocation timeline.
+
+The remaining two members, Kaifeng Lu and Zenan Jiang, are non-graduating students and will follow the standard deadlines (Assignment 4 by April 13 and Course Project by April 20).
+
 ---
 
 ## **2. Video Demo**
