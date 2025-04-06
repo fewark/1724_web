@@ -1,7 +1,13 @@
-import {useRef, useState} from "react";
+import {
+    useRef,
+    useState,
+} from "react";
 import {useParams} from "react-router-dom";
 
-import {SmileOutlined, UploadOutlined} from "@ant-design/icons";
+import {
+    SmileOutlined,
+    UploadOutlined,
+} from "@ant-design/icons";
 import Picker from "@emoji-mart/react";
 import {
     Button,
@@ -9,21 +15,29 @@ import {
     Form,
     Input,
     Layout,
-    Popover,
     message,
+    Popover,
     Upload,
 } from "antd";
 
-import {reqSendFileMessage, reqSendMessage} from "../../api/chatroom.js";
-import {getUploadPresignedUrl, uploadFileToStorage} from "../../api/file.js";
-import {ValidatedSubmitButton} from "../../components/ValidatedSubmitButton.jsx";
+import {
+    reqSendFileMessage,
+    reqSendMessage,
+} from "../../api/chatroom.js";
+import {
+    getUploadPresignedUrl,
+    uploadFileToStorage,
+} from "../../api/file.js";
 import {getUser} from "../../api/user.js";
+import {ValidatedSubmitButton} from "../../components/ValidatedSubmitButton.jsx";
 
 
 const {Footer} = Layout;
 
 const MAX_MESSAGE_LENGTH = 4096;
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const KILOBYTE = 1024;
+const MEGABYTE = KILOBYTE * KILOBYTE;
+const MAX_FILE_SIZE = 10 * MEGABYTE;
 
 const footerStyle = {
     backgroundColor: "#f3f3f3",
@@ -71,60 +85,68 @@ const MessageInput = ({socketRef}) => {
     };
 
     const handleFileUpload = async (options) => {
-        const { file, onSuccess, onError } = options;
-        
+        const {file, onSuccess, onError} = options;
+
         if (file.size > MAX_FILE_SIZE) {
-            message.error(`File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB`);
+            message.error(`File too large. Maximum size is ${MAX_FILE_SIZE / MEGABYTE}MB`);
             onError(new Error("File too large"));
+
             return;
         }
-        
+
         try {
             setUploading(true);
+
             // Get the current user ID from localStorage
             const user = getUser();
-            const userId = user ? user.id : null;
+            const userId = user ?
+                user.id :
+                null;
 
             if (!userId) {
                 message.error("User not authenticated");
                 onError(new Error("User not authenticated"));
+
                 return;
             }
-            
+
             // Get a presigned URL for upload
             const result = await getUploadPresignedUrl(id, userId, file.name);
-            
-            if (typeof result === 'string') {
+
+            if ("string" === typeof result) {
                 // Error returned as string
                 message.error(result);
                 onError(new Error(result));
+
                 return;
             }
-            
+
             if (!result.presignedUrl) {
                 message.error("Failed to get upload URL: No presigned URL returned");
                 onError(new Error("No presigned URL returned"));
+
                 return;
             }
-            
+
             // Upload the file directly to MinIO using the presigned URL
             const uploadError = await uploadFileToStorage(result.presignedUrl, file);
-            
+
             if (uploadError) {
                 message.error(uploadError);
                 onError(new Error(uploadError));
+
                 return;
             }
-            
+
             // Send file message to the chat after successful upload
             reqSendFileMessage(socketRef.current, id, {
-                filename: file.name,
-                fileUrl: result.fileUrl,
-                presignedUrl: result.presignedUrl,
+                fileId: result.fileId,
                 fileType: file.type,
-                fileId: result.fileId
+                fileUrl: result.fileUrl,
+                filename: file.name,
+                presignedUrl: result.presignedUrl,
             });
-            
+
             message.success(`${file.name} uploaded successfully`);
             onSuccess(null, file);
         } catch (error) {
@@ -167,16 +189,16 @@ const MessageInput = ({socketRef}) => {
                         </Form.Item>
                         <Form.Item style={{marginBottom: 0}}>
                             <Upload
+                                accept={"image/*,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"}
                                 customRequest={handleFileUpload}
                                 showUploadList={false}
-                                accept="image/*,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                             >
-                                <Button 
-                                    shape={"circle"} 
+                                <Button
                                     loading={uploading}
-                                    title="Upload file"
+                                    shape={"circle"}
+                                    title={"Upload file"}
                                 >
-                                    <UploadOutlined />
+                                    <UploadOutlined/>
                                 </Button>
                             </Upload>
                         </Form.Item>

@@ -96,25 +96,24 @@ const reqSendMessage = (socket, roomId, message) => {
  * @param {import('socket.io-client').Socket} socket
  * @param {string} roomId
  * @param {object} fileInfo
- * @param {string} fileInfo.filename - Original filename
- * @param {string} fileInfo.fileUrl - URL for the file
- * @param {string} fileInfo.presignedUrl - Temporary upload URL
- * @param {string} fileInfo.fileType - MIME type of the file
+ * @param {string} fileInfo.filename Original filename
+ * @param {string} fileInfo.fileUrl URL for the file
+ * @param {string} fileInfo.presignedUrl Temporary upload URL
+ * @param {string} fileInfo.fileType MIME type of the file
  * @return {null}
  */
 const reqSendFileMessage = (socket, roomId, fileInfo) => {
-    
     // Create a special file message format
     const fileMessage = JSON.stringify({
-        type: "file",
-        filename: fileInfo.filename,
-        fileUrl: fileInfo.fileUrl,
-        presignedUrl: fileInfo.presignedUrl,
+        fileId: fileInfo.fileId,
         fileType: fileInfo.fileType,
-        fileId: fileInfo.fileId
+        fileUrl: fileInfo.fileUrl,
+        filename: fileInfo.filename,
+        presignedUrl: fileInfo.presignedUrl,
+        type: "file",
     });
-    
-    socket.emit("sendMessage", {roomId, message: fileMessage});
+
+    socket.emit("sendMessage", {roomId: roomId, message: fileMessage});
 
     return null;
 };

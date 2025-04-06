@@ -6,23 +6,22 @@ import {
 import {useParams} from "react-router-dom";
 
 import {
+    DownloadOutlined,
+    FileImageOutlined,
+    FileOutlined,
+    FilePdfOutlined,
+    FileTextOutlined,
+    FileWordOutlined,
+    LoadingOutlined,
+} from "@ant-design/icons";
+import {
     Avatar,
     Button,
     Layout,
     List,
     Space,
     Typography,
-    message,
 } from "antd";
-import {
-    FileOutlined,
-    DownloadOutlined,
-    FilePdfOutlined,
-    FileImageOutlined,
-    FileWordOutlined,
-    FileTextOutlined,
-    LoadingOutlined,
-} from "@ant-design/icons";
 import dayjs from "dayjs";
 
 import {getDownloadPresignedUrl} from "../../../api/file.js";
@@ -43,24 +42,26 @@ const SET_IS_NOT_AT_BOTTOM_DEBOUNCE_TIMEOUT_MILLIS = 1000;
 
 /**
  * Renders a file icon based on file type
- * 
- * @param {string} fileType - MIME type of the file
+ *
+ * @param {string} fileType MIME type of the file
  * @return {React.ReactNode}
  */
-const FileTypeIcon = ({ fileType }) => {
-    if (!fileType) return <FileOutlined />;
-    
-    if (fileType.startsWith('image/')) {
-        return <FileImageOutlined style={{ color: '#36c' }} />;
-    } else if (fileType === 'application/pdf') {
-        return <FilePdfOutlined style={{ color: '#e53' }} />;
-    } else if (fileType.includes('word') || fileType.includes('document')) {
-        return <FileWordOutlined style={{ color: '#44a' }} />;
-    } else if (fileType === 'text/plain') {
-        return <FileTextOutlined style={{ color: '#666' }} />;
+const FileTypeIcon = ({fileType}) => {
+    if (!fileType) {
+        return <FileOutlined/>;
     }
-    
-    return <FileOutlined />;
+
+    if (fileType.startsWith("image/")) {
+        return <FileImageOutlined style={{color: "#36c"}}/>;
+    } else if ("application/pdf" === fileType) {
+        return <FilePdfOutlined style={{color: "#e53"}}/>;
+    } else if (fileType.includes("word") || fileType.includes("document")) {
+        return <FileWordOutlined style={{color: "#44a"}}/>;
+    } else if ("text/plain" === fileType) {
+        return <FileTextOutlined style={{color: "#666"}}/>;
+    }
+
+    return <FileOutlined/>;
 };
 
 /**
@@ -83,87 +84,91 @@ const MessageListItem = ({createdAt, message, senderId, senderUsername}) => {
     const handleMouseLeave = () => {
         setIsHovered(false);
     };
-    
+
     const handleFileDownload = async (fileData) => {
         setDownloading(true);
         try {
-            let fileId = fileData.fileId;
-            
-            // 如果没有 fileId，尝试从 fileUrl 解析
+            let {fileId} = fileData;
+
             if (!fileId && fileData.fileUrl) {
                 const parts = fileData.fileUrl.split("/");
                 fileId = parts[parts.length - 1];
             }
-    
+
             let downloadUrl;
-    
-            // 尝试获取新的 Presigned URL
+
             if (fileId) {
                 const freshData = await getDownloadPresignedUrl(fileId);
                 if (freshData?.presignedUrl) {
                     downloadUrl = freshData.presignedUrl;
                 }
             }
-    
-            // 回退到原始 URL
+
             if (!downloadUrl && fileData.presignedUrl) {
                 downloadUrl = fileData.presignedUrl;
             }
-    
+
             if (!downloadUrl) {
                 throw new Error("No valid download URL found");
             }
-        
+
             const response = await fetch(downloadUrl);
             const blob = await response.blob();
-            const blobUrl = window.URL.createObjectURL(blob);
-    
+
             const a = document.createElement("a");
-            a.href = blobUrl;
-            a.download = fileData.filename || "file"; 
+            a.href = window.URL.createObjectURL(blob);
+            a.download = fileData.filename || "file";
             document.body.appendChild(a);
             a.click();
-    
-            window.URL.revokeObjectURL(blobUrl);
+
+            window.URL.revokeObjectURL(window.URL.createObjectURL(blob));
             document.body.removeChild(a);
         } catch (error) {
             console.error("Download failed:", error);
-            message.error("Failed to download file: " + (error.message || "Unknown error"));
+            message.error(`Failed to download file: ${error.message || "Unknown error"}`);
         } finally {
             setDownloading(false);
         }
     };
-    
+
     // Check if the message is a file message (JSON string)
     let messageContent;
     let isFileMessage = false;
     let fileData = null;
-    
+
     try {
         const parsedMessage = JSON.parse(message);
-        if (parsedMessage.type === 'file') {
+        if ("file" === parsedMessage.type) {
             isFileMessage = true;
             console.log("File data:", parsedMessage);
             fileData = parsedMessage;
         }
-    } catch (e) {
-        // Not a JSON message, treat as regular text
+    } catch (error) {
+        console.error("Error parsing message:", error);
         isFileMessage = false;
     }
-    
+
     if (isFileMessage && fileData) {
         messageContent = (
-            <Space direction="vertical" size="small" style={{ width: '100%' }}>
+            <Space
+                direction={"vertical"}
+                size={"small"}
+                style={{width: "100%"}}
+            >
                 <Space>
-                    <FileTypeIcon fileType={fileData.fileType} />
-                    <Typography.Text strong>{fileData.filename}</Typography.Text>
+                    <FileTypeIcon fileType={fileData.fileType}/>
+                    <Typography.Text strong={true}>
+                        {fileData.filename}
+                    </Typography.Text>
                 </Space>
-                <Button 
-                    type="primary" 
-                    size="small" 
-                    icon={downloading ? <LoadingOutlined /> : <DownloadOutlined />}
-                    onClick={() => handleFileDownload(fileData)}
+                <Button
                     loading={downloading}
+                    size={"small"}
+                    type={"primary"}
+                    icon={downloading ?
+                        <LoadingOutlined/> :
+                        <DownloadOutlined/>}
+                    onClick={() => handleFileDownload(fileData)}
                 >
                     Download
                 </Button>
