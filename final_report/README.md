@@ -274,9 +274,11 @@ npm run lint
 
 The application is deployed on an **AWS EC2 instance** using a separate frontend and backend structure.
 
-- **Live URL**: [https://your-domain-or-ec2-public-ip](https://your-domain-or-ec2-public-ip)
+- **Live URL**: http://34.230.5.238/
 - **Frontend**: React app served via Vite build and hosted using a lightweight Node server
 - **Backend**: Node.js (Express.js) server
+- **Process Management**: Both frontend and backend are managed using systemd for automatic startup and reliability
+- **Reverse Proxy**: Handled via Caddy, which provides automatic TLS, reverse proxy to both services
 - **Database**: PostgreSQL hosted locally
 - **File Storage**: MinIO instance running on the same EC2
 - **Deployment Platform**: AWS EC2 (Ubuntu 22.04)
@@ -297,9 +299,9 @@ Security, storage, and environment configurations are managed through `.env` fil
 
 ### Jason Xie (jasonxiexy)
 - Set up the initial backend and frontend structure for the project.
-- Implemented user registration and login features for authentication.
-- Managed configuration files, including `.env`, and updated the `README.md`.
-- Enhanced the authentication handler by adding token expiry validation logic.
+- Implemented user registration, login, and JWT-based authentication logic.
+- Managed configuration files, updated project documentation, and enhanced token expiry validation.
+- Deployed the application to AWS EC2 using systemd and Caddy for process management and HTTPS.
 - Authored and submitted the final project report.
 
 ### Zenan Jiang (ZenanJ)
