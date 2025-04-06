@@ -22,67 +22,59 @@ Link URL:
 ## **3. Motivation**
 
 ### **Identify the Problem or Need:**
-In today's globalized and digitally connected world, online chat rooms have become a vital platform for communication, collaboration, and community building. However, two significant challenges persist in enhancing the user experience of chat rooms:  
+In today's globalized and digitally connected world, online chat rooms have become a vital platform for communication, collaboration, and community building. However, many existing platforms still face challenges in delivering a seamless and user-friendly chat experience:
 
-1. **Lack of Intelligent Interaction**:  
-   Traditional chat rooms rely solely on human-to-human communication, lacking the ability to integrate intelligent, AI-driven interactions that can provide instant assistance, answer questions, or even engage in meaningful conversations.  
+1. **Lack of Lightweight, Customizable Tools**:  
+   Traditional platforms can be overly complex or restrictive, especially for smaller communities or developer teams who require flexibility and simplicity without losing key features.
 
-2. **Language Barriers**:  
-   As chat rooms often bring together users from diverse linguistic backgrounds, real-time communication can be hindered by language differences, making it difficult for users to fully participate and connect.  
+2. **Limited Support for Real-Time Communication & File Sharing**:  
+   Many solutions don’t provide fully responsive real-time messaging or easy file-sharing capabilities without third-party plugins or added cost.
 
 ### **Why This Project is Worth Pursuing:**
-This project is worth pursuing because it addresses these critical pain points by integrating cutting-edge AI technologies into chat rooms, thereby revolutionizing the way users interact and communicate. Here are some reasons:  
+This project aims to build a real-time web-based chatroom application that prioritizes simplicity, usability, and flexibility. It offers a clean interface, seamless messaging, and file-sharing features that make it a useful tool for social users, teams, and learning groups. Key reasons for pursuing this include:
 
-1. **Enhanced User Engagement**:  
-   By introducing an AI-powered chatbot (e.g., `@chatbot`) that leverages large language models (LLMs), users can interact with an intelligent assistant capable of providing instant responses, answering queries, and even facilitating discussions. 
-   
-2. **Breaking Language Barriers**:  
-   The integration of real-time translation capabilities allows users to communicate seamlessly across different languages. This feature is particularly valuable in global communities, enabling inclusivity and fostering cross-cultural collaboration.  
+1. **Enhanced User Experience**:  
+   By developing an intuitive interface with responsive design, chat previews, and emoji support, we offer a comfortable and modern user experience across devices.
 
-3. **Competitive Advantage**:  
-   As AI and real-time translation technologies become increasingly prevalent, incorporating these features into a chat room positions the platform as innovative and forward-thinking, attracting a broader user base and staying ahead of competitors.  
+2. **Support for Communication and Collaboration**:  
+   With the ability to create and join multiple chatrooms, view message history, and manage user sessions, this platform facilitates more organized and effective group interaction.
 
-By addressing these challenges and leveraging the power of AI, this project aims to create a more intelligent, inclusive, and engaging chat room experience, ultimately redefining how people connect and communicate in digital spaces.
+3. **Scalability and Maintainability**:  
+   By following modern development practices and separating the frontend and backend, the system is easier to extend and deploy for future use cases — including potential AI-based features down the line.
 
 ### **Describe the Target Users:**
 
-1. **General Social Users**
-   This platform is designed for everyday users who rely on instant messaging tools to stay connected. Through the chatroom, they can easily communicate with friends, family, or like-minded communities. The integrated file-sharing and notification features further enhance the overall experience.
+1. **General Social Users**  
+   Everyday users looking for a simple messaging platform to stay in touch with friends, family, or communities. The app’s emoji support, responsive UI, and file-sharing features provide an engaging experience.
 
-2. **Tech Enthusiasts and Developers**
-   For users passionate about technology, this chatroom offers more than just basic messaging—it incorporates an AI Bot (integrated via ollama) that can assist in answering technical questions, providing development advice, or discussing code. This additional feature not only streamlines interactions but also adds value for users seeking smart, tech-driven support.
+2. **Tech Enthusiasts and Developers**  
+   Developers may benefit from the clean structure and potential to extend the platform. While AI chat was considered, the current version focuses on real-time, socket-based communication and backend extensibility.
 
-3. **Businesses and Collaborative Teams**
-   Small enterprises or teams looking for an efficient internal communication tool will benefit from the platform's ability to create, manage, and join multiple chatrooms. The robust role-based access control ensures proper permissions, while message logging and search functionalities support seamless collaboration. The integrated AI Bot further assists in answering common queries or providing data insights during team discussions.
+3. **Businesses and Collaborative Teams**  
+   Teams can create private chatrooms for specific discussions and securely share files. The role-based interactions and reliable message delivery make it useful for internal collaboration.
 
-4. **Educational Institutions and Learners**
-   Students and educators can use the platform for online discussions, Q&A sessions, and collaborative group work. The AI Bot can serve as a real-time tutor—responding to @mentions by providing additional learning resources or clarifying doubts, thus creating an interactive and supportive learning environment.
+4. **Educational Institutions and Learners**  
+   Students and educators can use the chatrooms for focused discussions or group work. The platform supports asynchronous messaging and persistent message storage, making it useful for ongoing Q&A and resource sharing.
 
 ### **Discuss any existing solutions and their limitations:**
 
-1. **Complexity:**
+1. **Complexity:**  
+   Platforms like Slack and Microsoft Teams offer many features, but they can be overwhelming for casual users or small teams. Their feature-rich nature introduces a learning curve.
 
-   Platforms like Slack and Microsoft Teams offer many features and integrations. However, this abundance of options makes them quite complex for everyday users or small communities. Their many settings can create a steep learning curve, which means users may struggle to quickly find and use the features they need, leading to a less smooth experience.
+2. **Customization Constraints:**  
+   While platforms like Slack and Discord allow integrations, they have limited flexibility in core feature modification and UI customization for niche use cases.
 
-2. **Customization Constraints:**
+3. **Lack of Lightweight Real-Time Solutions:**  
+   Many tools lack simple, browser-based real-time chat implementations that are easy to deploy and use. Some rely heavily on paid plans or third-party services.
 
-   Although platforms such as Slack and Discord allow for some third-party integrations and bots, they still have limits when it comes to deep customization. For example, Slack provides APIs that let you add extra functions, but it isn’t very flexible for integrating a dedicated AI chatbot or tailoring file handling processes. Similarly, while Discord supports various bots, these often require extra development work and still offer limited customization due to the platform’s fixed interfaces and permission rules.
-
-3. **Lack of Real-Time Interaction:**
-
-   Some platforms, like Microsoft Teams, have started to include basic AI features, such as simple chatbots that can answer common questions. However, these are usually based on preset commands and do not support dynamic, context-aware interactions triggered by @mentions. Ideally, a chat platform should offer immediate, intelligent, and personalized responses when users are mentioned, something that most existing products are not yet able to do effectively.
-
-4. **Limited Extensibility and Integration:**
-
-   Many current chat solutions have limited options for extending functionality or integrating with external services. For example, Telegram offers a Bot API that lets developers create bots, but its features are restricted when it comes to integrating advanced AI models or custom file management systems. Likewise, Discord supports many third-party bots, but adding a custom AI bot often requires significant extra work. This limited flexibility means that developers need to invest more time and effort to build the features they want.
-
-By comparing these real products, we can see that although the chat platforms currently on the market are powerful, they still have shortcomings in terms of ease of use, customization, real-time interaction and scalability.
+4. **Limited Extensibility:**  
+   Adding new features (e.g., file storage customization, direct socket handling) in existing platforms can be challenging. By building our own system, we retain full control over future enhancements.
 
 ---
 
 ## **4. Objectives**
 
-  The goal of this project is to develop a real-time chatroom web application that enhances user communication through intelligent AI-driven interactions, real-time messaging, and seamless file sharing. By integrating AI capabilities, this system will improve engagement and accessibility for users from a varity of backgrounds. This project also aims to provide a scalable and maintainable solution that aligns with modern web development practices.
+The goal of this project is to develop a real-time chatroom web application that enhances user communication through real-time messaging, responsive design, and seamless file sharing. The system is designed to be lightweight, customizable, and scalable — laying the foundation for future integration of advanced features like AI chatbots or real-time translation. This project also emphasizes best practices in full-stack web development, including modular architecture, secure authentication, and modern UI/UX design.
 
 ---
 
@@ -98,15 +90,29 @@ By comparing these real products, we can see that although the chat platforms cu
 
 ## **6. Features**
 
+Our application fulfills the core and advanced technical requirements outlined in the course by implementing a modern full-stack architecture with clear separation between frontend and backend, real-time features, secure authentication, file handling, and a responsive UI.
+
 | Feature | Implementation |
-| :------- | :------ |
-| User Authentication | Sign‑up / sign‑in, JWT issuance & verification, "Remember Me" persistent sessions|
-| User Profile | View / edit display name & avatar, and it has picture for profile. |
-| Chat Room Management | Create room, join/leave room, list user’s rooms with unread counts.|
-| Real‑time Messaging | Bi‑directional WebSocket via Socket.IO, room‑scoped events, optimistic UI update, server persistence. |
-| Message Storage | Messages will be stored in PostgreSQL using Prisma ORM with timestamps and sender details. |
-| Frontend Routing | Implemented using React Router, with pages for login, chatroom list, and individual chatrooms. |
-| Responsive UI Design | Built with React + Ant Design for a modern and user-friendly interface. |
+|:--------|:---------------|
+| **User Authentication** | Supports sign-up and sign-in using JWT-based authentication. Includes token verification, session persistence with "Remember Me", and secure credential storage using bcrypt. |
+| **User Profile** | Users can view and update their display name and profile avatar. Profile pictures are uploaded via form input and rendered dynamically in the UI. |
+| **Chat Room Management** | Users can create, join, and leave chatrooms. The system displays a personalized chatroom list, sorted by latest message, with unread message counts. |
+| **Real-Time Messaging** | Built with WebSockets via Socket.IO. Enables room-specific message events, real-time updates with optimistic UI rendering, and ensures backend persistence of messages. |
+| **File Sharing** | Users can upload and send image or PDF files through chat. Files are stored in MinIO using private, pre-signed URLs for secure access. Supports authentication, encryption, and scalable file handling. |
+| **Message Storage** | All chat messages are stored in a PostgreSQL database using Prisma ORM. Each message includes a timestamp, sender info, and room association for auditability and history retrieval. |
+| **Frontend Routing** | Implemented with React Router for structured navigation across login, chatroom list, and chat views. URL-based routing supports direct access and smooth user flow. |
+| **Responsive UI Design** | Developed using React 19, Tailwind CSS, and Ant Design v5. The UI adapts to various screen sizes and provides a modern, accessible user experience across devices. |
+
+### ✅ Requirement Coverage
+
+- **Frontend Stack**: React, TailwindCSS, Ant Design v5 (meets styling and UI library requirements)
+- **Backend Stack**: Express.js with RESTful API design
+- **Data Storage**: PostgreSQL for relational data, MinIO for file storage (meets storage requirements)
+- **Architecture**: Separate frontend and backend structure (Option B)
+- **Advanced Features**:
+  - ✅ User Authentication & Authorization (JWT, bcrypt)
+  - ✅ Real-time Functionality (WebSockets with Socket.IO)
+  - ✅ File Handling & Secure Uploads (MinIO, Multer)
 
 ---
 
@@ -154,7 +160,6 @@ Inside a chatroom, users can communicate in real-time.
 Picture of active chatroom with messages and emojis
 
 
-
 ### 4. User Profile and Sign Out
 
 - Users can view and manage their **profile** from the chatroom list page.
@@ -170,6 +175,17 @@ The application is fully responsive and optimized for desktop usage.
 
 - Built with **React** and **Ant Design**, the interface adapts to various screen sizes.
 - All pages, including login, chatroom list, and chatroom view, remain accessible and usable on Desktop.
+
+
+### 6. File Upload and Sharing
+
+Users can upload and share image or PDF files in any chatroom.
+
+- File upload is done via the message input toolbar.
+- Supported file types include images (`.png`, `.jpg`) and PDFs (`.pdf`).
+- Uploaded files are stored securely in **MinIO**, and accessed via pre-signed private URLs.
+- Files are immediately available in chat and can be viewed/downloaded by all participants in the room.
+
 
 ---
 
@@ -202,7 +218,7 @@ Make a copy of the `.env` file as `.env.local` in the backend folder, and replac
 ```bash
 cp .env .env.local
 ```
-And make sure your postgresql server is started.
+And make sure your postgresql server is started, and you could leave rest of the env variables as default.
 
 > [!WARNING]
 > Do not commit your `.env.local` file to version control.
@@ -216,6 +232,8 @@ npm run prisma:migrate
 ```bash
 npm run dev
 ```
+Once the backend server is successfully started, the server will be at `http://localhost:3000/`.
+And next, prepare to set up for the frontend.
 
 ### **6. Lint the code before committing**
 ```bash
@@ -241,6 +259,8 @@ npm install
 ```bash
 npm run dev
 ```
+Once you started the frontend server, you should be able to access it through `http://localhost:5173/`.
+Finally, open this address in a browser, and enjoy our chat room applications.
 
 ### **4. Lint the code before committing**
 ```bash
@@ -252,6 +272,16 @@ npm run lint
 
 ## **9. Deployment Information**
 
+The application is deployed on an **AWS EC2 instance** using a separate frontend and backend structure.
+
+- **Live URL**: [https://your-domain-or-ec2-public-ip](https://your-domain-or-ec2-public-ip)
+- **Frontend**: React app served via Vite build and hosted using a lightweight Node server
+- **Backend**: Node.js (Express.js) server
+- **Database**: PostgreSQL hosted locally
+- **File Storage**: MinIO instance running on the same EC2
+- **Deployment Platform**: AWS EC2 (Ubuntu 22.04)
+
+Security, storage, and environment configurations are managed through `.env` files.
 
 
 ---
