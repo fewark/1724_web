@@ -69,17 +69,20 @@ cp .env .env.local
 > [!WARNING]
 > Do not commit your `.env.local` file to version control.
 
-### **4. Run Prisma migration**
+### **4. Change the username and password in DATABASE_URL in .env.local to your own**
+![image](https://github.com/user-attachments/assets/13fb3604-115c-4497-9c83-4b684bf44ae4)
+
+### **5. Run Prisma migration**
 ```bash
 npm run prisma:migrate
 ```
 
-### **5. Start the Backend**
+### **6. Start the Backend**
 ```bash
 npm run dev
 ```
 
-### **6. Lint the code before committing**
+### **7. Lint the code before committing**
 ```bash
 npm run lint
 ```
