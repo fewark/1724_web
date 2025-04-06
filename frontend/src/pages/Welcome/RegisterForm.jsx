@@ -69,10 +69,29 @@ const RegisterForm = () => {
             <Form.Item
                 label={<Typography.Title level={5}>Password</Typography.Title>}
                 name={"password"}
-                rules={[{required: true, message: "Please enter a password"}]}
+                rules={[
+                    {required: true, message: "Please enter a password"},
+                    {
+                        validator: (_, value) => {
+                            if (!value) {
+                                return Promise.resolve();
+                            }
+                            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+                            return regex.test(value) ?
+                                Promise.resolve() :
+                                Promise.reject(
+                                    new Error(
+                                        "Password must be at least 8 characters and include uppercase, " +
+                                        "lowercase, number, and special character."
+                                    )
+                                );
+                        },
+                    },
+                ]}
             >
                 <Input.Password/>
             </Form.Item>
+
 
             <Form.Item
                 dependencies={["password"]}
