@@ -223,19 +223,23 @@ And make sure your postgresql server is started, and you could leave rest of the
 > [!WARNING]
 > Do not commit your `.env.local` file to version control.
 
-### **4. Run Prisma migration**
+### **4. Change the username and password in DATABASE_URL in .env.local to your own**
+![image](https://github.com/user-attachments/assets/6b6e3ae8-c5ac-4d6a-a001-f60f71171f88)
+
+
+### **5. Run Prisma migration**
 ```bash
 npm run prisma:migrate
 ```
 
-### **5. Start the Backend**
+### **6. Start the Backend**
 ```bash
 npm run dev
 ```
 Once the backend server is successfully started, the server will be at `http://localhost:3000/`.
 And next, prepare to set up for the frontend.
 
-### **6. Lint the code before committing**
+### **7. Lint the code before committing**
 ```bash
 npm run lint
 ```
