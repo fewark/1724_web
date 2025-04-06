@@ -6,7 +6,7 @@ A real-time chat room application consists of separate frontend and backend comp
 
 | Name         | Student Number | Email                      |
 |--------------|----------------|----------------------------|
-| Kaifeng Lu   | 1003012633     |                               |
+| Kaifeng Lu   | 1003012633     | kaifeng.lu@mail.utoronto.ca |
 | Zenan Jiang  | 1004996846     |                               |
 | Xiaoyang Xie | 1005755103     | xiaoyang.xie@mail.utoronto.ca |
 | Yanhao Li    | 1010253618     |                               |
